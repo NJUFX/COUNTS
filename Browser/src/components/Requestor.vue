@@ -64,55 +64,7 @@
                          layout="total, prev, pager, next, jumper" v-bind:total="project_total">
           </el-pagination>
         </div>
-        <div style="position: absolute; right: 0; top: 0; width: 210px; height: 250px">
-          <div style="position: relative;">
-            <span style="position:absolute; top: 10px; color: #d81e06; left: 40px;">筛选</span>
-            <img src="../assets/shaixuan.png" style="position: absolute;width:20px; top:12px; left: 75px;">
-            <div style="position: absolute; top: 35px; left: 40px;">
-              <el-button @click="allSelected" type="text">恢复默认</el-button>
-              <el-button @click="allCancel" type="text">全部取消</el-button>
-            </div>
-            <div style="position: absolute; top: 65px; left: 20px; width: 150px">
-              <el-switch
-                v-model='switchValue.detection'
-                active-color="#13ce66"
-                active-text="方框标注">
-              </el-switch>
-              <el-switch
-                v-model='switchValue.segmentation'
-                active-color="#13ce66"
-                active-text="区域标注">
-              </el-switch>
-              <el-switch
-                v-model='switchValue.caption'
-                active-color="#13ce66"
-                active-text="整体描述">
-              </el-switch>
-              <el-switch
-                v-model='switchValue.classification'
-                active-color="#13ce66"
-                active-text="图像分类">
-              </el-switch>
-              <el-switch
-                v-model='switchValue.attribute'
-                active-color="#13ce66"
-                active-text="属性标注">
-              </el-switch>
-            </div>
-            <div style="position: absolute; top: 173px; left: 2px; width: 200px">
-              <el-switch
-                v-model='switchValue.finished'
-                active-color="#13ce66"
-                active-text="已完成项目">
-              </el-switch>
-              <el-switch
-                v-model='switchValue.unfinished'
-                active-color="#13ce66"
-                active-text="未完成项目">
-              </el-switch>
-            </div>
-          </div>
-        </div>
+
       </div>
 
     </div>
@@ -978,8 +930,8 @@
   .createProject{
     border-radius: 100%;
     position: fixed;
-    right: 40px;
-    top: 510px;
+    right: 20px;
+    top: 365px;
     height: 50px;
     background-color: white;
     width: 50px;

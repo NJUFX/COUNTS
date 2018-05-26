@@ -46,33 +46,36 @@
       <div style="position: relative;">
         <div style="position: absolute; width: 5px; height:30px; background-color:#108cee; left: 30px;"></div>
         <span style="position: absolute; left: 40px;font-size: 22px; font-weight: bold">标注详情</span>
-        <div style="position: absolute; width: 600px; height: 400px; top: 50px;left: 100px;">
-          <img src="../assets/fangkuang_home.jpg" style="width: 500px;">
-          <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">方框标注(Detection)</span>
-          <p style="position:absolute;top: 330px;left:100px;font-size: 20px">根据标注需求，对图像中的目标物体进行画框</p>
+        <div style="position: absolute; width: 1260px;top: 50px;left: 50%; margin-left: -580px">
+          <div style="position: absolute; width: 600px; height: 400px; top: 50px;">
+            <img src="../assets/fangkuang_home.jpg" style="width: 500px;">
+            <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">方框标注(Detection)</span>
+            <p style="position:absolute;top: 330px;left:100px;font-size: 20px">根据标注需求，对图像中的目标物体进行画框</p>
+          </div>
+          <div style="position: absolute; width: 600px; height: 400px; top: 50px;left: 560px;">
+            <img src="../assets/quyu_home.jpg" style="width: 500px;">
+            <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">区域标注(Segmentation)</span>
+            <p style="position:absolute;top: 330px;left:60px;font-size: 20px">根据标注需求，使⽤连续的折线标注图像中目标物体的</p>
+            <p style="position:absolute;top: 360px;left:60px;font-size: 20px">轮廓，返回所有轮廓组成点的坐标。</p>
+          </div>
+          <div style="position: absolute; width: 600px; height: 400px; top: 500px;left: 0px;">
+            <img src="../assets/caption.png" style="width: 500px;">
+            <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">整体描述(Caption)</span>
+            <p style="position:absolute;top: 330px;left:60px;font-size: 20px">针对图像中具体情景及标注需求，为每张图像生成中文</p>
+            <p style="position:absolute;top: 360px;left:60px;font-size: 20px">标注语句。</p>
+          </div>
+          <div style="position: absolute; width: 600px; height: 400px; top: 500px;left: 560px;">
+            <img src="../assets/classification.jpg" style="width: 500px;">
+            <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">图像分类(Classification)</span>
+            <p style="position:absolute;top: 330px;left:100px;font-size: 20px">根据图像内容，选择给出选项中合适的一项。</p>
+          </div>
+          <div style="position: absolute; width: 600px; height: 400px; top: 950px;left: 0px;">
+            <img src="../assets/attribute.jpg" style="width: 500px;">
+            <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">属性标注(Attribute)</span>
+            <p style="position:absolute;top: 330px;left:100px;font-size: 20px">根据图像内容和给定的属性，填写属性值。</p>
+          </div>
         </div>
-        <div style="position: absolute; width: 600px; height: 400px; top: 50px;left: 660px;">
-          <img src="../assets/quyu_home.jpg" style="width: 500px;">
-          <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">区域标注(Segmentation)</span>
-          <p style="position:absolute;top: 330px;left:60px;font-size: 20px">根据标注需求，使⽤连续的折线标注图像中目标物体的</p>
-          <p style="position:absolute;top: 360px;left:60px;font-size: 20px">轮廓，返回所有轮廓组成点的坐标。</p>
-        </div>
-        <div style="position: absolute; width: 600px; height: 400px; top: 500px;left: 100px;">
-          <img src="../assets/caption.png" style="width: 500px;">
-          <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">整体描述(Caption)</span>
-          <p style="position:absolute;top: 330px;left:60px;font-size: 20px">针对图像中具体情景及标注需求，为每张图像生成中文</p>
-          <p style="position:absolute;top: 360px;left:60px;font-size: 20px">标注语句。</p>
-        </div>
-        <div style="position: absolute; width: 600px; height: 400px; top: 500px;left: 660px;">
-          <img src="../assets/classification.jpg" style="width: 500px;">
-          <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">图像分类(Classification)</span>
-          <p style="position:absolute;top: 330px;left:100px;font-size: 20px">根据图像内容，选择给出选项中合适的一项。</p>
-        </div>
-        <div style="position: absolute; width: 600px; height: 400px; top: 950px;left: 100px;">
-          <img src="../assets/attribute.jpg" style="width: 500px;">
-          <span style="position: absolute; top: 290px; font-size: 32px; width: 400px; left:90px; color: #02cc77">属性标注(Attribute)</span>
-          <p style="position:absolute;top: 330px;left:100px;font-size: 20px">根据图像内容和给定的属性，填写属性值。</p>
-        </div>
+
       </div>
     </div>
     <div style="float: top;height:150px; width: 100%;background-color:#24292E">

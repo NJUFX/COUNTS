@@ -132,7 +132,7 @@
       </div>
     </el-dialog>
     <!--双击文本弹出已提交标注文本结束-->
-    <div id="toolbar" v-drag style="position: fixed; right: 300px; top: 100px; width: 25px; height: 38px;">
+    <div id="toolbar" v-drag style="position: fixed; right: 300px; top: 100px; width: 25px; height: 38px; cursor: move">
       <div style="position:relative;">
         <img src="../assets/toolbox.png" style="position: absolute; width: 50px; top: -3px; right: -48px">
         <el-tooltip class="item" effect="dark" v-bind:content=tooltip placement="bottom">

@@ -76,11 +76,6 @@
         </el-dialog>
         <router-view></router-view>
       </div>
-      <p style="position: absolute; top: 550px; left: 8px; font-size: 12px;">
-        <br>
-        COUNTS_FX众筹标注系统由FX开发组开发，点击了解
-        <el-button @click="showProjectDetails()" type="text" style="font-size: 12px;">产品详情</el-button>
-      </p>
     </el-main>
   </el-container>
 
@@ -331,10 +326,6 @@ export default {
         this.form.location = CodeToText[value[1]]
 
       }
-    },
-    showProjectDetails () {
-      this.$alert('版本号：v2.0\n 更新时间：2018/04\n' +
-        '开发人员：FX开发组', '产品详情')
     },
 
     openSucc: function (text) {
