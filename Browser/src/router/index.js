@@ -12,13 +12,21 @@ import Test2 from '@/components/Test2'
 import Home from '@/components/Home'
 import ProjectDetails from '@/components/ProjectDetails'
 import CountsDetails from '@/components/CountsDetails'
+import Result from '@/components/Result'
+import Register from '@/components/Register'
 Vue.use(Router)
+
 export default new Router({
   routes: [
     {
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '/:username/worker',
@@ -49,6 +57,11 @@ export default new Router({
       path: '/:username/countsMarket/:id/projectDetails',
       name: 'CountsDetails',
       component: CountsDetails
+    },
+    {
+      path: '/:username/:id/result',
+      name: 'Result',
+      component: Result
     },
     {
       path: '/:username/admin',

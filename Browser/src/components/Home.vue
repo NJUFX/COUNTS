@@ -2,7 +2,7 @@
   <div>
     <div style="float: top; left: 0px;top: 0px; width: 100%; height: 600px;">
       <div>
-        <img id="backImg" src="../assets/home_back.png" style="position: absolute;top: 0px;left: 0px;width: 100%;">
+        <img id="backImg" src="../assets/home_back.png" style="position: absolute;top: 0px;left: 0px;background-size: 100%;">
       </div>
       <img src="./logo.png" style="width: 150px;position: absolute;top: 25px;left: 100px;">
       <span style="position: absolute; top: 40px; left: 270px;color: #f2f2f2; font-size: 28px">众包标注系统</span>
@@ -10,8 +10,8 @@
     </div>
     <div style="float: top; left: 0px;top: 650px; height: 460px;width: 100%;">
       <div style="position: relative;">
-        <div style="position: absolute; width: 5px; height:30px; background-color:#108cee; left: 30px;"></div>
-        <span style="position: absolute; left: 40px;font-size: 22px; font-weight: bold">产品优势</span>
+        <div style="position: absolute; width: 5px; height:30px; background-color:#108cee; left: 30px; top: 10px"></div>
+        <span style="position: absolute; left: 40px;font-size: 22px; font-weight: bold;top: 10px">产品优势</span>
         <div style="position: absolute;width:600px; height: 200px;top: 40px;left: 10px;">
           <img src="../assets/jifen.png" style="position: absolute; width: 140px; left: 45px; top:32px;">
           <span style="position: absolute; font-size: 20px;left: 210px;top:35px;">高效的积分激励系统</span>
@@ -78,7 +78,7 @@
 
       </div>
     </div>
-    <div style="float: top;height:150px; width: 100%;background-color:#24292E">
+    <div style="position:absolute;left:0px;float: top;height:150px; width: 100%;background-color:#24292E;">
       <div style="position:relative;">
         <span style="position: absolute; top: 10px; left: 100px; color: white;font-size: 18px">COUNTS_FX众筹标注系统</span>
         <span style="position: absolute; top: 50px; left: 100px; color: white">开发者：FX开发组</span>

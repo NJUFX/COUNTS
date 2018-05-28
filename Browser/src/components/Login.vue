@@ -28,7 +28,7 @@
             <span v-show="isBanShow" style="position: absolute;left: 5px; top: 39px; color: red;font-size: 11px">{{banDetails}}</span>
           </div>
           <el-button class="toHello" type="primary" @click="loginAndToUserPage">登陆</el-button>
-          <el-button id="registerBtn" type="text" @click="dialogFormVisible = true">还没账号？立刻注册</el-button>
+          <el-button id="registerBtn" type="text" @click="handleRegister">还没账号？立刻注册</el-button>
         </div>
 
         <el-dialog title="新用户注册" :visible.sync="dialogFormVisible">
@@ -443,6 +443,9 @@ export default {
     },
 
     handleRegister: function () {
+      var path = '/register'
+      this.$router.push({path: path})
+      /*
       var username = this.form.userName
       var password = this.form.pass
       var checkPassword = this.form.checkPass
@@ -488,6 +491,7 @@ export default {
         xmlhttp.send(JSON.stringify(user))
       }
       this.dialogFormVisible = false
+      */
     }
   }
 }
