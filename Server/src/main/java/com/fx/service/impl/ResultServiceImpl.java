@@ -1,8 +1,8 @@
 package com.fx.service.impl;
 
-import com.fx.bean.CaptionResult;
-import com.fx.bean.ClassificationResult;
+import com.fx.model.CaptionClassificationResult;
 import com.fx.service.ResultService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -10,7 +10,11 @@ import java.util.List;
  * Description:
  * Created by Hanxinhu at 17:52 2018/5/29/029
  */
+@Service
 public class ResultServiceImpl  implements ResultService {
+    public ResultServiceImpl() {
+    }
+
     /**
      * 得到整体描述的结果
      *
@@ -18,17 +22,9 @@ public class ResultServiceImpl  implements ResultService {
      * @return 整体描述的结果列表
      */
     @Override
-    public List<CaptionResult> getCaptionResult(int missionID) {
+    public List<CaptionClassificationResult> getCaptionResult(int missionID) {
         return null;
     }
 
-    /**
-     * 得到分类标注的结果
-     *
-     * @param missionID
-     */
-    @Override
-    public List<ClassificationResult> getClassificationResult(int missionID) {
-        return null;
-    }
+
 }

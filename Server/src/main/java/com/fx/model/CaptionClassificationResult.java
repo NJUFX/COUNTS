@@ -1,4 +1,4 @@
-package com.fx.bean;
+package com.fx.model;
 
 import java.util.HashMap;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
  * Description:
  * Created by Hanxinhu at 16:30 2018/5/29/029
  */
-public class CaptionResult {
+public class CaptionClassificationResult {
     /**
      * 结果对应的文件名
      */
@@ -16,10 +16,10 @@ public class CaptionResult {
      */
     public HashMap<String,Double> result;
 
-    public CaptionResult() {
+    public CaptionClassificationResult() {
     }
 
-    public CaptionResult(String filename, HashMap<String, Double> result) {
+    public CaptionClassificationResult(String filename, HashMap<String, Double> result) {
         this.filename = filename;
         this.result = result;
     }

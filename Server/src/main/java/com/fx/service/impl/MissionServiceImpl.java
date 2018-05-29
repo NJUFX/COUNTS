@@ -38,10 +38,10 @@ public class MissionServiceImpl implements MissionService {
      */
     public List<Mission> getAllMission(int i) {
         List<Mission> missions = new ArrayList<>();
-
-        for (int j = i; j <= i + 11; j++) {
-            if (missionRepository.findMissionByID(j) != null)
-                missions.add(missionRepository.findMissionByID(j));
+        List<Mission> results = missionRepository.getAllMission();
+        for (int j = i; j <= i + 11 && j < results.size(); j++) {
+            if (results.get(j).getAnnotationType()==0||results.get(j).getAnnotationType()==2)
+                missions.add(results.get(j));
         }
         return missions;
     }

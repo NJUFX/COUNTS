@@ -82,4 +82,10 @@ public interface MissionRepository {
      * @return
      */
     public List<Mission> findMissionByAnnotationType(int annotationType);
+
+    /**
+     * 得到所有的结果
+     * @return
+     */
+    public  List<Mission> getAllMission();
 }
