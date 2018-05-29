@@ -33,8 +33,6 @@ public class MissionController {
    )
    @ResponseBody
     public List<Mission> getAllMission(int i){
-
-       System.out.println("wwww"+i);
         return missionService.getAllMission(i);
     }
 
