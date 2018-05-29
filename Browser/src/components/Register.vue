@@ -2,7 +2,7 @@
   <div>
     <div style="position: absolute; left: 50%; top: 70px; margin-left: -350px">
       <span style="position: absolute; left: 0px; width: 70px; top: 10px">用户注册</span>
-      <el-steps simple align-center style="width: 600px; position: absolute; left: 70px;background-color: white" :active="active" finish-status="success">
+      <el-steps simple align-center style="width: 600px; position: absolute; left: 80px;background-color: white" :active="active" finish-status="success">
         <el-step icon="el-icon-info" style="margin-left: 40px;" title="基本信息"></el-step>
         <el-step icon="el-icon-edit" title="个性化订制"></el-step>
         <!--<el-step icon="el-icon-document" title="能力测试"></el-step>-->

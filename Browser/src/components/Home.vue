@@ -88,7 +88,8 @@
     </div>
     <img src="../assets/bottom.png" style="width: 100%;position: fixed; bottom:0px;left: 0px;">
     <div style="position: fixed;left: 0px;bottom: 0px;width: 100%; height: 45px;">
-      <el-button type="text" class="login"  @click="login">登陆 / 注册</el-button>
+      <el-button type="text" class="login"  @click="login">登陆</el-button>
+      <el-button type="text" class="login"  @click="register">注册</el-button>
       <el-button type="text" class="login" @click="goMarket">众包市场</el-button>
     </div>
   </div>
@@ -106,6 +107,13 @@ export default {
     return {}
   },
   methods: {
+    register(){
+      if (localStorage.getItem('username') == 'undefined') {
+        localStorage.setItem('identify', 'logout')
+        localStorage.setItem('username', 'visitor')
+      }
+      this.$router.push({path: '/register'})
+    },
     login () {
       if (localStorage.getItem('username') == 'undefined') {
         localStorage.setItem('identify', 'logout')
