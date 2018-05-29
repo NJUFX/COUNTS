@@ -199,7 +199,6 @@ export default {
     xmlhttp.send(formData)
   },
   methods: {
-
     getCoverImg (missionid, i) {
       var cover = ''
       var _this = this

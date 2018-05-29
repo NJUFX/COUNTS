@@ -24,9 +24,9 @@
             </div>
             <div class="imgOnClick">
               <div class="background"></div>
-              <div style="position: absolute;top: 0px;width: 100%;height: 100%;">
+              <div style="position: absolute;top: 0px;left:0;right:0;bottom: 0">
                 <!--用下面这个div作图-->
-                <div :id="index"  style="position: absolute;left: 5%; top: 5%; right: 5%; bottom: 5%; width: 340px; height: 200px;"></div>
+                <div :id="index"  style="position: absolute;left: 5%; top: 5%; right: 5%; bottom: 5%; width:340px; height: 200px;"></div>
               </div>
             </div>
           </el-card>
@@ -44,10 +44,46 @@
 <script>
   import echarts from 'echarts'
   import con1 from '@/assets/gakki.jpg'
+  require('echarts-wordcloud');
   export default {
     name: "result",
     data(){
       return{
+        captionWordInfos: [
+          {
+            name: "蓝天",
+            value: 10000,
+          },
+          {
+            name: "女人",
+            value: 6181,
+          },
+          {
+            name: "小狗",
+            value: 6861,
+          },
+          {
+            name: "美丽",
+            value: 4055,
+          },
+          {
+            name: "绿树",
+            value: 2467,
+          },
+          {
+            name: "阳光",
+            value: 2244,
+          },
+          {
+            name: "微笑",
+            value: 1898,
+
+          },
+          {
+            name: "年轻",
+            value: 1484,
+          },
+        ],
         projectInfo:{
           name: '一个测试的项目',
           details: 'testttttttttttffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff' +
@@ -88,7 +124,8 @@
       }
     },
     mounted(){
-      this.drawPieCharts()
+      //this.drawPieCharts()
+      this.drawStringCloud()
     },
     methods:{
       goMyProject () {
@@ -107,7 +144,7 @@
         for(var i=0;i<this.imgList.length;i++) {
           var container = document.getElementById(i);
           var myChart = echarts.init(container);
-          
+
           // 指定图表的配置项和数据
           var option = {
             tooltip: {
@@ -158,6 +195,64 @@
           myChart.setOption(option);
         }
       },
+
+      drawStringCloud(){
+        for(var i=0;i<this.imgList.length;i++) {
+          var container = document.getElementById(i);
+          var myChart = echarts.init(container);
+          var option = {
+            title: {
+              text: '关键词云',
+            },
+            tooltip: {
+              show: true
+            },
+            series: [{
+              name: 'Google Trends',
+              type: 'wordCloud',
+              size: ['80%', '80%'],
+              textRotation: [0, 45, 90, -45],
+              textPadding: 0,
+              autoSize: {
+                enable: true,
+                minSize: 14
+              },
+              textStyle: {
+                normal: {
+                  fontFamily: 'sans-serif',
+                  fontWeight: 'bold',
+                  // Color can be a callback function or a color string
+                  color: function () {
+                    // Random color
+                    return 'rgb(' + [
+                      Math.round(Math.random() * 160),
+                      Math.round(Math.random() * 160),
+                      Math.round(Math.random() * 160)
+                    ].join(',') + ')';
+                  }
+                },
+                emphasis: {
+                  shadowBlur: 13,
+                  shadowColor: '#999999'
+                }
+              },
+              data: this.captionWordInfos
+            }]
+          }
+          myChart.setOption(option);
+        }
+      },
+      createRandomItemStyle() {
+        return {
+          normal: {
+            color: 'rgb(' + [
+              Math.round(Math.random() * 160),
+              Math.round(Math.random() * 160),
+              Math.round(Math.random() * 160)
+            ].join(',') + ')'
+          }
+        };
+      }
     }
   }
 </script>
