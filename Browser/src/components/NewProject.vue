@@ -10,7 +10,12 @@
     </div>
     <div v-show="firstStep" style="position: absolute; top: 100px;width: 1000px; margin-left: -500px;left: 50%">
       <div class="form_div">
-        <el-form class="form" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+        <div style="position: absolute; left: 32px; top: -10px;">
+          <span style="position: absolute; left: 0px;padding-top: 5px; font-size: 14px;width: 70px; text-align: left">标注类型</span>
+          <div id="manLabel" style="position: absolute; left: 68px;" class="labelType" @click="selectManLabel">人工标注</div>
+          <div id="autoLabel" style="position: absolute; left: 178px;" class="labelType" @click="selectAutoLabel">自动化标注</div>
+        </div>
+        <el-form class="form" style="position:absolute;top: 50px" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
           <el-form-item label="任务标题" prop="topic" required>
             <el-input v-model="ruleForm.topic" ></el-input>
           </el-form-item>
@@ -20,29 +25,24 @@
           <el-form-item label="任务时间" required>
             <el-col :span="11">
               <el-form-item prop="dateStart" required>
-                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="起始日期" v-model="ruleForm.dateStart" style="width: 100%;"></el-date-picker>
+                <el-date-picker :disabled="isAutoLabel" value-format="yyyy-MM-dd" type="date" placeholder="起始日期" v-model="ruleForm.dateStart" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="dateEnd" required>
-                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="截止日期" v-model="ruleForm.dateEnd" style="width: 100%;"></el-date-picker>
+                <el-date-picker :disabled="isAutoLabel" value-format="yyyy-MM-dd" type="date" placeholder="截止日期" v-model="ruleForm.dateEnd" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item>
           <el-form-item label="标注方式" prop="type" required>
             <el-select @change="labelChange" style="position: absolute; left: 0px;" v-model="ruleForm.type" placeholder="选择标注方式">
               <div v-for="item in options" :key="item.value">
-                <el-option :label="item.label" :value="item.value"></el-option>
+                <el-option :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
               </div>
             </el-select>
             <el-button @click="labelDetailsShow" class="label_info_button" icon="el-icon-info" type="text"></el-button>
           </el-form-item>
-          <div style="position: absolute; left: 32px; top: 280px;">
-            <span style="position: absolute; left: 0px;padding-top: 5px; font-size: 14px;width: 70px; text-align: left">标注类型</span>
-            <div id="manLabel" style="position: absolute; left: 68px;" class="labelType" @click="selectManLabel">人工标注</div>
-            <div id="autoLabel" style="position: absolute; left: 178px;" class="labelType" @click="selectAutoLabel">自动化标注</div>
-          </div>
           <div style="position: absolute; top:220px; left: 360px;">
             <el-button type="text"  v-show="isClassBtnShow" @click="handleClassBtn">添加分类</el-button>
             <el-button type="text" v-show="isAttrBtnShow" @click="handleAttrBtn">添加属性</el-button>
@@ -89,7 +89,7 @@
       <button v-bind:disabled="isCancelBtnDisabled" @click="handleCancelButton" id="cancelBtn" class="stepBtn">取消</button>
       <button v-bind:disabled="isBeforeBtnDisabled"  @click="handleBeforeBtn" class="stepBtn">上一步</button>
       <button v-bind:disabled="isNextBtnDisabled" @click="handleNextBtn" class="stepBtn">下一步</button>
-      <button v-bind:disabled="isSureBtnDisabled" id="sureBtn" class="stepBtn">确定</button>
+      <button v-bind:disabled="isSureBtnDisabled" @click="submitForm" id="sureBtn" class="stepBtn">确定</button>
     </div>
 
 
@@ -142,14 +142,24 @@
       <span style="font-size: 16px; position: absolute; top: 260px; left: 12px;color: #4CAF50">属性标注</span>
       <p style="font-size: 14px; position: absolute; top: 270px; left: 12px; text-align: left">根据图像内容和给定的属性，填写属性值。</p>
     </div>
+
+    <div v-show="doAutoLabel">
+      <div class="modal" style="display: block;">  </div>
+      <my-loading style="position: absolute;left: 50%; margin-left: -82px;top: 180px;" type="rainbow"></my-loading>
+      <span style="position: absolute;left: 50%; margin-left: -60px;top: 310px;font-size: 18px" >正在执行自动化标注</span>
+      <span style="position: absolute;left: 50%; margin-left: -75px;top: 335px;font-size: 12px;color: #747474" >执行完成后将会发送邮件至您的邮箱</span>
+      <el-button type="primary" size="small" style="position: absolute;left: 50%;margin-left: -35px;top: 358px;font-size: 16px" @click="backStageRun">后台执行</el-button>
+    </div>
+
   </div>
 </template>
 
 <script>
   import JSZip from 'jszip'
   import TagSelector from './tagSelector/tagSelector'
+  import MyLoading from './myLoading/myLoading'
   export default {
-    components: {TagSelector},
+    components: {TagSelector, MyLoading},
     name: 'NewProject',
     watch: {
       active(){
@@ -188,6 +198,7 @@
         }
       }
       return {
+        doAutoLabel:false,
         isAutoLabel:false,
         hotTagList:['dog','cat','mouse','horse','padding','steve bob','hello world','vue',
           'element','boom','iphone','macbook','dest','56789','12345','天将降大任于斯人也'],
@@ -244,12 +255,14 @@
           {
             value: 'Detection',
             label: '方框描述',
-            info: '把图片中指定类型的元素用矩形标注出来'
+            info: '把图片中指定类型的元素用矩形标注出来',
+            disabled:false,
           },
           {
             value: 'Segmentation',
             label: '区域标注',
-            info: '描画图片中指定类型的元素的轮廓'
+            info: '描画图片中指定类型的元素的轮廓',
+            disabled:false
           },
           {
             value: 'Classification',
@@ -259,7 +272,8 @@
           {
             value: 'Attribute',
             label: '属性描述',
-            info: ' 标注图片中出现元素的属性'
+            info: ' 标注图片中出现元素的属性',
+            disabled:false
           }
         ],
         value: ''
@@ -280,7 +294,14 @@
       }
     },
     methods: {
+      backStageRun(){
+        this.doAutoLabel=false;
+        this.goMyProject()
+      },
       selectManLabel(){
+        for(var i=0;i<this.options.length;i++){
+            this.options[i].disabled=false;
+        }
         this.isAutoLabel=false;
         document.getElementById('manLabel').style.backgroundColor = '#1d86ff'
         document.getElementById('manLabel').style.color = 'white'
@@ -291,6 +312,9 @@
       },
       selectAutoLabel(){
         this.isAutoLabel=true;
+        this.options[1].disabled=true;
+        this.options[2].disabled=true;
+        this.options[4].disabled=true;
         document.getElementById('autoLabel').style.backgroundColor = '#1d86ff'
         document.getElementById('autoLabel').style.color = 'white'
         document.getElementById('autoLabel').style.border='0'
@@ -413,7 +437,14 @@
         var path = '/' + localStorage.getItem('username')
         this.$router.push({path: path + '/requester'})
       },
+      goMyProject () {
+        var path = '/' + localStorage.getItem('username')
+
+        this.$router.push({path: path + '/requester'})
+
+      },
       submitForm (formName) {
+        this.doAutoLabel=true;
         if (this.ruleForm.type == 'Classification') {
           for (var i = 0; i < this.classArray.length; i++) {
             if (this.LTrim(this.RTrim(this.classArray[i].value)) != '') {
@@ -452,6 +483,7 @@
               _this.uploadImg(missionID)
               _this.openSucc('Submit successfully')
               _this.resetForm()
+              _this.goMyProject()
             }
           }
           let formData = new FormData()
@@ -793,5 +825,15 @@
     background-color: #2ea2ff;
     cursor: pointer;
   }
-
+  .modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    filter:alpha(opacity:80);
+    opacity:0.8;
+    -moz-opacity:0.8;
+  }
 </style>
