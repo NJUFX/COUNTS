@@ -9,5 +9,6 @@ public class DataConst {
     public static final String REQUESTOR = "Requestor";
     public static final String WORKER = "Worker";
     public static final String IMAGE_PATH = "D:/images";
-
+    public static final int AUTO = 1;
+    public static final int
 }
