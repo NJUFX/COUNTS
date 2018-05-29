@@ -1,0 +1,16 @@
+{"ID":2,"begin":"2018/01/03","end":"2018/01/04","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":4,"begin":"2018/01/03","end":"2018/01/04","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":5,"requestorID":"980626han","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":6,"begin":"2018/01/03","end":"2018/01/04","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":7,"begin":"2018/01/02","end":"2018/02/02","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":8,"begin":"2018/01/03","end":"2018/01/04","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":9,"requestorID":"980626han","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":10,"begin":"2018/01/03","end":"2018/01/04","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":11,"begin":"2018/01/02","end":"2018/02/02","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":12,"requestorID":"980626han","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":13,"begin":"2018/01/03","end":"2018/01/04","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":14,"begin":"2018/01/02","end":"2018/02/02","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":15,"requestorID":"980626han","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":16,"begin":"2018/01/03","end":"2018/01/04","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":17,"begin":"2018/01/02","end":"2018/02/02","maxNumber":0,"currentNumber":0,"points":0}
+{"ID":18,"requestorID":"980626han","maxNumber":0,"currentNumber":0,"points":0}

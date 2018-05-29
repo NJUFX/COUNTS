@@ -1,0 +1,3 @@
+{"id":2,"username":"fjx","password":"fjx","email":"111","phone":"11","role":"Requestor","points":0,"exp":0,"level":0,"rate":0.0}
+{"id":5,"username":"req","password":"123","email":"","phone":"","role":"Requestor","points":0,"exp":0,"level":0,"rate":0.0}
+{"id":6,"username":"339916286","password":"hwl123456","email":"123456@email.com","phone":"18812345678","points":0,"exp":0,"level":0,"rate":0.0}
