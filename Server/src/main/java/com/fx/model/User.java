@@ -86,6 +86,18 @@ public class User {
      * 城市
      */
     private String city;
+    /**
+     * 用户经常标注的类型 比如 军事、动物等
+     */
+    private List<String> tags;
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
     public User() {
     }
 

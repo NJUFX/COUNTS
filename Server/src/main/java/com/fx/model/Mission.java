@@ -59,7 +59,30 @@ public class Mission {
      * 一人完成一次任务给予的奖励数目
      */
     private int points;
+    /**
+     * 标注类型 0代表人工标注 1代表自动标注 2代表人工标注+自动标注
+     */
+    private int annotationType;
+    /**
+     * 任务内容的标签
+     */
+    private List<String> tags;
 
+    public int getAnnotationType() {
+        return annotationType;
+    }
+
+    public void setAnnotationType(int annotationType) {
+        this.annotationType = annotationType;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
     public int getCurrentNumber() {
         return currentNumber;
     }
