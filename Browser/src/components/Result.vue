@@ -16,16 +16,17 @@
     </div>
     <div style="position: absolute; top: 200px; background-color: white;width: 99%;left: 1%">
       <div style="float: left">
-        <div v-for="item in 11" :key="item">
+        <div v-for="(item,index) in imgList" :key="(item,index)">
           <el-card class="el_card" :body-style="{padding:'0px'}">
             <div style="position: relative;">
-              <img style="width: 100%" src="../assets/gakki.jpg">
+              <img style="width: 100%" :src="item.url">
+              <span >{{item.filename}}</span>
             </div>
             <div class="imgOnClick">
-              <div class="background" ></div>
-              <div style="position: absolute;top: 0px;">
+              <div class="background"></div>
+              <div style="position: absolute;top: 0px;width: 100%;height: 100%;">
                 <!--用下面这个div作图-->
-                <div id="pie" style="position: absolute;left: 25%; top: 25%;width: 50%; height: 50%;"></div>
+                <div :id="index"  style="position: absolute;left: 5%; top: 5%; right: 5%; bottom: 5%; width: 340px; height: 200px;"></div>
               </div>
             </div>
           </el-card>
@@ -42,6 +43,7 @@
 
 <script>
   import echarts from 'echarts'
+  import con1 from '@/assets/gakki.jpg'
   export default {
     name: "result",
     data(){
@@ -51,12 +53,42 @@
           details: 'testttttttttttffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff' +
           'fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffftttttttttttttt',
           type: 'Detection',
+        },
+        imgList:[
+          {
+            url:con1,
+            filename:"gakki.jpg"
+          },
+          {
+            url:con1,
+            filename:"gakki.jpg"
+          },
+          {
+            url:con1,
+            filename:"gakki.jpg"
+          },
+          {
+            url:con1,
+            filename:"gakki.jpg"
+          },
+          {
+            url:con1,
+            filename:"gakki.jpg"
+          },
+          {
+            url:con1,
+            filename:"gakki.jpg"
+          },
+          {
+            url:con1,
+            filename:"gakki.jpg"
+          },
 
-        }
+        ]
       }
     },
-    created(){
-    //  this.drawPieCharts()
+    mounted(){
+      this.drawPieCharts()
     },
     methods:{
       goMyProject () {
@@ -69,6 +101,62 @@
           this.openInfo("You haven't logged in")
         }
         window.location.reload()
+      },
+
+      drawPieCharts(){
+        for(var i=0;i<this.imgList.length;i++) {
+          var container = document.getElementById(i);
+          var myChart = echarts.init(container);
+          
+          // 指定图表的配置项和数据
+          var option = {
+            tooltip: {
+              trigger: 'item',
+              formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+              orient: 'vertical',
+              x: 'left',
+              data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+            },
+            series: [
+              {
+                name: '访问来源',
+                type: 'pie',
+                radius: ['50%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                  normal: {
+                    show: false,
+                    position: 'center'
+                  },
+                  emphasis: {
+                    show: true,
+                    textStyle: {
+                      fontSize: '30',
+                      fontWeight: 'bold'
+                    }
+                  }
+                },
+                labelLine: {
+                  normal: {
+                    show: false
+                  }
+                },
+                data: [
+                  {value: 335, name: '直接访问'},
+                  {value: 310, name: '邮件营销'},
+                  {value: 234, name: '联盟广告'},
+                  {value: 135, name: '视频广告'},
+                  {value: 1548, name: '搜索引擎'}
+                ]
+              }
+            ]
+          };
+
+          // 使用刚指定的配置项和数据显示图表。
+          myChart.setOption(option);
+        }
       },
     }
   }
