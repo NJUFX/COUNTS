@@ -180,8 +180,8 @@ public class MissionRepositoryImpl implements MissionRepository {
         }
         return max + 1;
     }
-
-    private synchronized List<Mission> getAllMission() {
+    @Override
+    public synchronized List<Mission> getAllMission() {
         List<Mission> missions = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(file);
