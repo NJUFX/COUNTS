@@ -44,6 +44,7 @@
 <script>
   import echarts from 'echarts'
   import con1 from '@/assets/gakki.jpg'
+  import con2 from '@/assets/dog.jpg'
   require('echarts-wordcloud');
   export default {
     name: "result",
@@ -86,9 +87,8 @@
         ],
         projectInfo:{
           name: '一个测试的项目',
-          details: 'testttttttttttffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff' +
-          'fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffftttttttttttttt',
-          type: 'Detection',
+          details: '',
+          type: 'Caption',
         },
         imgList:[
           {
@@ -124,8 +124,17 @@
       }
     },
     mounted(){
-      //this.drawPieCharts()
-      this.drawStringCloud()
+      console.log(localStorage.getItem('mt'))
+      if(localStorage.getItem('mt')=='0'){
+        for(var i=0;i<this.imgList.length;i++){
+          this.imgList[i].url = con2
+          this.imgList[i].filename = 'dog.jpg'
+        }
+        this.drawPieCharts()
+      }else{
+        this.drawStringCloud()
+      }
+     // this.drawStringCloud()this.drawStringCloud()
     },
     methods:{
       goMyProject () {
@@ -154,11 +163,11 @@
             legend: {
               orient: 'vertical',
               x: 'left',
-              data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+              data: ['狗', '猫', '兔子', '鹦鹉']
             },
             series: [
               {
-                name: '访问来源',
+                name: '动物分类',
                 type: 'pie',
                 radius: ['50%', '70%'],
                 avoidLabelOverlap: false,
@@ -181,11 +190,10 @@
                   }
                 },
                 data: [
-                  {value: 335, name: '直接访问'},
-                  {value: 310, name: '邮件营销'},
-                  {value: 234, name: '联盟广告'},
-                  {value: 135, name: '视频广告'},
-                  {value: 1548, name: '搜索引擎'}
+                  {value: 3000, name: '狗'},
+                  {value: 310, name: '猫'},
+                  {value: 134, name: '兔子'},
+                  {value: 65, name: '鹦鹉'},
                 ]
               }
             ]

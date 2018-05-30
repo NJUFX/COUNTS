@@ -342,11 +342,11 @@
       sendVerification(){
         var ran = this.randomNum(100000, 999999)
         var phone = this.form.phoneNumber;
-        console.log(phone)
+        //console.log(phone)
         this.verification = ran;
         var templatePram =  '{"code":"'+ran+'"}'
         console.log(templatePram)
-        console.log('send')
+       // console.log('send')
         const SMSClient = require('@alicloud/sms-sdk')
         const accessKeyId = 'LTAIFKY2agu6Sj1H'
         const secretAccessKey = '5h7x9bYHZ8MVXtYjWINOj1fJATwKpk'
@@ -575,6 +575,7 @@
             level: 1,
             avatar: '',
             missions: [],
+            tags: this.selectedTagList,
             points: 0, // 积分
             rate: 0, // 评分
             city: city

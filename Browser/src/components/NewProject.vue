@@ -25,13 +25,13 @@
           <el-form-item label="任务时间" required>
             <el-col :span="11">
               <el-form-item prop="dateStart" required>
-                <el-date-picker :disabled="isAutoLabel" value-format="yyyy-MM-dd" type="date" placeholder="起始日期" v-model="ruleForm.dateStart" style="width: 100%;"></el-date-picker>
+                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="起始日期" v-model="ruleForm.dateStart" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="dateEnd" required>
-                <el-date-picker :disabled="isAutoLabel" value-format="yyyy-MM-dd" type="date" placeholder="截止日期" v-model="ruleForm.dateEnd" style="width: 100%;"></el-date-picker>
+                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="截止日期" v-model="ruleForm.dateEnd" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -439,12 +439,11 @@
       },
       goMyProject () {
         var path = '/' + localStorage.getItem('username')
-
         this.$router.push({path: path + '/requester'})
 
       },
       submitForm (formName) {
-        this.doAutoLabel=true;
+
         if (this.ruleForm.type == 'Classification') {
           for (var i = 0; i < this.classArray.length; i++) {
             if (this.LTrim(this.RTrim(this.classArray[i].value)) != '') {
@@ -459,14 +458,14 @@
           }
         }
         var isValid = true
-        this.$refs[formName].validate((valid) => {
+        /*this.$refs[formName].validate((valid) => {
           if (valid) {
           } else {
             console.log('error submit!!')
             isValid = false
             return false
           }
-        })
+        })*/
         if (this.imgFileList.length == 0) {
           this.openWarn('您尚未上传任何图片。')
           isValid = false
@@ -479,24 +478,38 @@
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
               missionID = xmlhttp.responseText
-              console.log(missionID)
               _this.uploadImg(missionID)
               _this.openSucc('Submit successfully')
-              _this.resetForm()
-              _this.goMyProject()
+              _this.doAutoLabel=true;
+             // _this.goMyProject()
             }
           }
           let formData = new FormData()
-          var mission = {
-            requestorID: username,
-            missionName: _this.ruleForm.topic,
-            description: _this.ruleForm.contents,
-            begin: _this.ruleForm.dateStart,
-            end: _this.ruleForm.dateEnd,
-            type: _this.ruleForm.type,
-            points: _this.ruleForm.workerPoints,
-            maxNumber: _this.ruleForm.workerNumber,
-            selects: []
+          var mission = {}
+          if(this.isAutoLabel==true){
+            mission = {
+              requestorID: username,
+              missionName: _this.ruleForm.topic,
+              description: _this.ruleForm.contents,
+              annotationType: 1,
+              selects:[],
+              begin: _this.ruleForm.dateStart,
+              end: _this.ruleForm.dateEnd,
+              type: _this.ruleForm.type
+            }
+          }else {
+            mission = {
+              requestorID: username,
+              missionName: _this.ruleForm.topic,
+              description: _this.ruleForm.contents,
+              begin: _this.ruleForm.dateStart,
+              end: _this.ruleForm.dateEnd,
+              type: _this.ruleForm.type,
+              points: _this.ruleForm.workerPoints,
+              maxNumber: _this.ruleForm.workerNumber,
+              selects: [],
+              tags: this.selectedTagList
+            }
           }
           if (mission.type == 'Classification' || mission.type == 'Attribute') {
             mission.selects =  _this.selectsArray

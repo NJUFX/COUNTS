@@ -65,20 +65,27 @@
         <div v-for="item in projects" :key="item">
           <el-card class="el_card" :body-style="{padding:'0px'}">
             <div style="position: relative;">
-              <img style="width: 96%" v-bind:src="item.cover" class="image" v-bind:id="item.missionname">
+              <img style="width: 98%" v-bind:src="item.cover" class="image" v-bind:id="item.missionname">
               <el-tag v-show="item.isContinue" style="position: absolute; left: 20px; top: 10px; color:white; " color="#4CAF50">进行中...</el-tag>
               <el-tag v-show="item.isEnd" style="position: absolute; left: 20px; top: 10px; color:white; " color="#E97506">已满员</el-tag>
               <el-tag v-show="item.isEnd2" style="position: absolute; left: 20px; top: 10px; color:white;width: 60px " color="#E97506">已截止</el-tag>
-              <div style="height: 130px;position:absolute; top: 150px; width: 96%; left: 2%; background-color: white">
+              <div style="height: 130px;position:absolute; top: 150px; width: 98%; left: 1%; background-color: white">
                 <span style="font-size: 20px; color: #4CAF50; width:100%">{{item.missionname}}</span>
-                <span class="time" style="position: absolute; left: 5px;top: 30px;font-size: 14px;">时间：{{item.dateStart}} - {{item.dateEnd}}</span>
-                <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
-                <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
-                <span style="position: absolute; left: 5px;top: 74px;font-size: 14px;">参与人数：{{item.worker_now_number}} / {{item.worker_total_number}}</span>
-                <el-progress style="position: absolute; top: 98px; left:5px;width: 230px; color: black;font-size: 12px;" :percentage="item.percent" :stroke-width="16" :text-inside="true"></el-progress>
+                <span class="time" style="position: absolute; left: 5px;top: 25px;font-size: 14px;">时间：{{item.dateStart}} - {{item.dateEnd}}</span>
+                <span style="position: absolute; left: 5px;top: 47px;font-size: 14px;">类型：{{item.type}}</span>
+                <span style="position: absolute; left: 140px;top: 47px;font-size: 14px;">积分：{{item.counts}}</span>
+                <span style="position: absolute; left: 5px;top: 69px;font-size: 14px;">参与人数：{{item.worker_now_number}} / {{item.worker_total_number}}</span>
+                <div style="position: absolute; left: 5px;top: 95px; width: 320px">
+                  <div style="float: left"  v-for="tag in item.tags">
+                    <div class="item">
+                      <span>{{tag}}</span>
+                    </div>
+                  </div>
+                </div>
+                <el-progress style="position: absolute; top: 72px; left:140px;width: 170px; color: black;font-size: 12px;" :percentage="item.percent" :stroke-width="16" :text-inside="true"></el-progress>
               </div>
               <div class="imgOnClick" >
-                <img @click="handleProjectDetails(item.id)" src="../assets/img_1.png" style="width: 100%; position: absolute; left: 0px;top: 0px;">
+                <img @click="handleProjectDetails(item.id)" src="../assets/img_1.png" style="width: 323px; position: absolute; left: -3px;top: 0px;height: 299px">
                 <p style="color:white;position: absolute; top: 0px; left: 5%; width: 90%;text-align: justify; font-size: 14px">{{item.details}}</p>
                 <el-button class="btn" style="position: absolute; left: 50px; bottom: 0px; color: white" type="text" @click="handleProjectDetails(item.id)">查看详情</el-button>
                 <el-button class="btn2" v-bind:id="item.id" @click="joinProject(item.id)" style="display:block;position: absolute; right: 50px; bottom: 0px; color: white;" type="text" v-bind:disabled="item.isBan">参与项目</el-button>
@@ -136,7 +143,58 @@ export default {
         isEnd: false,
         isBan:true,
       },
-      projects: []
+     /* projects: [
+        {
+          cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
+          missionname: 'mission',
+          counts: 5,
+          details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
+          dateStart: '2018/04/12',
+          dateEnd: '2018/09/27',
+          worker_total_number: 30,
+          worker_now_number: 16,
+          percent: (16 / 30 * 100).toFixed(2),
+          type: '方框标注',
+          id: '001002',
+          isContinue:true,
+          isEnd: false,
+          isBan:true,
+          tags:['dog','tech','java']
+        }, {
+          cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
+          missionname: 'mission',
+          counts: 5,
+          details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
+          dateStart: '2018/04/12',
+          dateEnd: '2018/09/27',
+          worker_total_number: 30,
+          worker_now_number: 16,
+          percent: (16 / 30 * 100).toFixed(2),
+          type: '方框标注',
+          id: '001002',
+          isContinue:true,
+          isEnd: false,
+          isBan:true,
+          tags:['cat','apple','win10']
+        }, {
+          cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
+          missionname: 'mission',
+          counts: 5,
+          details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
+          dateStart: '2018/04/12',
+          dateEnd: '2018/09/27',
+          worker_total_number: 30,
+          worker_now_number: 16,
+          percent: (16 / 30 * 100).toFixed(2),
+          type: '方框标注',
+          id: '001002',
+          isContinue:true,
+          isEnd: false,
+          isBan:true,
+          tags:['soft','database','mini','horse','padding','steve bob',]
+        }
+      ]*/
+      projects:[]
     }
   },
   created () {
@@ -243,6 +301,7 @@ export default {
               isContinue:true,
               isEnd:false,
               isEnd2: false,
+              tags:e.tags
             }
 
             _this.projects.push(info)
@@ -371,12 +430,23 @@ export default {
     border-radius: 0;
     margin: 15px;
     padding: 5px;
-    width: 250px;
-    height: 270px;
+    width: 330px;
+    height: 300px;
     float: left;
     position: relative;
   }
-
+  .item{
+    font-size: 13px;
+    color: #ff8432;
+    margin: 2px;
+    height: 18px;
+    border: 1px solid #ff8432;
+    border-radius: 15px;
+    float: left;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top:1px;
+  }
   ul{
     position: fixed;
     right: 0px;

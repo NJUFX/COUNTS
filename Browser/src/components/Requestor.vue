@@ -419,9 +419,24 @@
 
     methods: {
       goProjectDetails(id) {
+        for(var i=0;i<this.projectInfo.length;i++){
+          if(this.projectInfo[i].id == id){
+            if(this.projectInfo[i].isAuto == 1){
+              if(this.projectInfo[i].type == 'Caption'){
+                localStorage.setItem('mt', '1');
+              }else{
+                localStorage.setItem('mt', '0');
+              }
+              var p = '#/' + localStorage.getItem('username') + '/' + id + '/result'
+              window.open(p)
+              return;
+            }
+          }
+        }
         localStorage.setItem('missionID', id)
         var path = '#/' + localStorage.getItem('username') + '/requester/' + id + '/projectDetails'
         window.open(path)
+
       },
       getCoverImg (missionid, i) {
         var cover = ''
@@ -465,7 +480,8 @@
                 percent:0,
                 isEnd:false,
                 isContinue:true,
-                details: arrays[i].description
+                details: arrays[i].description,
+                isAuto:arrays[i].annotationType
               })
 
               var type = arrays[i].type
