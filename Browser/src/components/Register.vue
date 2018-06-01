@@ -79,516 +79,511 @@
 </template>
 
 <script>
-  import TagSelector from './tagSelector/tagSelector'
-  import { provinceAndCityData, regionData, provinceAndCityDataPlus, regionDataPlus, CodeToText, TextToCode }
-    from 'element-china-area-data'
-  import App from '../App'
-  import SIdentify from "./identify";
+import TagSelector from './tagSelector/tagSelector'
+import { provinceAndCityData, regionData, provinceAndCityDataPlus, regionDataPlus, CodeToText, TextToCode }
+  from 'element-china-area-data'
+import App from '../App'
+import SIdentify from './identify'
 
-  export default {
-    components: {
-      TagSelector,
-      SIdentify,
-      App,
+export default {
+  components: {
+    TagSelector,
+    SIdentify,
+    App
 
-    },
-    name: 'register',
-    watch: {
-      active(){
-        if(this.active==0){
-          this.firstStep=true;
-          this.secondStep =false;
-          this.thirdStep = false;
-        }
-        if(this.active==1){
-          this.firstStep=false;
-          this.secondStep =true;
-          this.thirdStep = false;
-        }
-        if(this.active==2){
-          this.firstStep=false;
-          this.secondStep =false;
-          this.thirdStep = true;
-        }
+  },
+  name: 'register',
+  watch: {
+    active () {
+      if (this.active == 0) {
+        this.firstStep = true
+        this.secondStep = false
+        this.thirdStep = false
       }
-    },
-    data () {
-      // 以下两个方法检验注册时密码是否一致
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'))
-        } else {
-          if (value.length < 6) {
-            callback(new Error('密码不能少于6位'))
-          }
-          if (this.form.checkPass !== '') {
-            this.$refs.form.validateField('checkPass')
-          }
-          callback()
-        }
+      if (this.active == 1) {
+        this.firstStep = false
+        this.secondStep = true
+        this.thirdStep = false
       }
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'))
-        } else if (value !== this.form.pass) {
-          callback(new Error('两次输入密码不一致!'))
-        } else {
-          callback()
-        }
-      }
-      var validateMail = (rule, value, callback) => {
-        var reg = /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
-        if (reg.test(value) == false) {
-          callback(new Error('邮箱格式不正确'))
-        }
-      }
-      var validatePhone = (rule, value, callback) => {
-        if (value.length != 0) {
-          var reg = /^[1][3,4,5,7,8][0-9]{9}$/
-          if (reg.test(value) == false) {
-            callback(new Error('手机号码格式不正确'))
-          }
-        }else{
-          callback(new Error('请输入手机号码'))
-        }
-      }
-      var validateUserName = (rule, value, callback) => {
-        if (value == 'visitor'){
-          callback(new Error('该用户名不能用于注册'))
-        }else{
-          var reg = /^[0-9a-zA-Z_]{1,}$/
-          if(reg.test(value)==false){
-            callback(new Error("用户名必须是字母、数字或下划线的组合"))
-          }
-        }
-      }
-      var validateVerification = (rule, value, callback) => {
-        if (value.length!=6){
-          callback(new Error('请输入验证码'))
-        }else{
-          if(value != this.verification){
-            callback(new Error('验证码不正确'))
-          }
-        }
-      }
-      return {
-        hotTagList:['dog','cat','mouse','horse','padding','steve bob','hello world','vue',
-          'element','boom','iphone','macbook','dest','56789','12345','天将降大任于斯人也'],
-        selectedTagList:[],
-        labelTypeSelectedList:[],
-        labelTypeList:[
-          {
-            index: 'Caption',
-            text:'整体描述'
-          },
-          {
-            index: 'Detection',
-            text:'矩形标注'
-          },
-          {
-            index: 'Segmentation',
-            text:'区域标注'
-          },
-          {
-            index: 'Attribute',
-            text:'属性标注'
-          },
-        ],
-        classificationType:{
-          index: 'Classification',
-          text:'图像分类'
-        },
-        firstStep: true,
-        secondStep: false,
-        thirdStep: false,
-        isCancelBtnDisabled: false,
-        isNextBtnDisabled: false,
-        isBeforeBtnDisabled: true,
-        isSureBtnDisabled: true,
-
-        active: 0,
-
-        banDetails: '',
-        isBanShow:false,
-        inputCounts: 0,
-        isInputVerify: false,
-        identifyVerify:'',
-        identifyCodes: "1234567890",
-        identifyCode: "",
-        verification: '',
-        isVerBtnShow: false,
-        verBtnInfo: '发送',
-        isPhoneCorrect:false,
-        options: provinceAndCityData,
-        selectedOptions: [],
-        isCorrectUser: false,
-
-        dialogFormVisible: false,
-        form: {
-          location: '',
-          userName: '',
-          identity: '',
-          mailbox: '',
-          pass: '',
-          checkPass: '',
-          phoneNumber: '',
-          verification: ''
-        },
-
-        formLabelWidth: '100px',
-
-        rules2: {
-          pass: [
-            { validator: validatePass, trigger: 'blur' }
-          ],
-          checkPass: [
-            { validator: validatePass2, trigger: 'blur' }
-          ],
-          mailbox: [
-            {validator: validateMail, trigger: 'blur'}
-          ],
-          phoneNumber: [
-            {validator: validatePhone, trigger: 'blur'}
-          ],
-          userName: [
-            {validator: validateUserName, trigger: 'blur'}
-          ],
-          verification: [
-            {validator: validateVerification, trigger: 'blur'}
-          ],
-        }
-
-      }
-    },
-    mounted() {
-      this.identifyCode = "";
-      this.makeCode(this.identifyCodes, 4);
-    },
-    methods: {
-      returnLogin(){
-        var path = '/login'
-        this.$router.push({path: path})
-      },
-      LTrim(str) {
-        return str.replace(/^\s*/g, '')
-      },
-      // 去右空格
-      RTrim(str) {
-        return str.replace(/\s*$/g, '')
-      },
-      handleCancelButton() {
-        var path = '/' + localStorage.getItem('username')
-        //  this.$router.push({path: path + '/requester'})
-      },
-      selectManLabel() {
-        this.isAutoLabel = false;
-        document.getElementById('manLabel').style.backgroundColor = '#1d86ff'
-        document.getElementById('manLabel').style.color = 'white'
-        document.getElementById('manLabel').style.border = '0'
-        document.getElementById('autoLabel').style.backgroundColor = 'white'
-        document.getElementById('autoLabel').style.color = 'black'
-        document.getElementById('autoLabel').style.border = '1px solid #999'
-      },
-      selectAutoLabel() {
-        this.isAutoLabel = true;
-        document.getElementById('autoLabel').style.backgroundColor = '#1d86ff'
-        document.getElementById('autoLabel').style.color = 'white'
-        document.getElementById('autoLabel').style.border = '0'
-        document.getElementById('manLabel').style.backgroundColor = 'white'
-        document.getElementById('manLabel').style.color = 'black'
-        document.getElementById('manLabel').style.border = '1px solid #999'
-      },
-      handleBeforeBtn() {
-        this.isNextBtnDisabled = false;
-        if (this.active > 0) {
-          this.active--;
-        }
-        if (this.isAutoLabel == true)
-          this.active = 0
-        if (this.active == 0) {
-          this.isBeforeBtnDisabled = true
-        }
-      },
-      newHotTag() {
-        this.hotTagList.push('new hot tag');
-      },
-      handleNextBtn() {
-        this.isBeforeBtnDisabled = false;
-
-        if (this.active < 2) {
-          this.active++;
-        }
-        if (this.isAutoLabel == true)
-          this.active = 2;
-        if (this.active == 1) {
-          this.isSureBtnDisabled = false;
-          this.isNextBtnDisabled = true
-        }
-      },
-      random_Num(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
-      },
-      refreshCode() {
-        this.identifyCode = "";
-        this.makeCode(this.identifyCodes, 4);
-      },
-      makeCode(o, l) {
-        for (let i = 0; i < l; i++) {
-          this.identifyCode += this.identifyCodes[
-            this.random_Num(0, this.identifyCodes.length)
-            ];
-        }
-      },
-      sendVerification(){
-        var ran = this.randomNum(100000, 999999)
-        var phone = this.form.phoneNumber;
-        //console.log(phone)
-        this.verification = ran;
-        var templatePram =  '{"code":"'+ran+'"}'
-        console.log(templatePram)
-       // console.log('send')
-        const SMSClient = require('@alicloud/sms-sdk')
-        const accessKeyId = 'LTAIFKY2agu6Sj1H'
-        const secretAccessKey = '5h7x9bYHZ8MVXtYjWINOj1fJATwKpk'
-        //初始化sms_client
-        let smsClient = new SMSClient({accessKeyId, secretAccessKey})
-        smsClient.sendSMS({
-          PhoneNumbers: phone,
-          SignName: '众包标注平台FX',
-          TemplateCode: 'SMS_133265998',
-          TemplateParam: templatePram
-        }).then(function (res) {
-          let {Code}=res
-          if (Code === 'OK') {
-            //处理返回参数
-            console.log(res)
-          }
-        }, function (err) {
-          console.log(err)
-        })
-        console.log('sended')
-        this.resetTime()
-
-      },
-      resetTime(){
-        var _this = this
-        var timer=null;
-        var t=60;
-        var m=0;
-        var s=0;
-        m=Math.floor(t/60%60);
-        m<10&&(m='0'+m);
-        s=Math.floor(t%60);
-        function countDown(){
-          s--;
-          s<10&&(s='0'+s);
-          if(s.length>=3){
-            s=59;
-            m="0"+(Number(m)-1);
-          }
-          if(m.length>=3){
-            m='00';
-            s='00';
-            clearInterval(timer);
-          }
-
-          if(parseInt(s)!=0){
-            _this.verBtnInfo = s+'秒'
-            _this.isVerBtnShow = true
-          }else{
-            _this.verBtnInfo = '重新发送'
-            _this.isVerBtnShow = false
-          }
-        }
-        timer=setInterval(countDown,1000);
-      },
-      randomNum(minNum,maxNum){
-        switch(arguments.length){
-          case 1:
-            return parseInt(Math.random()*minNum+1,10);
-            break;
-          case 2:
-            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10);
-            break;
-          default:
-            return 0;
-            break;
-        }
-      },
-      handleLocationChange (value) {
-        if (value[0] == '110000' || value[0] == '120000' || value[0] == '310000' || value[0] == '500000') {
-          this.form.location = CodeToText[value[0]]
-
-        } else {
-          this.form.location = CodeToText[value[1]]
-
-        }
-      },
-
-      openSucc: function (text) {
-        this.$notify({
-          title: '成功',
-          message: text,
-          type: 'success',
-          duration: 2000,
-          position: 'top-left'
-        })
-      },
-      openWarn: function (text) {
-        this.$notify({
-          title: '警告',
-          message: text,
-          type: 'warning',
-          duration: 2000,
-          position: 'top-left'
-        })
-      },
-      loginAndToUserPage () {
-        if (this.input_id == 'admin') {
-          var path = '/' + this.form.userName + '/admin'
-          this.$router.push({path: path})
-        } else if (this.input_id == 'test') {
-          var path = '/' + this.form.userName + '/test'
-          this.$router.push({path: path})
-        } else {
-          this.login()
-        }
-      },
-      login: function () {
-        if(this.isInputVerify==true){
-          if(this.identifyVerify==''){
-            this.banDetails = '请输入验证码'
-            this.isBanShow=true;
-            return
-          }else{
-            if(this.identifyCode!=this.identifyVerify){
-              this.banDetails = '验证码错误'
-              return;
-            }else{
-              this.isBanShow = false;
-            }
-          }
-        }
-        var id = this.form.userName
-        var password = this.form.pass
-        var _this = this
-        if (id == undefined || id == null || new RegExp('^[ ]+$').test(id)) {
-          this.$alert('请输入用户名', '错误', {
-            confirmButtonText: '确定'
-          })
-          return
-        }
-        if (password == undefined || password == null || new RegExp('^[ ]+$').test(password)) {
-          this.$alert('请输入密码', '错误', {
-            confirmButtonText: '确定'
-          })
-          return
-        }
-        var xmlhttp = new XMLHttpRequest()
-        xmlhttp.onreadystatechange = function () {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            if (JSON.parse(xmlhttp.responseText).result == true || JSON.parse(xmlhttp.responseText).result.result == true) {
-              _this.toUserPage()
-            } else {
-              _this.openWarn('Fail to log in')
-              _this.inputCounts++;
-              if(_this.inputCounts>=5){
-                _this.isInputVerify = true;
-              }
-            }
-          }
-        }
-
-        xmlhttp.open('POST', 'http://localhost:8080/counts/user/signin', true)
-        xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-        var user = {
-          username: id,
-          password: password,
-          email: '',
-          phone: '',
-          role: ''
-        }
-        xmlhttp.send(JSON.stringify(user))
-      },
-
-      toUserPage () {
-        var id = this.form.userName
-        var _this = this
-        var xmlhttp2 = new XMLHttpRequest()
-        xmlhttp2.onreadystatechange = function () {
-          if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
-            if (xmlhttp2.responseText == 'Requestor') {
-              _this.openSucc('Login in Successfully.')
-              var path = '/' + id + '/requester'
-              _this.$router.push({path: path})
-              localStorage.setItem('identify', 'requester')
-              localStorage.setItem('username', id)
-              window.location.reload()
-            } else if (xmlhttp2.responseText == 'Worker') {
-              _this.openSucc('Login in Successfully.')
-              var path = '/' + id + '/myProject'
-              _this.$router.push({path: path})
-              localStorage.setItem('identify', 'worker')
-              localStorage.setItem('username', id)
-              window.location.reload()
-            }
-          }
-        }
-        xmlhttp2.open('POST', 'http://localhost:8080/counts/user/findusername', true)
-        xmlhttp2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8')
-        xmlhttp2.send('username=' + id)
-      },
-      handleRegister: function () {
-        var username = this.form.userName
-        var password = this.form.pass
-        var checkPassword = this.form.checkPass
-        var mail = this.form.mailbox
-        var phoneNo = this.form.phoneNumber
-        var role = this.form.identity
-        var city = this.form.location
-        if (password != checkPassword) {
-          this.$alert('密码不一致', '错误', {
-            confirmButtonText: '确定'
-          })
-        } else {
-          var xmlhttp = new XMLHttpRequest()
-          var _this = this
-          xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-              // console.log(JSON.parse(xmlhttp.responseText).result);
-              if (JSON.parse(xmlhttp.responseText).result == true) {
-                _this.openSucc('注册成功！')
-                _this.loginAndToUserPage()
-              } else {
-                _this.openWarn('注册失败！')
-              }
-            }
-          }
-          var user = {
-            username: username,
-            password: password,
-            email: mail,
-            phone: phoneNo,
-            role: role,
-            name: username,
-            info: '',
-            level: 1,
-            avatar: '',
-            missions: [],
-            tags: this.selectedTagList,
-            points: 0, // 积分
-            rate: 0, // 评分
-            city: city
-          }
-
-          xmlhttp.open('POST', 'http://localhost:8080/counts/user/signup', true)
-          xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-          xmlhttp.send(JSON.stringify(user))
-        }
-        this.dialogFormVisible = false
+      if (this.active == 2) {
+        this.firstStep = false
+        this.secondStep = false
+        this.thirdStep = true
       }
     }
+  },
+  data () {
+    // 以下两个方法检验注册时密码是否一致
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (value.length < 6) {
+          callback(new Error('密码不能少于6位'))
+        }
+        if (this.form.checkPass !== '') {
+          this.$refs.form.validateField('checkPass')
+        }
+        callback()
+      }
+    }
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.form.pass) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    var validateMail = (rule, value, callback) => {
+      var reg = /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
+      if (reg.test(value) == false) {
+        callback(new Error('邮箱格式不正确'))
+      }
+    }
+    var validatePhone = (rule, value, callback) => {
+      if (value.length != 0) {
+        var reg = /^[1][3,4,5,7,8][0-9]{9}$/
+        if (reg.test(value) == false) {
+          callback(new Error('手机号码格式不正确'))
+        }
+      } else {
+        callback(new Error('请输入手机号码'))
+      }
+    }
+    var validateUserName = (rule, value, callback) => {
+      if (value == 'visitor') {
+        callback(new Error('该用户名不能用于注册'))
+      } else {
+        var reg = /^[0-9a-zA-Z_]{1,}$/
+        if (reg.test(value) == false) {
+          callback(new Error('用户名必须是字母、数字或下划线的组合'))
+        }
+      }
+    }
+    var validateVerification = (rule, value, callback) => {
+      if (value.length != 6) {
+        callback(new Error('请输入验证码'))
+      } else {
+        if (value != this.verification) {
+          callback(new Error('验证码不正确'))
+        }
+      }
+    }
+    return {
+      hotTagList: ['dog', 'cat', 'mouse', 'horse', 'padding', 'steve bob', 'hello world', 'vue',
+        'element', 'boom', 'iphone', 'macbook', 'dest', '56789', '12345', '天将降大任于斯人也'],
+      selectedTagList: [],
+      labelTypeSelectedList: [],
+      labelTypeList: [
+        {
+          index: 'Caption',
+          text: '整体描述'
+        },
+        {
+          index: 'Detection',
+          text: '矩形标注'
+        },
+        {
+          index: 'Segmentation',
+          text: '区域标注'
+        },
+        {
+          index: 'Attribute',
+          text: '属性标注'
+        }
+      ],
+      classificationType: {
+        index: 'Classification',
+        text: '图像分类'
+      },
+      firstStep: true,
+      secondStep: false,
+      thirdStep: false,
+      isCancelBtnDisabled: false,
+      isNextBtnDisabled: false,
+      isBeforeBtnDisabled: true,
+      isSureBtnDisabled: true,
+
+      active: 0,
+
+      banDetails: '',
+      isBanShow: false,
+      inputCounts: 0,
+      isInputVerify: false,
+      identifyVerify: '',
+      identifyCodes: '1234567890',
+      identifyCode: '',
+      verification: '',
+      isVerBtnShow: false,
+      verBtnInfo: '发送',
+      isPhoneCorrect: false,
+      options: provinceAndCityData,
+      selectedOptions: [],
+      isCorrectUser: false,
+
+      dialogFormVisible: false,
+      form: {
+        location: '',
+        userName: '',
+        identity: '',
+        mailbox: '',
+        pass: '',
+        checkPass: '',
+        phoneNumber: '',
+        verification: ''
+      },
+
+      formLabelWidth: '100px',
+
+      rules2: {
+        pass: [
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        checkPass: [
+          { validator: validatePass2, trigger: 'blur' }
+        ],
+        mailbox: [
+          {validator: validateMail, trigger: 'blur'}
+        ],
+        phoneNumber: [
+          {validator: validatePhone, trigger: 'blur'}
+        ],
+        userName: [
+          {validator: validateUserName, trigger: 'blur'}
+        ],
+        verification: [
+          {validator: validateVerification, trigger: 'blur'}
+        ]
+      }
+
+    }
+  },
+  mounted () {
+    this.identifyCode = ''
+    this.makeCode(this.identifyCodes, 4)
+  },
+  methods: {
+    returnLogin () {
+      var path = '/login'
+      this.$router.push({path: path})
+    },
+    LTrim (str) {
+      return str.replace(/^\s*/g, '')
+    },
+    // 去右空格
+    RTrim (str) {
+      return str.replace(/\s*$/g, '')
+    },
+    handleCancelButton () {
+      var path = '/' + localStorage.getItem('username')
+      //  this.$router.push({path: path + '/requester'})
+    },
+    selectManLabel () {
+      this.isAutoLabel = false
+      document.getElementById('manLabel').style.backgroundColor = '#1d86ff'
+      document.getElementById('manLabel').style.color = 'white'
+      document.getElementById('manLabel').style.border = '0'
+      document.getElementById('autoLabel').style.backgroundColor = 'white'
+      document.getElementById('autoLabel').style.color = 'black'
+      document.getElementById('autoLabel').style.border = '1px solid #999'
+    },
+    selectAutoLabel () {
+      this.isAutoLabel = true
+      document.getElementById('autoLabel').style.backgroundColor = '#1d86ff'
+      document.getElementById('autoLabel').style.color = 'white'
+      document.getElementById('autoLabel').style.border = '0'
+      document.getElementById('manLabel').style.backgroundColor = 'white'
+      document.getElementById('manLabel').style.color = 'black'
+      document.getElementById('manLabel').style.border = '1px solid #999'
+    },
+    handleBeforeBtn () {
+      this.isNextBtnDisabled = false
+      if (this.active > 0) {
+        this.active--
+      }
+      if (this.isAutoLabel == true) { this.active = 0 }
+      if (this.active == 0) {
+        this.isBeforeBtnDisabled = true
+      }
+    },
+    newHotTag () {
+      this.hotTagList.push('new hot tag')
+    },
+    handleNextBtn () {
+      this.isBeforeBtnDisabled = false
+
+      if (this.active < 2) {
+        this.active++
+      }
+      if (this.isAutoLabel == true) { this.active = 2 }
+      if (this.active == 1) {
+        this.isSureBtnDisabled = false
+        this.isNextBtnDisabled = true
+      }
+    },
+    random_Num (min, max) {
+      return Math.floor(Math.random() * (max - min) + min)
+    },
+    refreshCode () {
+      this.identifyCode = ''
+      this.makeCode(this.identifyCodes, 4)
+    },
+    makeCode (o, l) {
+      for (let i = 0; i < l; i++) {
+        this.identifyCode += this.identifyCodes[
+          this.random_Num(0, this.identifyCodes.length)
+        ]
+      }
+    },
+    sendVerification () {
+      var ran = this.randomNum(100000, 999999)
+      var phone = this.form.phoneNumber
+      // console.log(phone)
+      this.verification = ran
+      var templatePram = '{"code":"' + ran + '"}'
+      console.log(templatePram)
+      // console.log('send')
+      const SMSClient = require('@alicloud/sms-sdk')
+      const accessKeyId = 'LTAIFKY2agu6Sj1H'
+      const secretAccessKey = '5h7x9bYHZ8MVXtYjWINOj1fJATwKpk'
+      // 初始化sms_client
+      let smsClient = new SMSClient({accessKeyId, secretAccessKey})
+      smsClient.sendSMS({
+        PhoneNumbers: phone,
+        SignName: '众包标注平台FX',
+        TemplateCode: 'SMS_133265998',
+        TemplateParam: templatePram
+      }).then(function (res) {
+        let {Code} = res
+        if (Code === 'OK') {
+          // 处理返回参数
+          console.log(res)
+        }
+      }, function (err) {
+        console.log(err)
+      })
+      console.log('sended')
+      this.resetTime()
+    },
+    resetTime () {
+      var _this = this
+      var timer = null
+      var t = 60
+      var m = 0
+      var s = 0
+      m = Math.floor(t / 60 % 60)
+      m < 10 && (m = '0' + m)
+      s = Math.floor(t % 60)
+      function countDown () {
+        s--
+        s < 10 && (s = '0' + s)
+        if (s.length >= 3) {
+          s = 59
+          m = '0' + (Number(m) - 1)
+        }
+        if (m.length >= 3) {
+          m = '00'
+          s = '00'
+          clearInterval(timer)
+        }
+
+        if (parseInt(s) != 0) {
+          _this.verBtnInfo = s + '秒'
+          _this.isVerBtnShow = true
+        } else {
+          _this.verBtnInfo = '重新发送'
+          _this.isVerBtnShow = false
+        }
+      }
+      timer = setInterval(countDown, 1000)
+    },
+    randomNum (minNum, maxNum) {
+      switch (arguments.length) {
+        case 1:
+          return parseInt(Math.random() * minNum + 1, 10)
+          break
+        case 2:
+          return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
+          break
+        default:
+          return 0
+          break
+      }
+    },
+    handleLocationChange (value) {
+      if (value[0] == '110000' || value[0] == '120000' || value[0] == '310000' || value[0] == '500000') {
+        this.form.location = CodeToText[value[0]]
+      } else {
+        this.form.location = CodeToText[value[1]]
+      }
+    },
+
+    openSucc: function (text) {
+      this.$notify({
+        title: '成功',
+        message: text,
+        type: 'success',
+        duration: 2000,
+        position: 'top-left'
+      })
+    },
+    openWarn: function (text) {
+      this.$notify({
+        title: '警告',
+        message: text,
+        type: 'warning',
+        duration: 2000,
+        position: 'top-left'
+      })
+    },
+    loginAndToUserPage () {
+      if (this.input_id == 'admin') {
+        var path = '/' + this.form.userName + '/admin'
+        this.$router.push({path: path})
+      } else if (this.input_id == 'test') {
+        var path = '/' + this.form.userName + '/test'
+        this.$router.push({path: path})
+      } else {
+        this.login()
+      }
+    },
+    login: function () {
+      if (this.isInputVerify == true) {
+        if (this.identifyVerify == '') {
+          this.banDetails = '请输入验证码'
+          this.isBanShow = true
+          return
+        } else {
+          if (this.identifyCode != this.identifyVerify) {
+            this.banDetails = '验证码错误'
+            return
+          } else {
+            this.isBanShow = false
+          }
+        }
+      }
+      var id = this.form.userName
+      var password = this.form.pass
+      var _this = this
+      if (id == undefined || id == null || new RegExp('^[ ]+$').test(id)) {
+        this.$alert('请输入用户名', '错误', {
+          confirmButtonText: '确定'
+        })
+        return
+      }
+      if (password == undefined || password == null || new RegExp('^[ ]+$').test(password)) {
+        this.$alert('请输入密码', '错误', {
+          confirmButtonText: '确定'
+        })
+        return
+      }
+      var xmlhttp = new XMLHttpRequest()
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          if (JSON.parse(xmlhttp.responseText).result == true || JSON.parse(xmlhttp.responseText).result.result == true) {
+            _this.toUserPage()
+          } else {
+            _this.openWarn('Fail to log in')
+            _this.inputCounts++
+            if (_this.inputCounts >= 5) {
+              _this.isInputVerify = true
+            }
+          }
+        }
+      }
+
+      xmlhttp.open('POST', 'http://localhost:8080/counts/user/signin', true)
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      var user = {
+        username: id,
+        password: password,
+        email: '',
+        phone: '',
+        role: ''
+      }
+      xmlhttp.send(JSON.stringify(user))
+    },
+
+    toUserPage () {
+      var id = this.form.userName
+      var _this = this
+      var xmlhttp2 = new XMLHttpRequest()
+      xmlhttp2.onreadystatechange = function () {
+        if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+          if (xmlhttp2.responseText == 'Requestor') {
+            _this.openSucc('Login in Successfully.')
+            var path = '/' + id + '/requester'
+            _this.$router.push({path: path})
+            localStorage.setItem('identify', 'requester')
+            localStorage.setItem('username', id)
+            window.location.reload()
+          } else if (xmlhttp2.responseText == 'Worker') {
+            _this.openSucc('Login in Successfully.')
+            var path = '/' + id + '/myProject'
+            _this.$router.push({path: path})
+            localStorage.setItem('identify', 'worker')
+            localStorage.setItem('username', id)
+            window.location.reload()
+          }
+        }
+      }
+      xmlhttp2.open('POST', 'http://localhost:8080/counts/user/findusername', true)
+      xmlhttp2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8')
+      xmlhttp2.send('username=' + id)
+    },
+    handleRegister: function () {
+      var username = this.form.userName
+      var password = this.form.pass
+      var checkPassword = this.form.checkPass
+      var mail = this.form.mailbox
+      var phoneNo = this.form.phoneNumber
+      var role = this.form.identity
+      var city = this.form.location
+      if (password != checkPassword) {
+        this.$alert('密码不一致', '错误', {
+          confirmButtonText: '确定'
+        })
+      } else {
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            // console.log(JSON.parse(xmlhttp.responseText).result);
+            if (JSON.parse(xmlhttp.responseText).result == true) {
+              _this.openSucc('注册成功！')
+              _this.loginAndToUserPage()
+            } else {
+              _this.openWarn('注册失败！')
+            }
+          }
+        }
+        var user = {
+          username: username,
+          password: password,
+          email: mail,
+          phone: phoneNo,
+          role: role,
+          name: username,
+          info: '',
+          level: 1,
+          avatar: '',
+          missions: [],
+          tags: this.selectedTagList,
+          points: 0, // 积分
+          rate: 0, // 评分
+          city: city
+        }
+
+        xmlhttp.open('POST', 'http://localhost:8080/counts/user/signup', true)
+        xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        xmlhttp.send(JSON.stringify(user))
+      }
+      this.dialogFormVisible = false
+    }
   }
+}
 </script>
 
 <style scoped>
