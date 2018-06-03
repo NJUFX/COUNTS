@@ -14,6 +14,7 @@ import ProjectDetails from '@/components/ProjectDetails'
 import CountsDetails from '@/components/CountsDetails'
 import Result from '@/components/Result'
 import Register from '@/components/Register'
+import Message from '@/components/Message'
 Vue.use(Router)
 
 export default new Router({
@@ -32,6 +33,11 @@ export default new Router({
       path: '/:username/worker',
       name: 'Worker',
       component: Worker
+    },
+    {
+      path: '/:username/message',
+      name: 'Message',
+      component: Message
     },
     {
       path: '/:username/requester',

@@ -4,6 +4,9 @@
       <img class="logoIcon" @click="goHome" src="./assets/logo.png">
       <el-button class="zhongbaosc" @click="goMarket" type="text" >众包市场</el-button>
       <el-button class="wodexm" @click="goMyProject" type="text">个人中心</el-button>
+      <el-badge v-bind:value="unreadInfoNumber" class="item">
+        <el-button @click="readMessage" class="message" type="text"><i class="el-icon-ali-xinxi-copy" style="font-size: 22px"></i></el-button>
+      </el-badge>
       <el-button class="login_button" type="text" @click="login_button_action()">登陆</el-button>
       <el-dropdown @command="handleCommand" class="headDropDown">
         <img id="userImg" class="el-dropdown-link" v-bind:src="headImg">
@@ -33,7 +36,8 @@ export default {
   name: 'App',
   data: function () {
     return {
-      headImg: HeadImg
+      headImg: HeadImg,
+      unreadInfoNumber:localStorage.getItem('unreadInfoNumber')
     }
   },
   created () {
@@ -62,8 +66,6 @@ export default {
       '                                                                                                                                                                               '
     )
     console.log('   count_fx@163.com 欢迎您的来信')
-
-
     localStorage.setItem('server', 'http://localhost:8080')
     if (localStorage.getItem('username') != 'visitor' && localStorage.getItem('username') != 'undefined') {
       var xmlhttp = new XMLHttpRequest()
@@ -87,10 +89,18 @@ export default {
     }
   },
 
-  destroyed () {
-    window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
-  },
   methods: {
+    readMessage(){
+      var path = '/' + localStorage.getItem('username')
+      var id = localStorage.getItem('identify')
+      if (id == 'logout') {
+        this.openInfo("You haven't logged in")
+    //    this.$router.push({path: '/login'})
+      }else{
+        var p = '/'+localStorage.getItem('username')+'/message'
+        this.$router.push({path: p})
+      }
+    },
 
     openSucc (text) {
       this.$notify({
@@ -220,4 +230,16 @@ export default {
     font-size: 14px;
     color: white;
   }
+  .message{
+    margin-left: 100px;
+    color: white;
+    margin-top: -10px;
+  }
+.item {
+  font-size: 10px;
+  position: absolute;
+  top:17px;
+  right: 13%;
+
+ }
 </style>

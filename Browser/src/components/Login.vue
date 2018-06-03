@@ -357,6 +357,10 @@ export default {
         this.login()
       }
     },
+    getAllMessage(){
+      localStorage.setItem('unreadInfoNumber', 10);
+    },
+
     login: function () {
       if(this.isInputVerify==true){
         if(this.identifyVerify==''){
@@ -392,6 +396,7 @@ export default {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           if (JSON.parse(xmlhttp.responseText).result == true || JSON.parse(xmlhttp.responseText).result.result == true) {
             _this.toUserPage()
+            _this.getAllMessage()
           } else {
             _this.openWarn('Fail to log in')
             _this.inputCounts++;

@@ -2,46 +2,46 @@
   <div>
     <div style="position: absolute; top: 57px; left: 0px; width: 100%; height: 140px;">
       <div style="position: absolute; left: 300px; width: 700px">
-          <div style="position: relative;">
-            <span style="position:absolute; top: 10px; color: #d81e06; left: 0px;">筛选</span>
-            <img src="../assets/shaixuan.png" style="position: absolute;width:20px; top:12px; left: 35px;">
-            <div>
-              <span style="position: absolute;font-size: 14px; left: 100px; top: 12px;">标注类型:</span>
-              <el-button type="text" style="position: absolute; left: 180px; top: 1px;">默认</el-button>
-              <span style="position: absolute; left: 230px; top: 11px;">|</span>
-              <el-button type="text" style="position: absolute; left: 250px; top: 1px;">整体描述</el-button>
-              <span style="position: absolute; left: 320px; top: 11px;">|</span>
-              <el-button type="text" style="position: absolute; left: 340px; top: 1px;">方框标注</el-button>
-              <span style="position: absolute; left: 410px; top: 11px;">|</span>
-              <el-button type="text" style="position: absolute; left: 430px; top: 1px;">区域标注</el-button>
-              <span style="position: absolute; left: 500px; top: 11px;">|</span>
-              <el-button type="text" style="position: absolute; left: 520px; top: 1px;">图像分类</el-button>
-              <span style="position: absolute; left: 590px; top: 11px;">|</span>
-              <el-button type="text" style="position: absolute; left: 610px; top: 1px;">属性标注</el-button>
-            </div>
-            <div>
-              <span style="position: absolute;font-size: 14px; left: 103px; top: 45px;">积 分</span>
-              <el-input-number v-model="count" @change="handleChange" :min="5" :max="20" size="mini" style="position: absolute; left: 170px; top: 40px; "></el-input-number>
-              <el-button type="text" style="position: absolute; left: 310px; top: 33px;">恢复默认</el-button>
-            </div>
-            <div>
-              <span style="position: absolute;font-size: 14px; left:103px; top: 78px;">时 间</span>
-              <el-date-picker @change="handleTimeChange" style="position: absolute; left: 170px; top: 76px;" size="mini" v-model="timepart" type="daterange" range-separator="-" start-placeholder="起始日期" end-placeholder="截止日期"></el-date-picker>
-            </div>
-            <div>
-              <span style="position:absolute; top: 110px; color: #d81e06; left: 0px;">排序</span>
-              <img src="../assets/sort.png" style="position: absolute;width:20px; top:112px; left: 35px;">
-              <div>
-                <el-button type="text" style="position: absolute; left: 101px; top: 101px;">默认</el-button>
-                <span style="position: absolute; left: 150px; top: 110px;">|</span>
-                <el-button type="text" style="position: absolute; left: 170px; top: 101px;">积分 <i v-bind:class="countIcon"></i></el-button>
-                <span style="position: absolute; left: 220px; top: 110px;">|</span>
-                <el-button type="text" style="position: absolute; left: 240px; top: 101px;">时间 <i v-bind:class="timeIcon"></i></el-button>
-                <span style="position: absolute; left: 290px; top: 110px;">|</span>
-                <el-button type="text" style="position: absolute; left: 310px; top: 101px;">热度 <i v-bind:class="hotIcon"></i></el-button>
-              </div>
-            </div>
+        <div style="position: relative;">
+          <span style="position:absolute; top: 10px; color: #d81e06; left: 0px;">筛选</span>
+          <img src="../assets/shaixuan.png" style="position: absolute;width:20px; top:12px; left: 35px;">
+          <div>
+            <span style="position: absolute;font-size: 14px; left: 100px; top: 12px;">标注类型:</span>
+            <el-button type="text" style="position: absolute; left: 180px; top: 1px;">默认</el-button>
+            <span style="position: absolute; left: 230px; top: 11px;">|</span>
+            <el-button type="text" style="position: absolute; left: 250px; top: 1px;">整体描述</el-button>
+            <span style="position: absolute; left: 320px; top: 11px;">|</span>
+            <el-button type="text" style="position: absolute; left: 340px; top: 1px;">方框标注</el-button>
+            <span style="position: absolute; left: 410px; top: 11px;">|</span>
+            <el-button type="text" style="position: absolute; left: 430px; top: 1px;">区域标注</el-button>
+            <span style="position: absolute; left: 500px; top: 11px;">|</span>
+            <el-button type="text" style="position: absolute; left: 520px; top: 1px;">图像分类</el-button>
+            <span style="position: absolute; left: 590px; top: 11px;">|</span>
+            <el-button type="text" style="position: absolute; left: 610px; top: 1px;">属性标注</el-button>
           </div>
+          <!--
+          <div>
+            <span style="position: absolute;font-size: 14px; left: 103px; top: 45px;">积 分</span>
+            <el-input-number v-model="count" @change="handleChange" :min="5" :max="20" size="mini" style="position: absolute; left: 170px; top: 40px; "></el-input-number>
+            <el-button type="text" style="position: absolute; left: 310px; top: 33px;">恢复默认</el-button>
+          </div>
+          <div>
+            <span style="position: absolute;font-size: 14px; left:103px; top: 78px;">时 间</span>
+            <el-date-picker @change="handleTimeChange" style="position: absolute; left: 170px; top: 76px;" size="mini" v-model="timepart" type="daterange" range-separator="-" start-placeholder="起始日期" end-placeholder="截止日期"></el-date-picker>
+          </div>
+          -->
+          <div>
+            <span style="position:absolute; top: 110px; color: #d81e06; left: 0px;">排序</span>
+            <img src="../assets/sort.png" style="position: absolute;width:20px; top:112px; left: 35px;">
+            <div>
+              <el-button type="text" style="position: absolute; left: 101px; top: 101px;">默认</el-button>
+              <span style="position: absolute; left: 150px; top: 110px;">|</span>
+              <el-button type="text" style="position: absolute; left: 170px; top: 101px;">积分 <i v-bind:class="countIcon"></i></el-button>
+              <span style="position: absolute; left: 220px; top: 110px;">|</span>
+              <el-button type="text" style="position: absolute; left: 240px; top: 101px;">时间 <i v-bind:class="timeIcon"></i></el-button>
+              </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -76,11 +76,14 @@
                 <span style="position: absolute; left: 140px;top: 47px;font-size: 14px;">积分：{{item.counts}}</span>
                 <span style="position: absolute; left: 5px;top: 69px;font-size: 14px;">参与人数：{{item.worker_now_number}} / {{item.worker_total_number}}</span>
                 <div style="position: absolute; left: 5px;top: 95px; width: 320px">
-                  <div style="float: left"  v-for="tag in item.tags">
-                    <div class="item">
-                      <span>{{tag}}</span>
+                  <div style="float: left">
+                    <div style="float: left"  v-for="tag in item.tags">
+                      <div class="itemn" style="float: left">
+                        <span>{{tag}}</span>
+                      </div>
                     </div>
                   </div>
+
                 </div>
                 <el-progress style="position: absolute; top: 72px; left:140px;width: 170px; color: black;font-size: 12px;" :percentage="item.percent" :stroke-width="16" :text-inside="true"></el-progress>
               </div>
@@ -117,34 +120,17 @@
 </template>
 
 <script>
-export default {
-  name: 'CountsMarket',
-  data () {
-    return {
-      project_total: 0,
-      count: 1,
-      timepart: '',
-      countIcon: 'el-icon-sort-down',
-      timeIcon: 'el-icon-sort-down',
-      hotIcon: 'el-icon-sort-down',
-      project_info: {
-        cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
-        missionname: 'mission',
-        counts: 5,
-        details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
-        dateStart: '2018/04/12',
-        dateEnd: '2018/09/27',
-        worker_total_number: 30,
-        worker_now_number: 16,
-        percent: (16 / 30 * 100).toFixed(2),
-        type: '方框标注',
-        id: '001002',
-        isContinue:true,
-        isEnd: false,
-        isBan:true,
-      },
-     /* projects: [
-        {
+  export default {
+    name: 'CountsMarket',
+    data () {
+      return {
+        project_total: 0,
+        count: 1,
+        timepart: '',
+        countIcon: 'el-icon-sort-down',
+        timeIcon: 'el-icon-sort-down',
+        hotIcon: 'el-icon-sort-down',
+        project_info: {
           cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
           missionname: 'mission',
           counts: 5,
@@ -159,127 +145,64 @@ export default {
           isContinue:true,
           isEnd: false,
           isBan:true,
-          tags:['dog','tech','java']
-        }, {
-          cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
-          missionname: 'mission',
-          counts: 5,
-          details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
-          dateStart: '2018/04/12',
-          dateEnd: '2018/09/27',
-          worker_total_number: 30,
-          worker_now_number: 16,
-          percent: (16 / 30 * 100).toFixed(2),
-          type: '方框标注',
-          id: '001002',
-          isContinue:true,
-          isEnd: false,
-          isBan:true,
-          tags:['cat','apple','win10']
-        }, {
-          cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
-          missionname: 'mission',
-          counts: 5,
-          details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
-          dateStart: '2018/04/12',
-          dateEnd: '2018/09/27',
-          worker_total_number: 30,
-          worker_now_number: 16,
-          percent: (16 / 30 * 100).toFixed(2),
-          type: '方框标注',
-          id: '001002',
-          isContinue:true,
-          isEnd: false,
-          isBan:true,
-          tags:['soft','database','mini','horse','padding','steve bob',]
-        }
-      ]*/
-      projects:[]
-    }
-  },
-  created () {
-    var xmlhttp = new XMLHttpRequest()
-    var _this = this
-    xmlhttp.onreadystatechange = function () {
-      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        var arrays = JSON.parse(xmlhttp.responseText)
-        _this.project_total = arrays.length
-        for (var i = 0; i < arrays.length; i++) {
-          var e = arrays[i]
-          var info = {
-            cover: '',
-            missionname: e.missionName,
-            counts: e.points,
-            details: e.description,
-            dateStart: e.begin,
-            dateEnd: e.end,
-            worker_total_number: e.maxNumber,
-            worker_now_number: e.currentNumber,
-            percent: (e.currentNumber / e.maxNumber * 100).toFixed(2),
-            type: e.type,
-            id: e.id,
-            isContinue:true,
-            isEnd:false,
-            isEnd2: false,
-          }
-
-          _this.projects.push(info)
-        }
-        for(var i=0;i<_this.projects.length;i++){
-          var time = _this.projects[i].dateEnd.split('-');
-          var end = new Date(time[0], parseInt(time[1])-1, parseInt(time[2])+1)
-          var now = new Date()
-          if(now <= end){
-            _this.projects[i].isEnd2=false;
-            if(_this.projects[i].worker_now_number<_this.projects[i].worker_total_number) {
-              _this.projects[i].isContinue = true;
-              _this.projects[i].isEnd = false;
-            }else{
-              _this.projects[i].isContinue = false;
-              _this.projects[i].isEnd = true;
-            }
-          }else{
-            _this.projects[i].isEnd2 = true;
-            _this.projects[i].isEnd = false;
-            _this.projects[i].isContinue = false;
-          }
-          _this.projects[i].isBan = !_this.projects[i].isContinue;
-          if(localStorage.getItem('identify')=='requester'){
-            _this.projects[i].isBan = true;
-          }
-          _this.getCoverImg(_this.projects[i].id, i);
-        }
+        },
+        projects: [
+           {
+             cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
+             missionname: 'mission',
+             counts: 5,
+             details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
+             dateStart: '2018/04/12',
+             dateEnd: '2018/09/27',
+             worker_total_number: 30,
+             worker_now_number: 16,
+             percent: (16 / 30 * 100).toFixed(2),
+             type: '方框标注',
+             id: '001002',
+             isContinue:true,
+             isEnd: false,
+             isBan:true,
+             tags:['dog','tech','java']
+           }, {
+             cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
+             missionname: 'mission',
+             counts: 5,
+             details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
+             dateStart: '2018/04/12',
+             dateEnd: '2018/09/27',
+             worker_total_number: 30,
+             worker_now_number: 16,
+             percent: (16 / 30 * 100).toFixed(2),
+             type: '方框标注',
+             id: '001002',
+             isContinue:true,
+             isEnd: false,
+             isBan:true,
+             tags:['cat','apple','win10']
+           }, {
+             cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
+             missionname: 'mission',
+             counts: 5,
+             details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
+             dateStart: '2018/04/12',
+             dateEnd: '2018/09/27',
+             worker_total_number: 30,
+             worker_now_number: 16,
+             percent: (16 / 30 * 100).toFixed(2),
+             type: '方框标注',
+             id: '001002',
+             isContinue:true,
+             isEnd: false,
+             isBan:true,
+             tags:['soft','database','mini','horse','padding','steve bob',]
+           }
+         ]
+       // projects:[]
       }
-    }
-    let formData = new FormData()
-    formData.append('i', '1')
-    xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getmission', true)
-    xmlhttp.send(formData)
-  },
-  methods: {
-    getCoverImg (missionid, i) {
-      var cover = ''
-      var _this = this
-      var xmlhttp = new XMLHttpRequest()
-      xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          cover = xmlhttp.responseText
-          _this.projects[i].cover = cover
-        }
-      }
-      let formData = new FormData()
-      var str = '' + missionid
-      formData.append('missionid', str)
-      var path = localStorage.getItem('server')+'/counts/mission/get/firstimage'
-      xmlhttp.open('POST',path, true)
-      xmlhttp.send(formData)
     },
-
-    handleCurrentChange (val) {
-      console.log(val)
+    created () {
       var xmlhttp = new XMLHttpRequest()
       var _this = this
-      this.projects = []
       xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           var arrays = JSON.parse(xmlhttp.responseText)
@@ -301,7 +224,6 @@ export default {
               isContinue:true,
               isEnd:false,
               isEnd2: false,
-              tags:e.tags
             }
 
             _this.projects.push(info)
@@ -325,91 +247,172 @@ export default {
               _this.projects[i].isContinue = false;
             }
             _this.projects[i].isBan = !_this.projects[i].isContinue;
+            if(localStorage.getItem('identify')=='requester'){
+              _this.projects[i].isBan = true;
+            }
             _this.getCoverImg(_this.projects[i].id, i);
           }
         }
       }
       let formData = new FormData()
-      formData.append('i', ''+val)
+      formData.append('i', '1')
       xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getmission', true)
       xmlhttp.send(formData)
     },
-    openSucc: function (text) {
-      this.$notify({
-        title: '成功',
-        message: text,
-        type: 'success',
-        duration: 2000,
-        position: 'top-left'
-      })
-    },
-    openInfo (text) {
-      this.$notify({
-        title: '消息',
-        message: text,
-        type: 'info',
-        duration: 2000,
-        position: 'top-left'
-      })
-    },
-    goMyProject () {
-
-      var path = '/' + localStorage.getItem('username')
-      if (localStorage.getItem('identify') == 'worker') {
-        this.$router.push({path: path + '/myProject'})
-      } else if (localStorage.getItem('identify') == 'requester') {
-        this.$router.push({path: path + '/requester'})
-      } else if (localStorage.getItem('identify') == 'logout' || localStorage.getItem('username') == 'visitor') {
-        this.openInfo("You haven't logged in")
-      }
-      window.location.reload()
-    },
-
-    joinProject (id) {
-      if (localStorage.getItem('identify') == 'requester') {
-        this.openInfo("Sorry, you can't join this project as a requester.")
-        return;
-      } else if (localStorage.getItem('identify') == 'logout') {
-        this.openInfo("You haven't logged in. Please login first.")
-        return;
-      }
-      var xmlhttp = new XMLHttpRequest()
-      var _this = this
-      xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          if (JSON.parse(xmlhttp.responseText).result == true) {
-            _this.openSucc('操作成功！')
-          }else{
-            _this.openInfo('您已经加入该项目')
+    methods: {
+      getCoverImg (missionid, i) {
+        var cover = ''
+        var _this = this
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            cover = xmlhttp.responseText
+            _this.projects[i].cover = cover
           }
         }
+        let formData = new FormData()
+        var str = '' + missionid
+        formData.append('missionid', str)
+        var path = localStorage.getItem('server')+'/counts/mission/get/firstimage'
+        xmlhttp.open('POST',path, true)
+        xmlhttp.send(formData)
+      },
+
+      handleCurrentChange (val) {
+        console.log(val)
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        this.projects = []
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var arrays = JSON.parse(xmlhttp.responseText)
+            _this.project_total = arrays.length
+            for (var i = 0; i < arrays.length; i++) {
+              var e = arrays[i]
+              var info = {
+                cover: '',
+                missionname: e.missionName,
+                counts: e.points,
+                details: e.description,
+                dateStart: e.begin,
+                dateEnd: e.end,
+                worker_total_number: e.maxNumber,
+                worker_now_number: e.currentNumber,
+                percent: (e.currentNumber / e.maxNumber * 100).toFixed(2),
+                type: e.type,
+                id: e.id,
+                isContinue:true,
+                isEnd:false,
+                isEnd2: false,
+                tags:e.tags
+              }
+
+              _this.projects.push(info)
+            }
+            for(var i=0;i<_this.projects.length;i++){
+              var time = _this.projects[i].dateEnd.split('-');
+              var end = new Date(time[0], parseInt(time[1])-1, parseInt(time[2])+1)
+              var now = new Date()
+              if(now <= end){
+                _this.projects[i].isEnd2=false;
+                if(_this.projects[i].worker_now_number<_this.projects[i].worker_total_number) {
+                  _this.projects[i].isContinue = true;
+                  _this.projects[i].isEnd = false;
+                }else{
+                  _this.projects[i].isContinue = false;
+                  _this.projects[i].isEnd = true;
+                }
+              }else{
+                _this.projects[i].isEnd2 = true;
+                _this.projects[i].isEnd = false;
+                _this.projects[i].isContinue = false;
+              }
+              _this.projects[i].isBan = !_this.projects[i].isContinue;
+              _this.getCoverImg(_this.projects[i].id, i);
+            }
+          }
+        }
+        let formData = new FormData()
+        formData.append('i', ''+val)
+        xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getmission', true)
+        xmlhttp.send(formData)
+      },
+      openSucc: function (text) {
+        this.$notify({
+          title: '成功',
+          message: text,
+          type: 'success',
+          duration: 2000,
+          position: 'top-left'
+        })
+      },
+      openInfo (text) {
+        this.$notify({
+          title: '消息',
+          message: text,
+          type: 'info',
+          duration: 2000,
+          position: 'top-left'
+        })
+      },
+      goMyProject () {
+
+        var path = '/' + localStorage.getItem('username')
+        if (localStorage.getItem('identify') == 'worker') {
+          this.$router.push({path: path + '/myProject'})
+        } else if (localStorage.getItem('identify') == 'requester') {
+          this.$router.push({path: path + '/requester'})
+        } else if (localStorage.getItem('identify') == 'logout' || localStorage.getItem('username') == 'visitor') {
+          this.openInfo("You haven't logged in")
+        }
+        window.location.reload()
+      },
+
+      joinProject (id) {
+        if (localStorage.getItem('identify') == 'requester') {
+          this.openInfo("Sorry, you can't join this project as a requester.")
+          return;
+        } else if (localStorage.getItem('identify') == 'logout') {
+          this.openInfo("You haven't logged in. Please login first.")
+          return;
+        }
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (JSON.parse(xmlhttp.responseText).result == true) {
+              _this.openSucc('操作成功！')
+            }else{
+              _this.openInfo('您已经加入该项目')
+            }
+          }
+        }
+        let formData = new FormData()
+        var str = '' + id
+        formData.append('missionid', str)
+        var name = localStorage.getItem('userid')
+        formData.append('userid',name)
+        console.log(name)
+        var path = localStorage.getItem('server')+'/counts/user/acceptmission'
+        xmlhttp.open('POST', path, true)
+        xmlhttp.send(formData)
+      },
+
+      handleProjectDetails (id) {
+        localStorage.setItem('missionID', id)
+        var path = '#/' + localStorage.getItem('username') + '/countsMarket/' + id + '/projectDetails'
+        window.open(path)
+      },
+
+      handleChange (value) {
+
+      },
+      handleTimeChange () {
+
       }
-      let formData = new FormData()
-      var str = '' + id
-      formData.append('missionid', str)
-      var name = localStorage.getItem('userid')
-      formData.append('userid',name)
-      console.log(name)
-      var path = localStorage.getItem('server')+'/counts/user/acceptmission'
-      xmlhttp.open('POST', path, true)
-      xmlhttp.send(formData)
-    },
-
-    handleProjectDetails (id) {
-      localStorage.setItem('missionID', id)
-      var path = '#/' + localStorage.getItem('username') + '/countsMarket/' + id + '/projectDetails'
-      window.open(path)
-    },
-
-    handleChange (value) {
-
-    },
-    handleTimeChange () {
 
     }
-
   }
-}
 </script>
 
 <style scoped>
@@ -435,7 +438,7 @@ export default {
     float: left;
     position: relative;
   }
-  .item{
+  .itemn{
     font-size: 13px;
     color: #ff8432;
     margin: 2px;

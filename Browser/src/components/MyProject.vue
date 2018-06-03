@@ -37,35 +37,38 @@
       </div>
     </div>
     <div v-show="project_show" style="position: absolute; top: 400px;width: 100%; left: 0; top: 418px;">
-
       <div style="position: absolute; top: 0px;width: 1100px; left: 50%; margin-left: -550px; background-color: white;">
-        <div style="position: absolute; top: 0px;left: 0; width: 100%; height: 250px; background-color: white"></div>
-        <div v-for="item in projectInfo" style="float: left" :key="item">
-          <el-card class="el_card" :body-style="{padding:'0px'}">
-            <el-tag v-show="item.isContinue" style="position: absolute; left: 20px; top: 10px; color:white; width: 70px " color="#4CAF50">进行中...</el-tag>
-            <el-tag v-show="item.isEnd" style="position: absolute; left: 20px; top: 10px; color:white;width: 60px " color="#E97506">已截止</el-tag>
-            <img v-bind:src="item.cover" class="image" v-bind:id="item.missionname">
-            <div class="imgOnClick">
-              <span>已标注：{{item.imgFinished}} 张</span>
-              <span>未标注：{{item.imgToDo}} 张</span>
-              <el-progress type="circle" v-bind:percentage="item.percent" color="#8e71c7"></el-progress>
-            </div>
-            <div style="height: 130px;position:absolute; top: 150px; width: 97%; left: 1.5%; background-color: white">
-              <span style="font-size: 20px; color: #4CAF50">{{item.missionname}}</span>
-              <span class="time" style="position: absolute; left: 5px;top: 30px;font-size: 14px; color:black">时间：{{item.dateStart}} - {{item.dateEnd}}</span>
-              <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
-              <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
-              <el-button style="position: absolute; left: 50px;top: 75px;font-size: 14px;" type="text" @click="handleProjectDetails(item.id)">项目详情</el-button>
-              <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="openProject(item)">进入项目</el-button>
-            </div>
-
-          </el-card>
+        <div style="position: absolute; top: 0px;left: 0; width: 100%; height: 370px; background-color: white"></div>
+        <div>
+          <div id="manLabel" style="position: absolute; left: 30px; top: 10px;" class="labelType" @click="selectManLabel">人工标注</div>
+          <div id="autoLabel" style="position: absolute; left: 140px; top: 10px" class="labelType" @click="selectAutoLabel">自动化标注</div>
         </div>
-
-        <div v-show="hasProject" style="float: left; width: 100%;">
-          <el-pagination @current-change="handleCurrentChange" background :current-page=1 :page-size="12"
-                         layout="total, prev, pager, next, jumper" v-bind:total="project_total">
-          </el-pagination>
+        <div style="position: absolute; top: 40px; left: 20px">
+          <div v-for="item in projectInfo" style="float: left" :key="item">
+            <el-card v-show="item.show" class="el_card" :body-style="{padding:'0px'}">
+              <el-tag v-show="item.isContinue" style="position: absolute; left: 20px; top: 10px; color:white; width: 70px " color="#4CAF50">进行中...</el-tag>
+              <el-tag v-show="item.isEnd" style="position: absolute; left: 20px; top: 10px; color:white;width: 60px " color="#E97506">已截止</el-tag>
+              <img v-bind:src="item.cover" class="image" v-bind:id="item.missionname">
+              <div class="imgOnClick">
+                <span>已标注：{{item.imgFinished}} 张</span>
+                <span>未标注：{{item.imgToDo}} 张</span>
+                <el-progress type="circle" v-bind:percentage="item.percent" color="#8e71c7"></el-progress>
+              </div>
+              <div style="height: 130px;position:absolute; top: 150px; width: 97%; left: 1.5%; background-color: white">
+                <span style="font-size: 20px; color: #4CAF50">{{item.missionname}}</span>
+                <span class="time" style="position: absolute; left: 5px;top: 30px;font-size: 14px; color:black">时间：{{item.dateStart}} - {{item.dateEnd}}</span>
+                <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
+                <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
+                <el-button style="position: absolute; left: 50px;top: 75px;font-size: 14px;" type="text" @click="handleProjectDetails(item.id)">项目详情</el-button>
+                <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="openProject(item)">进入项目</el-button>
+              </div>
+            </el-card>
+          </div>
+          <div v-show="hasProject" style="float: left; width: 100%;">
+            <el-pagination @current-change="handleCurrentChange" background :current-page=1 :page-size="12"
+                           layout="total, prev, pager, next, jumper" v-bind:total="project_total">
+            </el-pagination>
+          </div>
         </div>
 
       </div>
@@ -266,6 +269,8 @@ export default {
       }
     }
     return {
+      isManLabel:true,
+      isAutoLabel:true,
       rankingTableData: [
 
       ],
@@ -340,7 +345,25 @@ export default {
       info_show: false,
       default_index: '1',
       project_info: {},
-      projectInfo: [],
+      projectInfo: [
+       /* {
+          show:true,
+          id: '01',
+          missionname: 'miss',
+          dateStart: '2011-1-2',
+          dateEnd:'2016-3-2',
+          charts_id: '1_charts',
+          imgFinished: 17,
+          imgToDo: 3,
+          type: 'Caption',
+          cover: '',
+          annotationType: 0,
+          counts: 5,
+          percent:0,
+          isEnd:false,
+          isContinue:true
+        }*/
+      ],
       project_total: 0,
       info: {
         id: '',
@@ -457,6 +480,7 @@ export default {
                 imgFinished: arrays[i].finished,
                 imgToDo: (arrays[i].sum - arrays[i].finished),
                 type: arrays[i].type,
+                annotationType: arrays[i].annotationType,
                 cover: '',
                 counts: arrays[i].points,
                 type: arrays[i].type,
@@ -532,6 +556,52 @@ export default {
   },
 
   methods: {
+    selectManLabel(){
+      this.isManLabel=!this.isManLabel;
+      if(this.isManLabel==true) {
+        for(var i=0;i<this.projectInfo.length;i++){
+          if(this.projectInfo[i].annotationType==0){
+            this.projectInfo[i].show=true;
+          }
+        }
+        document.getElementById('manLabel').style.backgroundColor = '#1d86ff'
+        document.getElementById('manLabel').style.color = 'white'
+        document.getElementById('manLabel').style.border = '0'
+      }else{
+        for(var i=0;i<this.projectInfo.length;i++){
+          if(this.projectInfo[i].annotationType==0){
+            this.projectInfo[i].show=false;
+          }
+        }
+        document.getElementById('manLabel').style.backgroundColor = 'white'
+        document.getElementById('manLabel').style.color = 'black'
+        document.getElementById('manLabel').style.border = '1px solid #999'
+      }
+    },
+
+    selectAutoLabel(){
+      this.isAutoLabel=!this.isAutoLabel;
+      if(this.isAutoLabel==true) {
+        for(var i=0;i<this.projectInfo.length;i++){
+          if(this.projectInfo[i].annotationType==1){
+            this.projectInfo[i].show=true;
+          }
+        }
+        document.getElementById('autoLabel').style.backgroundColor = '#1d86ff'
+        document.getElementById('autoLabel').style.color = 'white'
+        document.getElementById('autoLabel').style.border = '0'
+      }else{
+        for(var i=0;i<this.projectInfo.length;i++){
+          if(this.projectInfo[i].annotationType==1){
+            this.projectInfo[i].show=false;
+          }
+        }
+        document.getElementById('autoLabel').style.backgroundColor = 'white'
+        document.getElementById('autoLabel').style.color = 'black'
+        document.getElementById('autoLabel').style.border = '1px solid #999'
+      }
+    },
+
     getRankingInfo(){
       var _this = this
       var xmlhttp = new XMLHttpRequest()
@@ -1143,5 +1213,19 @@ export default {
 
   #connect_info:hover #edit_connect{
     display: block;
+  }
+  .labelType{
+    width:100px;
+    padding-top: 3px;
+    height: 24px;
+    border-radius: 15px;
+    color: white;
+    background-color: #2ea2ff;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .labelType:hover{
+    color:white;
+    cursor: pointer;
   }
 </style>
