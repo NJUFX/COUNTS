@@ -146,7 +146,7 @@
           isEnd: false,
           isBan:true,
         },
-        projects: [
+      /*  projects: [
            {
              cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
              missionname: 'mission',
@@ -196,8 +196,8 @@
              isBan:true,
              tags:['soft','database','mini','horse','padding','steve bob',]
            }
-         ]
-       // projects:[]
+         ]*/
+        projects:[]
       }
     },
     created () {

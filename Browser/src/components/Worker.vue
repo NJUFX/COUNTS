@@ -1,17 +1,46 @@
 <template>
   <el-container>
+    <div id="toolbox" style="border-radius: 6px; background: #409eff; width: 480px;height: 42px; position: absolute; left:35%; top:57px">
+      <el-button-group style="padding: 1px; position: absolute; top:-10px; left: 160px;">
+        <el-tooltip class="item" effect="dark" content="添加标注信息" placement="bottom">
+          <el-button type="primary" icon="el-icon-edit" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="重新标注当前图片" placement="bottom-end">
+          <el-button type="primary" icon="el-icon-ali-xiangpica" style="font-size: 14px;" size="mini" @click="reLabelImg"></el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="保存图片并提交" placement="bottom">
+          <el-button type="primary" icon="el-icon-upload" style="font-size: 14px;" size="mini" @click="commitImg" ></el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="加载任务数据" placement="bottom-start">
+          <el-button type="primary" icon="el-icon-download" size="mini" style="font-size: 14px;" @click="downloadSource" ></el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="上一张" placement="bottom-start">
+          <el-button type="primary" icon="el-icon-caret-left" style="font-size: 14px;" size="mini" @click="prevImg"></el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="下一张" placement="bottom">
+          <el-button type="primary" icon="el-icon-caret-right" style="font-size: 14px;" size="mini" @click="nextImg"></el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="标注信息" placement="bottom">
+          <el-button type="primary" icon="el-icon-info" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
+        </el-tooltip>
+      </el-button-group>
+      <div style="width: 100px;height: 42px; background: #e4e4e4; top:5px;">
+        <span style="font-size: 17px; ">完成/总数 </span>
+        <span style="font-size: 16px; ">{{labeled}}/{{imgList.length}}</span>
+      </div>
+    </div>
 
     <div class="work_place">
       <div class="block">
-        <canvas id="myCanvas" v-model="canvas" @click="drawShapes" @dblclick="selectDialog" width="800px" height="500px"></canvas>
+        <canvas id="myCanvas" v-model="canvas" @click="drawShapes" @dblclick="selectDialog"  width="900px" height="500px"></canvas>
       </div>
     </div>
     <div style="position: fixed; top: 0px; left: 0px; width: 18%; height: 680px; z-index:-10000;background-color: #e9e9e9;border: 1px solid rgba(156, 162, 148, 0.75);border-top: none" >
-      <div style="position: absolute; left: 20px; height: 70px; top: 72px ">
-        图片预览
+      <div style="position: absolute; left: 50px; height: 70px; top: 72px ">
+        <h3 id="title">图片预览</h3>
       </div>
 
-      <happy-scroll class="happy_scroll" color="rgba(51,51,51,0.2)" hide-vertical="false" style="top: 107px">
+      <happy-scroll class="happy_scroll" color="rgba(51,51,51,0.2)" hide-vertical="false">
         <div v-for="(item,index) of imgList" :key="item">
           <div class="upload_warp_img_div_top">
             <div class="upload_warp_img_div_text" style="font-size: 12px;">
@@ -23,7 +52,6 @@
       </happy-scroll>
 
     </div>
-
 
     <div style="display: none">
       <el-button @click="dialogVisible=true"></el-button>
@@ -144,7 +172,6 @@
       <div v-show="isShow" style="position:absolute;right: 20px; width: 323px; background-color: #43a0ff; height: 36px; border-radius: 3px">
         <div style="position: relative;" >
           <el-button-group style="padding: 2px; position: absolute; right: 0px;">
-
             <el-tooltip class="item" effect="dark" content="添加标注信息" placement="bottom">
               <el-button type="primary" icon="el-icon-edit" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
             </el-tooltip>
@@ -177,6 +204,7 @@
 import ElMain from 'element-ui/packages/main/src/main'
 import ElAside from 'element-ui/packages/aside/src/main'
 
+
 export default {
   components: {
     ElAside,
@@ -194,24 +222,23 @@ export default {
       colorPos: 0,
       imgPos: 0,
 
-
-      captionInfoList:[
-        /*{
+      captionInfoList: [
+        /* {
         filename:"",
         caption:""
       }
-      */],//存储当前数据集的全部整体标注内容
-      classificationInfoList:[
+      */], // 存储当前数据集的全部整体标注内容
+      classificationInfoList: [
         {
-        fileName:"",
-        select:""
-      }
-      ],//存储当前数据集每张图片的分类结果
-      attributeInfoList:[
-        /*{
+          fileName: '',
+          select: ''
+        }
+      ], // 存储当前数据集每张图片的分类结果
+      attributeInfoList: [
+        /* {
           fileName:"",
           info:{}
-        }*/],//存储当前数据集每张图片的属性结果，每个元素都是一个List
+        } */], // 存储当前数据集每张图片的属性结果，每个元素都是一个List
 
       tooltip: '收起',
       btnText: 'el-icon-arrow-right',
@@ -227,7 +254,7 @@ export default {
       missionID: '', // 当前任务ID号
       classificationDialogVisible: false, // classification类型标注时的弹出框
       classificationOptions: [
-        /*{ // classification类型标注的选项列表
+        /* { // classification类型标注的选项列表
         classificationValue: '选项1',
         label: '黄金糕'
       }, {
@@ -235,8 +262,8 @@ export default {
         label: '双皮奶'
       }
        */],
-      classificationValue: "", // classificationOptions的选择结果(号码)
-      classificationLabel: "",//classificationOptions的选择结果(文本)
+      classificationValue: '', // classificationOptions的选择结果(号码)
+      classificationLabel: '', // classificationOptions的选择结果(文本)
       captionDialogVisible: false, // caption弹出框是否可见
       captionDialogInfo: '', // caption标注的内容
       attributeDialogVisible: false, // attribute弹出框是否可见
@@ -248,19 +275,19 @@ export default {
         }
         */
       ],
-      pointList:[],//存储点集
+      pointList: [],// 存储点集
+      labeled: 0, //已标注数量
 
     }
   },
   created () {
-    this.missionType = localStorage.getItem("missionType");
+    this.missionType = localStorage.getItem('missionType')
     this.missionID = localStorage.getItem('missionID')
   },
   watch: {
     imgList: {
       handler (oldValue, newValue) {
         this.draw()
-
       },
       deep: true
     }
@@ -283,40 +310,40 @@ export default {
   methods: {
     // 以下方法用于处理classfication类型标注/caption类型标注/Arribute类型标注，用于实验后期可以删除
     saveClassificationInfo () {
-     // console.log(JSON.stringify(classificationInfoList))
+      // console.log(JSON.stringify(classificationInfoList))
 
-      var _this = this;
-      for(var i=0;i<_this.classificationInfoList.length;i++){
-        if(_this.classificationInfoList[i].fileName == _this.imgList[_this.imgPos].filename){
-          _this.classificationInfoList[i].select = _this.classificationValue ;
+      var _this = this
+      for (var i = 0; i < _this.classificationInfoList.length; i++) {
+        if (_this.classificationInfoList[i].fileName == _this.imgList[_this.imgPos].filename) {
+          _this.classificationInfoList[i].select = _this.classificationValue
           console.log(_this.classificationInfoList[i].select)
         }
       }
 
       this.classificationDialogVisible = false
     },
-    saveCaptionInfo (){
-      var _this = this;
-      for(var i=0;i<_this.captionInfoList.length;i++){
-        if(_this.captionInfoList[i].fileName === _this.imgList[_this.imgPos].filename){
-          _this.captionInfoList[i].caption = _this.captionDialogInfo;
+    saveCaptionInfo () {
+      var _this = this
+      for (var i = 0; i < _this.captionInfoList.length; i++) {
+        if (_this.captionInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
+          _this.captionInfoList[i].caption = _this.captionDialogInfo
         }
       }
-      //console.log(this.captionDialogInfo);
-      this.captionDialogVisible = false;
+      // console.log(this.captionDialogInfo);
+      this.captionDialogVisible = false
     },
     saveAttributeInfo () {
-      //console.log("close")
+      // console.log("close")
       /*
       for (var i = 0; i < this.attributeTableData.length; i++) {
         console.log(this.attributeTableData[i].label)
       }
       */
-      this.attributeDialogVisible = false;
+      this.attributeDialogVisible = false
     },
     // 选择弹出框类型
     selectDialog () {
-      //console.log(this.missionType)
+      // console.log(this.missionType)
       switch (this.missionType) {
         case 'Caption': {
           this.captionDialogVisible = true
@@ -370,41 +397,41 @@ export default {
     reLabelImg () {
       this.tableData = []
 
-      var _this = this;
-      if(this.missionType=="Caption") {
-        //重设caption标注
-        _this.captionDialogInfo = "";
+      var _this = this
+      if (this.missionType == 'Caption') {
+        // 重设caption标注
+        _this.captionDialogInfo = ''
         for (var i = 0; i < _this.captionInfoList.length; i++) {
           if (_this.captionInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
-            _this.captionInfoList[i].caption = _this.captionDialogInfo;
-          }
-        }
-        _this.commitImg();
-      }
-      if(this.missionType=="Classification") {
-        //重设classification标注
-        _this.classificationValue = 0;
-        for (var i = 0; i < _this.classificationInfoList.length; i++) {
-          if (_this.classificationInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
-            _this.classificationInfoList[i].select = _this.classificationValue;
-            //console.log("relabel")
+            _this.captionInfoList[i].caption = _this.captionDialogInfo
           }
         }
         _this.commitImg()
       }
-      if(this.missionType=="Attribute"){
-        for(var i=0;i<_this.attributeTableData.length;i++){
-          _this.attributeTableData[i].label = "";
+      if (this.missionType == 'Classification') {
+        // 重设classification标注
+        _this.classificationValue = 0
+        for (var i = 0; i < _this.classificationInfoList.length; i++) {
+          if (_this.classificationInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
+            _this.classificationInfoList[i].select = _this.classificationValue
+            // console.log("relabel")
+          }
+        }
+        _this.commitImg()
+      }
+      if (this.missionType == 'Attribute') {
+        for (var i = 0; i < _this.attributeTableData.length; i++) {
+          _this.attributeTableData[i].label = ''
         }
         for (var i = 0; i < _this.attributeInfoList.length; i++) {
           if (_this.attributeInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
-            _this.attributeInfoList[i].info = _this.attributeTableData;
-            //console.log("relabel")
+            _this.attributeInfoList[i].info = _this.attributeTableData
+            // console.log("relabel")
           }
         }
-        _this.commitImg();
+        _this.commitImg()
       }
-      if(this.missionType=="Detection"||this.missionType=="Segmentation") {
+      if (this.missionType == 'Detection' || this.missionType == 'Segmentation') {
         this.colorPos = 0
         // _this.imgDataClear();
         var xmlhttp = new XMLHttpRequest()
@@ -417,171 +444,165 @@ export default {
           }
         }
         let formData3 = new FormData()
-        formData3.append('missionid', localStorage.getItem("missionID"))
+        formData3.append('missionid', localStorage.getItem('missionID'))
         formData3.append('imgname', this.imgList[this.imgPos].filename)
         // console.log("12345678");
         xmlhttp.open('POST', 'http://localhost:8080/counts/image/checkimg', true)
         xmlhttp.send(formData3)
-
       }
     },
     // 下载数据集
     downloadSource () {
-
       var xmlhttp1 = new XMLHttpRequest()
       var xmlhttp = new XMLHttpRequest()
-      var xmlhttp0 = new XMLHttpRequest();
+      var xmlhttp0 = new XMLHttpRequest()
       var _this = this
-      if(this.missionType=="Segmentation"||this.missionType=="Detection"){
+      if (this.missionType == 'Segmentation' || this.missionType == 'Detection') {
         xmlhttp1.onreadystatechange = function () {
           if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
-            //console.log("123")
+            // console.log("123")
             // 加入imgList
             _this.imgPos = 0
             _this.imgList = []
             var dataSet = JSON.parse(xmlhttp1.responseText)
             for (var i = 0; i < dataSet.length; i++) {
-              //var dataurl = dataSet[i].url
-              //var name = dataSet[i].location.split('/')[1]
-              var dataurl = dataSet[i].url;
-              var name = dataSet[i].fileName;
+              // var dataurl = dataSet[i].url
+              // var name = dataSet[i].location.split('/')[1]
+              var dataurl = dataSet[i].url
+              var name = dataSet[i].fileName
               _this.imgList.push({url: dataurl, filename: name})
             }
           }
         }
         let formData = new FormData()
-        formData.append('missionid', localStorage.getItem("missionID"))
-        formData.append('username',localStorage.getItem("username"))
-        console.log(localStorage.getItem("missionID"))
+        formData.append('missionid', localStorage.getItem('missionID'))
+        formData.append('username', localStorage.getItem('username'))
+        console.log(localStorage.getItem('missionID'))
         xmlhttp1.open('POST', 'http://localhost:8080/counts/label/getlocallabel', true)
         xmlhttp1.send(formData)
-      }
-      else {
+      } else {
         xmlhttp1.onreadystatechange = function () {
           if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
-            //console.log("123")
+            // console.log("123")
             // 加入imgList
             _this.imgPos = 0
             _this.imgList = []
             var dataSet = JSON.parse(xmlhttp1.responseText)
             for (var i = 0; i < dataSet.length; i++) {
-              //var dataurl = dataSet[i].url
-              //var name = dataSet[i].location.split('/')[1]
-              var dataurl = dataSet[i].base64;
-              var name = dataSet[i].fileName;
+              // var dataurl = dataSet[i].url
+              // var name = dataSet[i].location.split('/')[1]
+              var dataurl = dataSet[i].base64
+              var name = dataSet[i].fileName
               _this.imgList.push({url: dataurl, filename: name})
             }
           }
         }
         let formData3 = new FormData()
-        formData3.append('missionid', localStorage.getItem("missionID"))
-        console.log(localStorage.getItem("missionID"))
+        formData3.append('missionid', localStorage.getItem('missionID'))
+        console.log(localStorage.getItem('missionID'))
         xmlhttp1.open('POST', 'http://localhost:8080/counts/image/originmission', true)
         xmlhttp1.send(formData3)
       }
-      //判断任务类型下载任务数据
+      // 判断任务类型下载任务数据
       switch (this.missionType) {
         case 'Caption': {
-         //下载整体标注结果集
+          // 下载整体标注结果集
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
               // 下载所有的整体标注结果
-              //console.log("download")
-              _this.captionInfoList = JSON.parse(xmlhttp.responseText);
-              //console.log(JSON.parse(xmlhttp.responseText));
-              //console.log(_this.captionInfoList)
-              _this.setCurrentImgCaptionInfo();
+              // console.log("download")
+              _this.captionInfoList = JSON.parse(xmlhttp.responseText)
+              // console.log(JSON.parse(xmlhttp.responseText));
+              // console.log(_this.captionInfoList)
+              _this.setCurrentImgCaptionInfo()
             }
           }
           let formDataCap = new FormData()
           formDataCap.append('userid', localStorage.getItem('username'))
-          formDataCap.append('missionid', localStorage.getItem("missionID"))
+          formDataCap.append('missionid', localStorage.getItem('missionID'))
           xmlhttp.open('POST', 'http://localhost:8080/counts/label/get/captionlabel', true)
-          xmlhttp.send(formDataCap);
+          xmlhttp.send(formDataCap)
           break
         }
         case 'Classification': {
-         //下载分类标注选项
+          // 下载分类标注选项
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
               console.log(JSON.parse(xmlhttp.responseText).selects)
               // 选项列表放入选项数组
-             var selects = JSON.parse(xmlhttp.responseText).selects;
-             for(var i=0;i<selects.length;i++){
-               _this.classificationOptions.push({
-                 classificationValue: i+1,
-                 label: selects[i]
-               })
-             }
-             console.log("00"+JSON.stringify(_this.classificationOptions))
+              var selects = JSON.parse(xmlhttp.responseText).selects
+              for (var i = 0; i < selects.length; i++) {
+                _this.classificationOptions.push({
+                  classificationValue: i + 1,
+                  label: selects[i]
+                })
+              }
+              console.log('00' + JSON.stringify(_this.classificationOptions))
             }
           }
           let formDataCla = new FormData()
-          formDataCla.append('id', localStorage.getItem("missionID"))
-          //console.log(localStorage.getItem("missionID")+"mission")
+          formDataCla.append('id', localStorage.getItem('missionID'))
+          // console.log(localStorage.getItem("missionID")+"mission")
           xmlhttp.open('POST', 'http://localhost:8080/counts/mission/findmission/id', true)
-          xmlhttp.send(formDataCla);
+          xmlhttp.send(formDataCla)
 
-
-          //下载分类标注结果
+          // 下载分类标注结果
           xmlhttp0.onreadystatechange = function () {
             if (xmlhttp0.readyState == 4 && xmlhttp0.status == 200) {
               // 加入下载结果
-              _this.classificationInfoList = JSON.parse(xmlhttp0.responseText);
-              console.log("999"+JSON.stringify(_this.classificationInfoList));
-              _this.setCurrentImgClassificationValue();
+              _this.classificationInfoList = JSON.parse(xmlhttp0.responseText)
+              console.log('999' + JSON.stringify(_this.classificationInfoList))
+              _this.setCurrentImgClassificationValue()
             }
           }
           let formDataClaRes = new FormData()
-          formDataClaRes.append('missionid', localStorage.getItem("missionID"))
-          formDataClaRes.append('userid',localStorage.getItem("username"));
+          formDataClaRes.append('missionid', localStorage.getItem('missionID'))
+          formDataClaRes.append('userid', localStorage.getItem('username'))
           xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/classificationlabel', true)
-          xmlhttp0.send(formDataClaRes);
+          xmlhttp0.send(formDataClaRes)
           break
         }
         case 'Attribute': {
-          var selects = [];
-          var result = [];
-         //下载属性标注选项
+          var selects = []
+          var result = []
+          // 下载属性标注选项
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
               // 选项列表放入选项数组
-               selects = JSON.parse(xmlhttp.responseText).selects;
-               console.log(selects)
+              selects = JSON.parse(xmlhttp.responseText).selects
+              console.log(selects)
             }
           }
           let formDataAtt = new FormData()
-          formDataAtt.append('id', localStorage.getItem("missionID"))
+          formDataAtt.append('id', localStorage.getItem('missionID'))
           xmlhttp.open('POST', 'http://localhost:8080/counts/mission/findmission/id', true)
-          xmlhttp.send(formDataAtt);
+          xmlhttp.send(formDataAtt)
 
-
-          //下载属性标注结果并解析
+          // 下载属性标注结果并解析
           xmlhttp0.onreadystatechange = function () {
             if (xmlhttp0.readyState == 4 && xmlhttp0.status == 200) {
               // 加入下载结果
-               result = JSON.parse(xmlhttp0.responseText);
-               console.log(result);
-              //把结果加入infoList
-              for(var i=0;i<result.length;i++){
-                //console.log("00000")
-                var filename = result[i].fileName;
-                var info = [];
-                for(var j=0;j<selects.length;j++){
-                  if(result[i].attributes!=null) {
+              result = JSON.parse(xmlhttp0.responseText)
+              console.log(result)
+              // 把结果加入infoList
+              for (var i = 0; i < result.length; i++) {
+                // console.log("00000")
+                var filename = result[i].fileName
+                var info = []
+                for (var j = 0; j < selects.length; j++) {
+                  if (result[i].attributes != null) {
                     info.push({
                       attributeValue: selects[j],
-                      label: result[i].attributes[j],
+                      label: result[i].attributes[j]
                     })
-                  }
-                  else{
-                    //console.log("123456")
+                  } else {
+                    // console.log("123456")
                     info.push({
                       attributeValue: selects[j],
-                      label: "",
+                      label: ''
                     })
                   }
-                  //console.log(info);
+                  // console.log(info);
                 }
 
                 _this.attributeInfoList.push({
@@ -589,99 +610,94 @@ export default {
                   info: info
                 })
               }
-              console.log(_this.attributeInfoList);
-              _this.setCurrentImgAttributeTable();
+              console.log(_this.attributeInfoList)
+              _this.setCurrentImgAttributeTable()
             }
           }
           let formDataAttRes = new FormData()
-          formDataAttRes.append('missionid', localStorage.getItem("missionID"))
-          formDataAttRes.append('userid',localStorage.getItem("username"));
+          formDataAttRes.append('missionid', localStorage.getItem('missionID'))
+          formDataAttRes.append('userid', localStorage.getItem('username'))
           xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/attributelabel', true)
-          xmlhttp0.send(formDataAttRes);
+          xmlhttp0.send(formDataAttRes)
           break
         }
 
        // default: {}
       }
     },
-    //以下三个方法用于设置当前图片的标注结果
-    setCurrentImgCaptionInfo(){
-      this.captionDialogInfo = "";
+    // 以下三个方法用于设置当前图片的标注结果
+    setCurrentImgCaptionInfo () {
+      this.captionDialogInfo = ''
       console.log(this.captionInfoList)
-      //console.log(_this.imgList[_this.imgPos].filename)
-      var _this = this;
-      for(var i=0;i<_this.captionInfoList.length;i++){
-        if(_this.captionInfoList[i].fileName == _this.imgList[_this.imgPos].filename){
+      // console.log(_this.imgList[_this.imgPos].filename)
+      var _this = this
+      for (var i = 0; i < _this.captionInfoList.length; i++) {
+        if (_this.captionInfoList[i].fileName == _this.imgList[_this.imgPos].filename) {
           _this.captionDialogInfo = _this.captionInfoList[i].caption
         }
       }
     },
-    setCurrentImgClassificationValue(){
-      var _this = this;
-      for(var i=0;i<_this.classificationInfoList.length;i++){
-        if(_this.classificationInfoList[i].fileName === _this.imgList[_this.imgPos].filename){
-          _this.classificationValue = _this.classificationInfoList[i].select;
+    setCurrentImgClassificationValue () {
+      var _this = this
+      for (var i = 0; i < _this.classificationInfoList.length; i++) {
+        if (_this.classificationInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
+          _this.classificationValue = _this.classificationInfoList[i].select
         }
       }
 
-
-      //console.log(_this.classificationInfoList)
-
+      // console.log(_this.classificationInfoList)
     },
-    setCurrentImgAttributeTable(){
-      var _this = this;
-      for(var i=0;i<_this.attributeInfoList.length;i++){
-        if(_this.attributeInfoList[i].fileName == _this.imgList[_this.imgPos].filename){
+    setCurrentImgAttributeTable () {
+      var _this = this
+      for (var i = 0; i < _this.attributeInfoList.length; i++) {
+        if (_this.attributeInfoList[i].fileName == _this.imgList[_this.imgPos].filename) {
           _this.attributeTableData = _this.attributeInfoList[i].info
         }
       }
     },
-    setCurrentImgInfo(){
-      //console.log(localStorage.getItem("missionType"))
-      switch(localStorage.getItem("missionType")){
-        case "Caption":{
-          console.log("uuuuu")
-          this.setCurrentImgCaptionInfo();
-          break;
+    setCurrentImgInfo () {
+      // console.log(localStorage.getItem("missionType"))
+      switch (localStorage.getItem('missionType')) {
+        case 'Caption': {
+          console.log('uuuuu')
+          this.setCurrentImgCaptionInfo()
+          break
         }
-        case "Classification":{
-          this.setCurrentImgClassificationValue();
-          break;
+        case 'Classification': {
+          this.setCurrentImgClassificationValue()
+          break
         }
-        case "Attribute":{
-          this.setCurrentImgAttributeTable();
-          break;
+        case 'Attribute': {
+          this.setCurrentImgAttributeTable()
+          break
         }
       }
     },
-
 
     // 提交图片
     commitImg () {
       var xmlhttp = new XMLHttpRequest()
       var xmlhttp1 = new XMLHttpRequest()
       var _this = this
-      var userName = localStorage.getItem("username");
-      var missionID = localStorage.getItem("missionID")
+      var userName = localStorage.getItem('username')
+      var missionID = localStorage.getItem('missionID')
 
-
-      if(this.missionType=="Segmentation"||this.missionType=="Detection"){
+      if (this.missionType == 'Segmentation' || this.missionType == 'Detection') {
         // 准备数据
         var c = document.getElementById('myCanvas')
         var dataURL = c.toDataURL()
-        var _this = this;
-        var filename = _this.imgList[_this.imgPos].filename;
+        var _this = this
+        var filename = _this.imgList[_this.imgPos].filename
         var data = {
           userName: localStorage.getItem('username'),
           missionID: localStorage.getItem('missionID'),
           fileName: filename,
           url: dataURL,
-          dots: _this.pointList,
+          dots: _this.pointList
         }
         // 替换img图片
-        this.imgList[this.imgPos].url = dataURL;
+        this.imgList[this.imgPos].url = dataURL
         // 发送数据
-
 
         xmlhttp1.onreadystatechange = function () {
           if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
@@ -708,7 +724,7 @@ export default {
         xmlhttp1.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         xmlhttp1.send(JSON.stringify(data))
       }
-      if(this.missionType=="Caption"){
+      if (this.missionType == 'Caption') {
         var captionLabel = {
           fileName: _this.imgList[_this.imgPos].filename,
           caption: _this.captionDialogInfo
@@ -716,13 +732,13 @@ export default {
         var data = {
           userName: userName,
           missionID: missionID,
-          captionLabel: captionLabel,
-       }
-        console.log(data);
+          captionLabel: captionLabel
+        }
+        console.log(data)
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             if (JSON.parse(xmlhttp.responseText).result == true) {
-              //console.log("commitsucc")
+              // console.log("commitsucc")
               _this.$notify({
                 title: '提交成功',
                 message: '图片已上传！',
@@ -743,20 +759,19 @@ export default {
         }
         xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/captionlabel', true)
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-        xmlhttp.send(JSON.stringify(data));
+        xmlhttp.send(JSON.stringify(data))
       }
-      if(this.missionType=="Classification"){
-
+      if (this.missionType == 'Classification') {
         var classificationLabel = {
           fileName: _this.imgList[_this.imgPos].filename,
           select: _this.classificationValue
 
         }
-        console.log(",,"+JSON.stringify(classificationLabel))
+        console.log(',,' + JSON.stringify(classificationLabel))
         var data = {
           userName: userName,
           missionID: missionID,
-          classificationLabel: classificationLabel,
+          classificationLabel: classificationLabel
         }
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -783,11 +798,11 @@ export default {
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         xmlhttp.send(JSON.stringify(data))
       }
-      if(this.missionType=="Attribute"){
-        //获得属性值List
-        var attributes = [];
-        for(var i=0;i<_this.attributeTableData.length;i++){
-          attributes.push(_this.attributeTableData[i].label);
+      if (this.missionType == 'Attribute') {
+        // 获得属性值List
+        var attributes = []
+        for (var i = 0; i < _this.attributeTableData.length; i++) {
+          attributes.push(_this.attributeTableData[i].label)
         }
         var attributeLabel = {
           fileName: _this.imgList[_this.imgPos].filename,
@@ -796,7 +811,7 @@ export default {
         var data = {
           userName: userName,
           missionID: missionID,
-          attributeLabel: attributeLabel,
+          attributeLabel: attributeLabel
         }
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -823,10 +838,6 @@ export default {
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         xmlhttp.send(JSON.stringify(data))
       }
-
-
-
-
     },
 
     // 获取图片location属性
@@ -847,7 +858,7 @@ export default {
     },
     // 以下方法用于加载图片到画布上
     draw () {
-      var _this = this;
+      var _this = this
       var cvs = document.getElementById('myCanvas')
       var imgObj = new Image() // 创建image对象
       var img = this.imgList[this.imgPos].url
@@ -856,17 +867,14 @@ export default {
       imgObj.onload = function () {
         var ctx = cvs.getContext('2d')
         // 压缩图片
-        var rate = 800 / imgObj.width
+        var rate = 900 / imgObj.width
         cvs.height = imgObj.height * rate
         // ctx.drawImage(this, 0, 0);//this即是imgObj,保持图片的原始大小：470*480
-        ctx.drawImage(this, 0, 0, 800, cvs.height)// 改变图片的大小到800*500
-        //设置当前图片标注
+        ctx.drawImage(this, 0, 0, 900, cvs.height)// 改变图片的大小到900*500
+        // 设置当前图片标注
       }
 
-
-
-      _this.setCurrentImgInfo();
-
+      _this.setCurrentImgInfo()
     },
     // 以下两个方法分别用于画折线和矩形
     drawBrokenLine () {
@@ -877,14 +885,14 @@ export default {
         canvas.onmousedown = function (ev) {
           var x = ev.offsetX
           var y = ev.offsetY
-          _this.pointList.push({x:x,y:y});
+          _this.pointList.push({x: x, y: y})
           console.log(_this.pointList)
           ctx.beginPath()
           ctx.moveTo(x, y)
           canvas.onmousemove = function (ev) {
             var targetX = ev.offsetX
             var targetY = ev.offsetY
-            _this.pointList.push({x:targetX,y:targetY});
+            _this.pointList.push({x: targetX, y: targetY})
             console.log(_this.pointList)
             ctx.lineWidth = 1
             ctx.strokeStyle = 'rgba(52, 136, 255, 1)'
@@ -906,14 +914,14 @@ export default {
       }
     },
     drawRec () {
-      //var pointList = new Array()
+      // var pointList = new Array()
       var pos = 0
-      //var flag = this.checkList.indexOf('矩形画框')
+      // var flag = this.checkList.indexOf('矩形画框')
       var canvas = document.getElementById('myCanvas')
       var ctx = canvas.getContext('2d')
-      var x2;
-      var y2;
-      var _this = this;
+      var x2
+      var y2
+      var _this = this
       if (this.missionType == 'Detection') {
         var lineColor = this.colorList[this.colorPos]
         canvas.onmousedown = function (ev) {
@@ -922,15 +930,15 @@ export default {
           console.log(x1)
           ctx.beginPath()
           ctx.moveTo(x1, y1)
-          _this.pointList.push({x:x1,y:y1});
+          _this.pointList.push({x: x1, y: y1})
           console.log(_this.pointList)
-          //pointList[pos] = '(' + x1 + ',' + y1 + '),'
+          // pointList[pos] = '(' + x1 + ',' + y1 + '),'
           pos = pos + 1
 
           canvas.onmousemove = function (ev) {
             x2 = ev.offsetX
             y2 = ev.offsetY
-            //pointList[pos] = '(' + x2 + ',' + y2 + '),'
+            // pointList[pos] = '(' + x2 + ',' + y2 + '),'
             pos = pos + 1
             ctx.strokeStyle = '#000000'
             ctx.rect(x1, y1, x2 - x1, y2 - y1)
@@ -942,8 +950,8 @@ export default {
             ctx.strokeStyle = 'rgba(52, 136, 255, 1)'
             ctx.fillStyle = 'rgba(52, 136, 255, 0.5)'
             ctx.fill()
-            _this.pointList.push({x:x2,y:y2});
-            console.log(_this.pointList);
+            _this.pointList.push({x: x2, y: y2})
+            console.log(_this.pointList)
 
             ctx.strokeRect(x1, y1, x2 - x1, y2 - y1)
             c.onmousemove = null
@@ -955,7 +963,6 @@ export default {
     },
     // 以下方法用于清空数据缓存
     imgDataClear () {
-
       var c = document.getElementById('myCanvas')
       c.click()
       var cxt = c.getContent('2d')
@@ -977,8 +984,7 @@ export default {
         this.draw()
       }
       this.imgDataClear()
-    },
-
+    }
 
   }
 }
@@ -998,9 +1004,10 @@ export default {
 
   .work_place {
     position: absolute;
-    top: 90px;
+    top: 140px;
     width: 60%;
     left: 20.5%;
+
   }
 
   .carousel img {
@@ -1121,13 +1128,12 @@ export default {
     width: 20px;
   }
 
-  .cb {
-    margin-bottom: 5px;
 
+  #title{
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    color: #6699cc;
   }
 
-  #cb1 {
-    left: 5px;
-  }
+
 
 </style>

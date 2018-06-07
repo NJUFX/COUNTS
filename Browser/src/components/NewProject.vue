@@ -480,7 +480,7 @@
               missionID = xmlhttp.responseText
               _this.uploadImg(missionID)
               _this.openSucc('Submit successfully')
-              _this.doAutoLabel=true;
+             // _this.doAutoLabel=true;
              // _this.goMyProject()
             }
           }
