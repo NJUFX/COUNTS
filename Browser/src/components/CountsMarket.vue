@@ -34,7 +34,7 @@
             <span style="position:absolute; top: 110px; color: #d81e06; left: 0px;">排序</span>
             <img src="../assets/sort.png" style="position: absolute;width:20px; top:112px; left: 35px;">
             <div>
-              <el-button type="text" style="position: absolute; left: 101px; top: 101px;">默认</el-button>
+              <el-button type="text" style="position: absolute; left: 101px; top: 101px;">综合</el-button>
               <span style="position: absolute; left: 150px; top: 110px;">|</span>
               <el-button type="text" style="position: absolute; left: 170px; top: 101px;">积分 <i v-bind:class="countIcon"></i></el-button>
               <span style="position: absolute; left: 220px; top: 110px;">|</span>

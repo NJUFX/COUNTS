@@ -17,7 +17,7 @@
       </el-button>
       <div  v-bind:style="myStyle">
         <div v-for="item in candidateLabelList">
-          <div class="item" @click="select(item)">
+          <div class="itemT" @click="select(item)">
             {{item}}
           </div>
         </div>
@@ -165,7 +165,7 @@
 </script>
 
 <style scoped>
-  .item{
+  .itemT{
     font-size: 13px;
     color: #ff8432;
     margin: 2px;
@@ -177,7 +177,7 @@
     padding-right: 8px;
     padding-top:2px;
   }
-  .item:hover{
+  .itemT:hover{
     color: white;
     background-color: #ff8432;
     cursor: default
