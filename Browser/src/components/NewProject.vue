@@ -519,13 +519,10 @@
               missionID = xmlhttp.responseText
               _this.uploadImg(missionID)
               _this.openSucc('Submit successfully')
-<<<<<<< HEAD
              // _this.doAutoLabel=true;
              // _this.goMyProject()
-=======
               _this.doAutoLabel=true;
               // _this.goMyProject()
->>>>>>> 43b4f73256feb47a167837072332eb288f7b60d0
             }
           }
           let formData = new FormData()
