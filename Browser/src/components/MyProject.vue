@@ -486,7 +486,8 @@ export default {
                 type: arrays[i].type,
                 percent:0,
                 isEnd:false,
-                isContinue:true
+                isContinue:true,
+                show:(arrays[i].annotationType==1)?false:true
               })
               if (arrays[i].finished == arrays[i].sum) {
                 fin++

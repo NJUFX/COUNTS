@@ -519,7 +519,7 @@
               missionID = xmlhttp.responseText
               _this.uploadImg(missionID)
               _this.openSucc('Submit successfully')
-              _this.doAutoLabel=true;
+             // _this.doAutoLabel=true;
               // _this.goMyProject()
             }
           }
@@ -539,7 +539,7 @@
           if (mission.type == 'Classification' || mission.type == 'Attribute') {
             mission.selects =  _this.selectsArray
           }
-          console.log('ms '+ mission)
+          //console.log('ms '+ mission)
           xmlhttp.open('POST', 'http://localhost:8080/counts/image/addmission', true)
           xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
           xmlhttp.send(JSON.stringify(mission))
