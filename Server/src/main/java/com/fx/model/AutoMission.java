@@ -1,5 +1,7 @@
 package com.fx.model;
 
+import java.util.List;
+
 /**
  * Description:
  * Created by Hanxinhu at 16:00 2018/6/8/008
@@ -41,6 +43,18 @@ public class AutoMission {
      * 任务描述
      */
     private String description;
+    /**
+     * 分类标注时所有可能的类型
+     */
+    private List<String> types;
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
+    }
 
     public String getMissionName() {
         return missionName;
