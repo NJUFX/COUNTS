@@ -26,6 +26,12 @@ public class MessageController {
 
         return null;
     }
+
+    /**
+     * 更新消息的状态 把未读改为已读
+     * @param id 消息的id
+     * @return
+     */
     @RequestMapping(
             value = "updateMessage",
             method = RequestMethod.POST,

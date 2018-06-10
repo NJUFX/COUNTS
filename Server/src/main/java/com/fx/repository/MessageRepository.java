@@ -15,7 +15,7 @@ public interface MessageRepository {
 
     public ResultMessage addMessages(List<Message> messages);
 
-    public ResultMessage updateMessage(Message message);
+    public ResultMessage updateMessage(int messageID);
 
     public List<Message> findMessageByUsername(String username);
 
