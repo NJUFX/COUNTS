@@ -520,6 +520,8 @@
               _this.uploadImg(missionID)
               _this.openSucc('Submit successfully')
              // _this.doAutoLabel=true;
+             // _this.goMyProject()
+              _this.doAutoLabel=true;
               // _this.goMyProject()
             }
           }

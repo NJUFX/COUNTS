@@ -15,6 +15,8 @@ import CountsDetails from '@/components/CountsDetails'
 import Result from '@/components/Result'
 import Register from '@/components/Register'
 import Message from '@/components/Message'
+import AutoLabel from '@/components/AutoLabel'
+import AutoJudge from '@/components/AUtoJudge'
 Vue.use(Router)
 
 export default new Router({
@@ -33,6 +35,16 @@ export default new Router({
       path: '/:username/worker',
       name: 'Worker',
       component: Worker
+    },
+    {
+      path: '/:username/autoLabel',
+      name: 'AutoLabel',
+      component: AutoLabel
+    },
+    {
+      path: '/:username/autoJudge',
+      name: 'AutoJudge',
+      component: AutoJudge
     },
     {
       path: '/:username/message',

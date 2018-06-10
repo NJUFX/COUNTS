@@ -36,6 +36,7 @@
     name: 'App',
     data: function () {
       return {
+        sakura_show:true,
         headImg: HeadImg,
         unreadInfoNumber:localStorage.getItem('unreadInfoNumber')
       }
@@ -90,6 +91,7 @@
     },
 
     methods: {
+
       readMessage(){
         var path = '/' + localStorage.getItem('username')
         var id = localStorage.getItem('identify')
@@ -129,6 +131,7 @@
         }
       },
       goMarket: function () {
+
         if (localStorage.getItem('identify') == 'logout') {
           this.openInfo("You haven't logged in")
           var path = '/visitor/countsMarket'
@@ -139,7 +142,11 @@
           this.$router.push({path: path})
         }
       },
+      sakuraShowOrNot:function(){
+        this.sakura_show= !this.sakura_show
+      },
       goMyProject: function () {
+
         var path = '/' + localStorage.getItem('username')
         var id = localStorage.getItem('identify')
         if (id == 'worker') {

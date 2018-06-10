@@ -40,10 +40,14 @@
       <div style="position: absolute; top: 0px;width: 1100px; left: 50%; margin-left: -550px; background-color: white;">
         <div style="position: absolute; top: 0px;left: 0; width: 100%; height: 370px; background-color: white"></div>
         <div>
-          <div id="manLabel" style="position: absolute; left: 30px; top: 10px;" class="labelType" @click="selectManLabel">人工标注</div>
-          <div id="autoLabel" style="position: absolute; left: 140px; top: 10px" class="labelType" @click="selectAutoLabel">自动化标注</div>
+          <el-cascader style="position: absolute; left: 30px; top: 10px;"
+            expand-trigger="hover"
+            :options="labelTypeOptions"
+            v-model="selectLabelTypeOption"
+            @change="handleLabelTypeChange">
+          </el-cascader>
         </div>
-        <div style="position: absolute; top: 40px; left: 20px">
+        <div style="position: absolute; top: 50px; left: 20px">
           <div v-for="item in projectInfo" style="float: left" :key="item">
             <el-card v-show="item.show" class="el_card" :body-style="{padding:'0px'}">
               <el-tag v-show="item.isContinue" style="position: absolute; left: 20px; top: 10px; color:white; width: 70px " color="#4CAF50">进行中...</el-tag>
@@ -269,6 +273,31 @@ export default {
       }
     }
     return {
+      selectLabelTypeOption:[],
+      labelTypeOptions:[
+        {
+          value:'all',
+          label:'全部项目'
+        },
+        {
+          value: 'man',
+          label:'人工标注项目'
+        },
+        {
+          value:'auto',
+          label:'自动化项目',
+          children: [
+            {
+              value: 'label',
+              label:'标注项目'
+            },
+            {
+              value:'test',
+              label:'审查项目'
+            }
+          ]
+        }
+      ],
       isManLabel:true,
       isAutoLabel:true,
       rankingTableData: [
@@ -346,7 +375,7 @@ export default {
       default_index: '1',
       project_info: {},
       projectInfo: [
-       /* {
+        {
           show:true,
           id: '01',
           missionname: 'miss',
@@ -362,7 +391,7 @@ export default {
           percent:0,
           isEnd:false,
           isContinue:true
-        }*/
+        }
       ],
       project_total: 0,
       info: {
@@ -438,7 +467,6 @@ export default {
           if (JSON.parse(xmlhttp.responseText) != null) {
             var item = JSON.parse(xmlhttp.responseText)
             _this.user = item
-            localStorage.setItem('userid',''+item.id)
             var info2 = {
               id: item.id,
               username: item.username,
@@ -480,14 +508,12 @@ export default {
                 imgFinished: arrays[i].finished,
                 imgToDo: (arrays[i].sum - arrays[i].finished),
                 type: arrays[i].type,
-                annotationType: arrays[i].annotationType,
                 cover: '',
-                counts: arrays[i].points,
-                type: arrays[i].type,
                 percent:0,
                 isEnd:false,
                 isContinue:true,
-                show:(arrays[i].annotationType==1)?false:true
+                annotationType:0,
+                show:true
               })
               if (arrays[i].finished == arrays[i].sum) {
                 fin++
@@ -557,49 +583,47 @@ export default {
   },
 
   methods: {
-    selectManLabel(){
-      this.isManLabel=!this.isManLabel;
-      if(this.isManLabel==true) {
-        for(var i=0;i<this.projectInfo.length;i++){
-          if(this.projectInfo[i].annotationType==0){
-            this.projectInfo[i].show=true;
-          }
+    handleLabelTypeChange(val){
+      if(val[0]=='man'){
+        this.selectManLabel()
+      }else if(val[0]=='auto'){
+        console.log(val[1])
+        if(val[1]=='label'){
+          this.selectAutoLabel()
+        }else if(val[1]=='test'){
+          this.selectAutoTest()
         }
-        document.getElementById('manLabel').style.backgroundColor = '#1d86ff'
-        document.getElementById('manLabel').style.color = 'white'
-        document.getElementById('manLabel').style.border = '0'
       }else{
         for(var i=0;i<this.projectInfo.length;i++){
-          if(this.projectInfo[i].annotationType==0){
-            this.projectInfo[i].show=false;
-          }
+            this.projectInfo[i].show=true;
         }
-        document.getElementById('manLabel').style.backgroundColor = 'white'
-        document.getElementById('manLabel').style.color = 'black'
-        document.getElementById('manLabel').style.border = '1px solid #999'
       }
     },
-
+    selectManLabel(){
+      for(var i=0;i<this.projectInfo.length;i++){
+        if(this.projectInfo[i].annotationType==0){
+          this.projectInfo[i].show=true;
+        }else{
+          this.projectInfo[i].show=false;
+        }
+      }
+    },
+    selectAutoTest(){
+      for(var i=0;i<this.projectInfo.length;i++){
+        if(this.projectInfo[i].annotationType==2){
+          this.projectInfo[i].show=true;
+        }else{
+          this.projectInfo[i].show=false;
+        }
+      }
+    },
     selectAutoLabel(){
-      this.isAutoLabel=!this.isAutoLabel;
-      if(this.isAutoLabel==true) {
-        for(var i=0;i<this.projectInfo.length;i++){
-          if(this.projectInfo[i].annotationType==1){
-            this.projectInfo[i].show=true;
-          }
+      for(var i=0;i<this.projectInfo.length;i++){
+        if(this.projectInfo[i].annotationType==1){
+          this.projectInfo[i].show=true;
+        }else{
+          this.projectInfo[i].show=false;
         }
-        document.getElementById('autoLabel').style.backgroundColor = '#1d86ff'
-        document.getElementById('autoLabel').style.color = 'white'
-        document.getElementById('autoLabel').style.border = '0'
-      }else{
-        for(var i=0;i<this.projectInfo.length;i++){
-          if(this.projectInfo[i].annotationType==1){
-            this.projectInfo[i].show=false;
-          }
-        }
-        document.getElementById('autoLabel').style.backgroundColor = 'white'
-        document.getElementById('autoLabel').style.color = 'black'
-        document.getElementById('autoLabel').style.border = '1px solid #999'
       }
     },
 

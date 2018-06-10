@@ -1,0 +1,2 @@
+{"ID":2,"requestorID":"lyx2","missionName":"test","description":"测试工作台","begin":"2018-06-04","end":"2018-08-22","type":"Caption","selects":[],"maxNumber":20,"currentNumber":0,"points":5,"annotationType":0,"tags":[]}
+{"ID":3,"requestorID":"lyx2","missionName":"test2","description":"test2","begin":"2018-05-28","end":"2018-09-28","type":"Classification","selects":["猫","狗"],"maxNumber":20,"currentNumber":1,"points":5,"annotationType":0,"tags":["dog","cat"]}
