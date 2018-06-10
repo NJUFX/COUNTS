@@ -15,7 +15,20 @@
           <div id="manLabel" style="position: absolute; left: 68px;" class="labelType" @click="selectManLabel">人工标注</div>
           <div id="autoLabel" style="position: absolute; left: 178px;" class="labelType" @click="selectAutoLabel">自动化标注</div>
         </div>
-        <el-form class="form" style="position:absolute;top: 50px" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+        <div v-show="isAutoLabel">
+          <span style="position: absolute; left: 32px;top: 40px;font-size: 14px">任务详情</span>
+          <el-input style="position: absolute; left: 100px;top: 40px;font-size: 14px;width: 390px" type="textarea" :rows="7" placeholder="输入任务的具体要求" v-model="autoForm.contents"></el-input>
+          <span style="position: absolute; left: 32px;top: 233px;font-size: 14px">标注方式</span>
+          <el-select @change="labelChange2" style="position: absolute; left:100px;top: 233px;" v-model="autoForm.type" placeholder="选择标注方式">
+            <div v-for="item in options" :key="item.value">
+              <el-option :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
+            </div>
+          </el-select>
+          <el-button style="position: absolute; left:350px;top: 233px;" @click="labelDetailsShow" class="label_info_button" icon="el-icon-info" type="text"></el-button>
+          <el-button style="position: absolute; left:360px;top: 233px;" type="text"  v-show="isClassBtnShow" @click="handleClassBtn">添加分类</el-button>
+
+        </div>
+        <el-form v-show="!isAutoLabel" class="form" style="position:absolute;top: 50px" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
           <el-form-item label="任务标题" prop="topic" required>
             <el-input v-model="ruleForm.topic" ></el-input>
           </el-form-item>
@@ -198,6 +211,10 @@
         }
       }
       return {
+        autoForm:{
+          type: '',
+          contents: ''
+        },
         doAutoLabel:false,
         isAutoLabel:false,
         hotTagList:['dog','cat','mouse','horse','padding','steve bob','hello world','vue',
@@ -300,7 +317,7 @@
       },
       selectManLabel(){
         for(var i=0;i<this.options.length;i++){
-            this.options[i].disabled=false;
+          this.options[i].disabled=false;
         }
         this.isAutoLabel=false;
         document.getElementById('manLabel').style.backgroundColor = '#1d86ff'
@@ -360,7 +377,6 @@
         this.attrDialogVisible = true
       },
       labelChange () {
-        console.log(this.ruleForm.type)
         if (this.ruleForm.type == 'Classification') {
           this.isClassBtnShow = true
           this.isAttrBtnShow = false
@@ -369,6 +385,18 @@
           this.isClassBtnShow = false
           this.isAttrBtnShow = true
           this.attrDialogVisible = true
+        } else {
+          this.isClassBtnShow = false
+          this.isAttrBtnShow = false
+          this.classDialogVisible = false
+          this.attrDialogVisible = false
+        }
+      },
+      labelChange2 () {
+        if (this.autoForm.type == 'Classification') {
+          this.isClassBtnShow = true
+          this.isAttrBtnShow = false
+          this.classDialogVisible = true
         } else {
           this.isClassBtnShow = false
           this.isAttrBtnShow = false
@@ -442,8 +470,19 @@
         this.$router.push({path: path + '/requester'})
 
       },
-      submitForm (formName) {
+      submitForm(){
+        if(this.isAutoLabel){
+          this.submitAutoForm()
+        }else{
+          this.submitManForm()
+        }
+      },
 
+      submitAutoForm(){
+
+      },
+
+      submitManForm () {
         if (this.ruleForm.type == 'Classification') {
           for (var i = 0; i < this.classArray.length; i++) {
             if (this.LTrim(this.RTrim(this.classArray[i].value)) != '') {
@@ -480,36 +519,24 @@
               missionID = xmlhttp.responseText
               _this.uploadImg(missionID)
               _this.openSucc('Submit successfully')
-              _this.doAutoLabel=true;
+             // _this.doAutoLabel=true;
              // _this.goMyProject()
+              _this.doAutoLabel=true;
+              // _this.goMyProject()
             }
           }
           let formData = new FormData()
-          var mission = {}
-          if(this.isAutoLabel==true){
-            mission = {
-              requestorID: username,
-              missionName: _this.ruleForm.topic,
-              description: _this.ruleForm.contents,
-              annotationType: 1,
-              selects:[],
-              begin: _this.ruleForm.dateStart,
-              end: _this.ruleForm.dateEnd,
-              type: _this.ruleForm.type
-            }
-          }else {
-            mission = {
-              requestorID: username,
-              missionName: _this.ruleForm.topic,
-              description: _this.ruleForm.contents,
-              begin: _this.ruleForm.dateStart,
-              end: _this.ruleForm.dateEnd,
-              type: _this.ruleForm.type,
-              points: _this.ruleForm.workerPoints,
-              maxNumber: _this.ruleForm.workerNumber,
-              selects: [],
-              tags: this.selectedTagList
-            }
+          var mission = {
+            requestorID: username,
+            missionName: _this.ruleForm.topic,
+            description: _this.ruleForm.contents,
+            begin: _this.ruleForm.dateStart,
+            end: _this.ruleForm.dateEnd,
+            type: _this.ruleForm.type,
+            points: _this.ruleForm.workerPoints,
+            maxNumber: _this.ruleForm.workerNumber,
+            selects: [],
+            tags: this.selectedTagList
           }
           if (mission.type == 'Classification' || mission.type == 'Attribute') {
             mission.selects =  _this.selectsArray
