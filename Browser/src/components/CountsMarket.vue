@@ -30,11 +30,11 @@
             <span style="position: absolute;font-size: 14px; left:103px; top: 78px;">时 间</span>
             <el-date-picker @change="handleTimeChange" style="position: absolute; left: 170px; top: 76px;" size="mini" v-model="timepart" type="daterange" range-separator="-" start-placeholder="起始日期" end-placeholder="截止日期"></el-date-picker>
           </div>
-          -->
+
           <div>
             <span style="position:absolute; top: 10px; color: #d81e06; left: 0px;">排序</span>
             <img src="../assets/sort.png" style="position: absolute;width:20px; top:12px; left: 35px;">
-            <div>
+            <div >
               <el-button type="text" style="position: absolute; left: 101px; top: 1px;">综合</el-button>
               <span style="position: absolute; left: 150px; top: 10px;">|</span>
               <el-button type="text" style="position: absolute; left: 170px; top: 1px;">积分 <i v-bind:class="countIcon"></i></el-button>
@@ -42,6 +42,7 @@
               <el-button type="text" style="position: absolute; left: 240px; top: 1px;">时间 <i v-bind:class="timeIcon"></i></el-button>
               </div>
           </div>
+           -->
         </div>
       </div>
     </div>
