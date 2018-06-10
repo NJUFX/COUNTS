@@ -3,10 +3,13 @@ package com.fx.service.impl;
 import com.fx.bean.MissionPresentation;
 import com.fx.bean.OptMessage;
 import com.fx.controller.ImageController;
+import com.fx.model.AutoMission;
 import com.fx.model.Mission;
 import com.fx.model.User;
+import com.fx.repository.AutoMissionRepository;
 import com.fx.repository.MissionRepository;
 import com.fx.repository.UserRepository;
+import com.fx.repository.impl.AutoMissionRepositoryImpl;
 import com.fx.repository.impl.MissionRepositoryImpl;
 import com.fx.repository.impl.UserRepositoryImpl;
 import com.fx.service.MissionService;
@@ -26,9 +29,10 @@ import java.util.List;
 @Service
 public class MissionServiceImpl implements MissionService {
     MissionRepository missionRepository;
-
+    AutoMissionRepository autoMissionRepository;
     public MissionServiceImpl() {
         missionRepository = new MissionRepositoryImpl();
+        autoMissionRepository = new AutoMissionRepositoryImpl();
     }
 
     /**
@@ -148,7 +152,6 @@ public class MissionServiceImpl implements MissionService {
      * @return
      */
     public Mission findMissionByID(int id) {
-
         return missionRepository.findMissionByID(id);
     }
 
@@ -213,5 +216,26 @@ public class MissionServiceImpl implements MissionService {
 
         String result = head + encoder.encode(data);
         return result;
+    }
+
+    /**
+     * 根据发布者的用户名查询 所有的自动化标注
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public List<AutoMission> getAutoMissionByRequestorID(String username) {
+        return autoMissionRepository.findAutoMissionByRequestorID(username);
+    }
+
+    @Override
+    public ResultMessage addAutoMission(AutoMission autoMission) {
+        return autoMissionRepository.addAutoMission(autoMission);
+    }
+
+    @Override
+    public AutoMission findAutoMissionByID(int id) {
+        return autoMissionRepository.findAutoMissionByID(id);
     }
 }

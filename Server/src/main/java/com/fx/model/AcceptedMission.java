@@ -12,11 +12,15 @@ public class AcceptedMission {
      * 正在进行中的任务id
      */
     private  int id;
-
     /**
      * 任务名
      */
     private String missionName;
+
+    /**
+     * 用户名
+     */
+    private String username;
 
     /**
      * 任务起始日期
@@ -42,6 +46,19 @@ public class AcceptedMission {
      * 该任务需要标注的总图片数目
      */
     private int sum;
+
+    /**
+     * 用户对任务的评分
+     */
+    private int score;
+
+    /**
+     * 以哪一种推荐接受到任务的
+     * 1代表topFive
+     * 2代表基于内容的推荐
+     * 3代表基于用户协调CF的推荐
+     */
+    private int recommendType;
 
     public AcceptedMission() {
     }
@@ -116,6 +133,30 @@ public class AcceptedMission {
         if (finished<sum)
             finished++;
         return finished;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getRecommendType() {
+        return recommendType;
+    }
+
+    public void setRecommendType(int recommendType) {
+        this.recommendType = recommendType;
     }
 }
 

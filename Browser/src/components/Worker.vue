@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <div id="toolbox" style="border-radius: 6px; background: #409eff; width: 480px;height: 42px; position: absolute; left:35%; top:57px">
+    <div id="toolbox" style="border-radius: 6px; background: #409eff; width: 525px;height: 42px; position: absolute; left:35%; top:57px">
       <el-button-group style="padding: 1px; position: absolute; top:-10px; left: 160px;">
         <el-tooltip class="item" effect="dark" content="添加标注信息" placement="bottom">
           <el-button type="primary" icon="el-icon-edit" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
@@ -22,6 +22,9 @@
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="标注信息" placement="bottom">
           <el-button type="primary" icon="el-icon-info" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="给项目评分" placement="bottom">
+          <el-button type="primary" icon="el-icon-star-on" style="font-size: 14px;" size="mini" @click="rateProject"></el-button>
         </el-tooltip>
       </el-button-group>
       <div style="width: 100px;height: 42px; background: #e4e4e4; top:5px;">
@@ -160,44 +163,7 @@
       </div>
     </el-dialog>
     <!--双击文本弹出已提交标注文本结束-->
-    <div id="toolbar" v-drag style="position: fixed; right: 300px; top: 100px; width: 25px; height: 38px; cursor: move">
-      <div style="position:relative;">
-        <img src="../assets/toolbox.png" style="position: absolute; width: 50px; top: -3px; right: -48px">
-        <el-tooltip class="item" effect="dark" v-bind:content=tooltip placement="bottom">
-          <el-button @click="showToolBar" type="text" v-bind:icon="btnText" size="mini"
-                     style="position: absolute; right:0px;width: 20px; height: 36px; font-size: 17px; color: #e90c05;">
-          </el-button>
-        </el-tooltip>
-      </div>
-      <div v-show="isShow" style="position:absolute;right: 20px; width: 323px; background-color: #43a0ff; height: 36px; border-radius: 3px">
-        <div style="position: relative;" >
-          <el-button-group style="padding: 2px; position: absolute; right: 0px;">
-            <el-tooltip class="item" effect="dark" content="添加标注信息" placement="bottom">
-              <el-button type="primary" icon="el-icon-edit" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="重新标注当前图片" placement="bottom-end">
-              <el-button type="primary" icon="el-icon-ali-xiangpica" style="font-size: 14px;" size="mini" @click="reLabelImg"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="保存图片并提交" placement="bottom">
-              <el-button type="primary" icon="el-icon-upload" style="font-size: 14px;" size="mini" @click="commitImg" ></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="加载任务数据" placement="bottom-start">
-              <el-button type="primary" icon="el-icon-download" size="mini" style="font-size: 14px;" @click="downloadSource" ></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="上一张" placement="bottom-start">
-              <el-button type="primary" icon="el-icon-caret-left" style="font-size: 14px;" size="mini" @click="prevImg"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="下一张" placement="bottom">
-              <el-button type="primary" icon="el-icon-caret-right" style="font-size: 14px;" size="mini" @click="nextImg"></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="标注信息" placement="bottom">
-              <el-button type="primary" icon="el-icon-info" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
-            </el-tooltip>
-          </el-button-group>
-        </div>
-      </div>
-    </div>
-  </el-container>
+    </el-container>
 </template>
 
 <script>
@@ -984,6 +950,9 @@ export default {
         this.draw()
       }
       this.imgDataClear()
+    },
+    rateProject(){
+      console.log("rating");
     }
 
   }

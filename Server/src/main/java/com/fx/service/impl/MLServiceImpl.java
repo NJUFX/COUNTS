@@ -1,5 +1,6 @@
 package com.fx.service.impl;
 
+import com.fx.machinelearning.PBServer;
 import com.fx.service.MLService;
 import org.springframework.stereotype.Service;
 
@@ -9,4 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MLServiceImpl implements MLService {
 
+    PBServer pbServer = new PBServer();
+
+    @Override
+    public void predictLabel() {
+
+    }
 }

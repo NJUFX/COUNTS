@@ -14,7 +14,7 @@ public interface ResultService {
      * @param missionID 任务ID
      * @return 整体描述的结果列表
      */
-    public List<CaptionClassificationResult> getCaptionResult(int missionID);
+    public List<CaptionClassificationResult> getCapAndClaResult(int missionID);
 
 
 

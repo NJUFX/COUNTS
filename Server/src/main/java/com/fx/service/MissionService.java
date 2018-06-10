@@ -1,6 +1,7 @@
 package com.fx.service;
 
 import com.fx.bean.MissionPresentation;
+import com.fx.model.AutoMission;
 import com.fx.model.Mission;
 import com.fx.util.ResultMessage;
 
@@ -116,4 +117,15 @@ public interface MissionService {
 
 
     public String getFirstImage(int missionid);
+
+    /**
+     * 根据发布者的用户名查询 所有的自动化标注
+     * @param username
+     * @return
+     */
+    public List<AutoMission> getAutoMissionByRequestorID(String username);
+
+    public ResultMessage addAutoMission(AutoMission autoMission);
+
+    public AutoMission findAutoMissionByID(int id);
 }

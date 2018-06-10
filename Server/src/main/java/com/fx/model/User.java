@@ -279,9 +279,9 @@ public class User {
     public ResultMessage addAcceptedMission(int missionID){
         for (int i = 0; i < missions.size(); i++) {
             if(missions.get(i).getId()==missionID){
-                int fininsedfirst = missions.get(i).getFinished();
-                int finishedSeconnd =   missions.get(i).addone();
-                if (fininsedfirst<finishedSeconnd&&finishedSeconnd>=missions.get(i).getSum()){
+                int finishedFirst = missions.get(i).getFinished();
+                int finishedSecond =   missions.get(i).addone();
+                if (finishedFirst<finishedSecond&&finishedSecond>=missions.get(i).getSum()){
                     points += missions.get(i).getSum();
                     setExp(exp += missions.get(i).getSum());
                 }
