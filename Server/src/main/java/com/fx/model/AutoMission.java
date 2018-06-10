@@ -22,7 +22,7 @@ public class AutoMission {
      */
     private int size;
     /**
-     *  目前分为 Classification Caption两种
+     *  目前分为 Classification Caption Detection三种
      */
     private String type;
     /**
@@ -33,7 +33,30 @@ public class AutoMission {
      * 项目开始时间
      */
     private String beginTime;
+    /**
+     * 任务名称
+     */
+    private String missionName;
+    /**
+     * 任务描述
+     */
+    private String description;
 
+    public String getMissionName() {
+        return missionName;
+    }
+
+    public void setMissionName(String missionName) {
+        this.missionName = missionName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public int getPoints() {
         return points;
