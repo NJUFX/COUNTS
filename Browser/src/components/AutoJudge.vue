@@ -1,10 +1,12 @@
 <template>
-
+    <div>
+      这个是判断对错的界面
+    </div>
 </template>
 
 <script>
     export default {
-        name: "test2"
+        name: "auto-judge"
     }
 </script>
 
