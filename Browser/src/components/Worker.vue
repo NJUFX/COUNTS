@@ -163,6 +163,22 @@
       </div>
     </el-dialog>
     <!--双击文本弹出已提交标注文本结束-->
+    <!--评分对话框开始-->
+    <el-dialog title="评价项目" :visible.sync="ratingDialogVisible">
+      <div class="block">
+        <span class="demonstration">对这个项目感兴趣吗？</span>
+        <div style="height: 10px"></div>
+        <el-rate
+          v-model="projectRate"
+          :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+        </el-rate>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button  icon="el-icon-close" @click="ratingDialogVisible = true">取消</el-button>
+        <el-button type="primary"icon="el-icon-circle-plus-outline" @click="commitRating">确定</el-button>
+      </div>
+    </el-dialog>
+    <!--评分对话框结束-->
     </el-container>
 </template>
 
@@ -243,6 +259,8 @@ export default {
       ],
       pointList: [],// 存储点集
       labeled: 0, //已标注数量
+      ratingDialogVisible: false, //评分弹出框是否可见
+      projectRate: null,
 
     }
   },
@@ -952,8 +970,13 @@ export default {
       this.imgDataClear()
     },
     rateProject(){
-      console.log("rating");
-    }
+      //console.log("rating");
+      this.ratingDialogVisible = true;
+    },
+    commitRating(){
+      this.ratingDialogVisible = false;
+      //console.log(this.projectRate);
+    },
 
   }
 }
