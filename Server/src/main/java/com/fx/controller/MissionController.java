@@ -2,6 +2,7 @@ package com.fx.controller;
 
 import com.fx.bean.MissionPresentation;
 import com.fx.bean.OptMessage;
+import com.fx.model.AcceptedMission;
 import com.fx.model.AutoMission;
 import com.fx.model.Mission;
 import com.fx.service.MissionService;
@@ -313,5 +314,35 @@ public class MissionController {
         return ResultMessage.SUCCESS;
     }
 
+    /**
+     * 工人接收任务
+     */
+    @RequestMapping(
+            value = "/addAcceptMission",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public ResultMessage addAcceptMission(String username,int missionID){
+        return null;
+    }
 
+    @RequestMapping(
+            value = "/getAcceptMission",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public AcceptedMission getAcceptMission(String username,int missionID){
+        return null;
+    }
+    @RequestMapping(
+            value = "/updateAcceptMission",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public ResultMessage updateAcceptMission(@RequestBody AcceptedMission acceptedMission){
+        return null;
+    }
 }

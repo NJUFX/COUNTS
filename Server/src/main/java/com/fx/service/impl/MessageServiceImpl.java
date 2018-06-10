@@ -45,4 +45,15 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> findMessageByUsername(String username) {
         return null;
     }
+
+    /**
+     * 更新已读未读
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ResultMessage updateMessage(int id) {
+        return null;
+    }
 }

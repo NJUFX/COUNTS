@@ -31,4 +31,11 @@ public interface MessageService {
      */
     public List<Message> findMessageByUsername(String username);
 
+    /**
+     * 更新已读未读
+     * @param id
+     * @return
+     */
+    public ResultMessage updateMessage(int id);
+
 }
