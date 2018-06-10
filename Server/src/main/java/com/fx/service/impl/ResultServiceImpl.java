@@ -22,7 +22,7 @@ public class ResultServiceImpl  implements ResultService {
      * @return 整体描述的结果列表
      */
     @Override
-    public List<CaptionClassificationResult> getCaptionResult(int missionID) {
+    public List<CaptionClassificationResult> getCapAndClaResult(int missionID) {
         return null;
     }
 

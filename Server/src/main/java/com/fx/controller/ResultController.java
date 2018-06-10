@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,13 +26,13 @@ public class ResultController {
      * 获得标注的结果 需要任务id
      */
     @RequestMapping(
-            value = "getCaptionResult",
+            value = "/getCaptionResult",
             method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
     public List<CaptionClassificationResult> getCaptionResult(int missionID){
-        System.out.println("get caption Result");
-        return resultService.getCaptionResult(missionID);
+
+        return resultService.getCapAndClaResult(missionID);
     }
 }

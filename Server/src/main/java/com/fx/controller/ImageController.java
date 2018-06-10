@@ -3,25 +3,27 @@ package com.fx.controller;
 
 import com.fx.bean.Image;
 import com.fx.bean.MissionCompletion;
-import com.fx.bean.OptMessage;
 import com.fx.model.LocalLabel;
 import com.fx.model.Mission;
 import com.fx.model.User;
-import com.fx.repository.UserRepository;
 import com.fx.service.ImageService;
 import com.fx.service.LabelService;
 import com.fx.service.MissionService;
 import com.fx.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Created by thinkpad on 2018/3/17.
@@ -31,8 +33,8 @@ import java.util.List;
 @CrossOrigin
 public class ImageController {
     //图片存放地址
-   // public static final String imageURL = "E:\\大二下\\软工\\ImageTest\\";
-      public static final String imageURL = "data/image/";
+    // public static final String imageURL = "E:\\大二下\\软工\\ImageTest\\";
+    public static final String imageURL = "data/image/";
     @Autowired
     ImageService imageService;
 
@@ -43,6 +45,35 @@ public class ImageController {
     MissionService missionService;
     @Autowired
     UserService userService;
+
+    private final static String autoDirName = "../data/autoImage";
+
+    public ImageController() {
+        File file = new File(autoDirName);
+        try {
+            if (!file.exists())
+                file.mkdir();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(
+            value = "/uploadAutoImg"
+    )
+    @ResponseBody
+    public void uploadAutoImg(int missionID,MultipartFile file[]) throws Exception{
+        for (MultipartFile f : file) {
+
+            // System.out.println("missionname"+mission.getID());
+
+            // String imgName = System.currentTimeMillis() + f.getOriginalFilename(); // 这里图片的名字用毫秒数+图片原来的名字拼接,迭代一暂时不考虑重名情况
+            String imgName = f.getOriginalFilename();//这里图片还是以原名命名
+            //上传文件
+            imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/"+"allimage", imgName);
+        }
+    }
+
     /**
      * 上传多张图片
      * 前端语法参考：http://blog.csdn.net/jtshongke/article/details/78516559?locationNum=7&fps=1
@@ -56,24 +87,22 @@ public class ImageController {
     )
 
     @ResponseBody
-    public void uploadImg( int mission, MultipartFile file[]) throws Exception {
-      //  System.out.println(mission.getID());
-        System.out.println("得到的areaName:"+imageURL);
-     //写给后端coder：file似乎不要用requestparam定义，不然会报错。。。
+    public void uploadImg(int mission, MultipartFile file[]) throws Exception {
+        //  System.out.println(mission.getID());
+        System.out.println("得到的areaName:" + imageURL);
+        //写给后端coder：file似乎不要用requestparam定义，不然会报错。。。
 
-      //  missionService.addMission(mission);
-
-
+        //  missionService.addMission(mission);
 
 
         for (MultipartFile f : file) {
 
-           // System.out.println("missionname"+mission.getID());
+            // System.out.println("missionname"+mission.getID());
 
-           // String imgName = System.currentTimeMillis() + f.getOriginalFilename(); // 这里图片的名字用毫秒数+图片原来的名字拼接,迭代一暂时不考虑重名情况
-           String imgName = f.getOriginalFilename();//这里图片还是以原名命名
+            // String imgName = System.currentTimeMillis() + f.getOriginalFilename(); // 这里图片的名字用毫秒数+图片原来的名字拼接,迭代一暂时不考虑重名情况
+            String imgName = f.getOriginalFilename();//这里图片还是以原名命名
             //上传文件
-            imageService.uploadFileUtil(f.getBytes(), imageURL+mission+"/", imgName);
+            imageService.uploadFileUtil(f.getBytes(), imageURL + mission + "/", imgName);
         }
 
     }
@@ -82,15 +111,14 @@ public class ImageController {
             method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"})
     @ResponseBody
-    public int addMission(@RequestBody  Mission mission){
-
+    public int addMission(@RequestBody Mission mission) {
 
 
         missionService.addMission(mission);
         return mission.getID();
     }
 
-    private void addRequestorExp(String userName,int missionExp){
+    private void addRequestorExp(String userName, int missionExp) {
         User user = userService.getUser(userName);
         user.setExp(user.getExp() + missionExp);
         userService.updateUserData(user);
@@ -99,8 +127,9 @@ public class ImageController {
 
     /**
      * 获得原图的方法
+     *
      * @param missionid 任务名 迭代1默认“mission”
-     * @param imgname 图片名，包括.jpg
+     * @param imgname   图片名，包括.jpg
      * @return
      */
     @ResponseBody
@@ -108,13 +137,13 @@ public class ImageController {
             value = "checkimg",
             method = RequestMethod.POST
     )
-    public LocalLabel checkImg(String missionid, String imgname){
-        File file = new File(imageURL+missionid+"/"+imgname);
+    public LocalLabel checkImg(String missionid, String imgname) {
+        File file = new File(imageURL + missionid + "/" + imgname);
 
-        if(file.exists()){
+        if (file.exists()) {
             InputStream in = null;
-            byte[] data =null;
-            try{
+            byte[] data = null;
+            try {
                 in = new FileInputStream(file);
                 data = new byte[in.available()];
                 in.read(data);
@@ -122,11 +151,11 @@ public class ImageController {
                 LocalLabel localLabel = new LocalLabel();
                 BASE64Encoder encoder = new BASE64Encoder();
                 String url = encoder.encode(data);
-                String head = "data:image/"+file.getName().split("[.]")[1]+";base64,";
+                String head = "data:image/" + file.getName().split("[.]")[1] + ";base64,";
 
-                localLabel.setUrl(head+url);
-               // localLabel.setOtherComments(null);
-               // localLabel.setOverallComment(null);
+                localLabel.setUrl(head + url);
+                // localLabel.setOtherComments(null);
+                // localLabel.setOverallComment(null);
                 localLabel.setMissionID(missionid);
 
                 localLabel.setFileName(file.getName());
@@ -134,23 +163,21 @@ public class ImageController {
 
                 return localLabel;
 
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
                 return null;
             }
 
-        }
-        else{
+        } else {
             return null;
         }
 
     }
 
 
-
-
     /**
      * 根据任务名称返回对应图片集
+     *
      * @param mission
      * @return 图片集
      */
@@ -161,7 +188,7 @@ public class ImageController {
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public List<String> getMission(@RequestParam(value = "mission") String mission){
+    public List<String> getMission(@RequestParam(value = "mission") String mission) {
         return imageService.getMission(mission);
     }
 
@@ -172,12 +199,12 @@ public class ImageController {
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public List<Image> getOriginPicture(@RequestParam(value = "missionid") String missionid){
+    public List<Image> getOriginPicture(@RequestParam(value = "missionid") String missionid) {
 
         return imageService.getOriginPicture(missionid);
     }
     /****************************************************************************8/
-    /**下面是迭代2的新增方法**/
+     /**下面是迭代2的新增方法**/
 
 
     /**
@@ -185,11 +212,11 @@ public class ImageController {
      *
      * @param missionid
      * @param userId
-     * @return 负数表示没有该用户没有接这个任务，0.0<= n && n>=1.0表示准确率的小数表示
+     * @return 负数表示没有该用户没有接这个任务，0.0<= n && n<=1.0表示准确率的小数表示
      */
-    @RequestMapping(value = "/accuracy",params = {"missionid","userid"})
+    @RequestMapping(value = "/accuracy", params = {"missionid", "userid"})
     @ResponseBody
-    public double judgeAccuracyRate(@RequestParam(value = "missionid") String missionid,@RequestParam(value = "userid") String userId){
+    public double judgeAccuracyRate(@RequestParam(value = "missionid") String missionid, @RequestParam(value = "userid") String userId) {
 
         return imageService.judgeAccuracyRate(missionid, userId);
     }
@@ -201,14 +228,12 @@ public class ImageController {
      * @param userid
      * @return
      */
-    @RequestMapping(value = "/completion",params = {"userid"})
+    @RequestMapping(value = "/completion", params = {"userid"})
     @ResponseBody
-    public List<MissionCompletion> degreeOfCompletion(@RequestParam(value = "userid") String userid){
+    public List<MissionCompletion> degreeOfCompletion(@RequestParam(value = "userid") String userid) {
 
         return imageService.degreeOfCompletion(userid);
     }
-
-
 
 
 }
