@@ -1,11 +1,9 @@
 package com.fx.controller;
 
 import com.fx.model.Message;
+import com.fx.util.ResultMessage;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,8 +23,18 @@ public class MessageController {
     )
     @ResponseBody
     public List<Message> getMessageByUsername(String username){
-        System.out.println(1);
+
         return null;
     }
+    @RequestMapping(
+            value = "updateMessage",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
 
+    )
+    @ResponseBody
+    public ResultMessage updateMessage(int id){
+        System.out.println(id);
+        return null;
+    }
 }
