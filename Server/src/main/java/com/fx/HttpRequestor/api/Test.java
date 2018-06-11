@@ -12,7 +12,7 @@ import java.util.Map;
 public class Test {
     public static void main(String[] args){
 
-        String url = "https://api.ai.qq.com/fcgi-bin/image/image_tag";
+        String url = "https://api.ai.qq.com/fcgi-bin/vision/vision_imgtotext";
 
         BaseApiService baseApiService = new BaseApiService();
         Map<String,String> params = baseApiService.buildCommonParam();
@@ -22,7 +22,7 @@ public class Test {
 
         try {
             ApiResult<Map> apiResult = baseApiService.postApi(url, params);
-            System.out.println(apiResult);
+            System.out.println(apiResult.getData().get("text"));
         }catch (Exception e){
             e.printStackTrace();
         }

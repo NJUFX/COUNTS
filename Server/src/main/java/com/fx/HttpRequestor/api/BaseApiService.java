@@ -51,7 +51,7 @@ public class BaseApiService {
 		params.put("app_id", "1106937204");
 		params.put("time_stamp", timeStamp);
 		params.put("nonce_str", RandomUtil.generateRandomString(16));
-		
+		params.put("session_id","1509333186");
 		return params;
 	}
 	
