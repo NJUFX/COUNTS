@@ -108,30 +108,32 @@ public class UserController {
     }
 
     /*****************************下面为迭代2新增方法***************/
-
-
-    /**
-     * 用户接任务
-     * @param missionid
-     * @param userid
-     * @return
-     */
-
-    @RequestMapping(value = "/acceptmission",params= {"missionid","userid"},  method = RequestMethod.POST)
-    @ResponseBody
-    public OptMessage acceptMission(int missionid,int userid){
-
-
-        ResultMessage resultMessage = userService.acceptMission(missionid, userid);
-        OptMessage result = new OptMessage(false);
-
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
-
-    }
+/**
+ * 将接任务转移到MissionController
+ */
+//
+//    /**
+//     * 用户接任务
+//     * @param missionid
+//     * @param userid
+//     * @return
+//     */
+//
+//    @RequestMapping(value = "/acceptmission",params= {"missionid","userid"},  method = RequestMethod.POST)
+//    @ResponseBody
+//    public OptMessage acceptMission(int missionid,int userid){
+//
+//
+//        ResultMessage resultMessage = userService.acceptMission(missionid, userid);
+//        OptMessage result = new OptMessage(false);
+//
+//        if(ResultMessage.SUCCESS == resultMessage){
+//            result.setResult(true);
+//        }
+//        result.setMessage(resultMessage.toString());
+//        return result;
+//
+//    }
 
     /**
      * 获得用户个人中心中“我的资料”展示时需要的数据

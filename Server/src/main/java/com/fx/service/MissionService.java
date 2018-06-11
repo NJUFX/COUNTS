@@ -1,6 +1,7 @@
 package com.fx.service;
 
 import com.fx.bean.MissionPresentation;
+import com.fx.model.AcceptedMission;
 import com.fx.model.AutoMission;
 import com.fx.model.Mission;
 import com.fx.util.ResultMessage;
@@ -128,4 +129,10 @@ public interface MissionService {
     public ResultMessage addAutoMission(AutoMission autoMission);
 
     public AutoMission findAutoMissionByID(int id);
+
+    public ResultMessage addAcceptedMission(String username, int id, int recommendType);
+
+    public ResultMessage updateAcceptedMission(AcceptedMission acceptedMission);
+
+    public List<AcceptedMission> findAcceptedMissionByUsername(String username);
 }

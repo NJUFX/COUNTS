@@ -315,7 +315,11 @@ public class MissionController {
     }
 
     /**
-     * 工人接收任务
+     * 工人接受任务
+     * @param username 用户名
+     * @param missionID 任务的id
+     * @param recommendType 推荐的类型
+     * @return
      */
     @RequestMapping(
             value = "/addAcceptMission",
@@ -323,8 +327,16 @@ public class MissionController {
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public ResultMessage addAcceptMission(String username,int missionID){
-        return null;
+    public OptMessage addAcceptMission(String username,int missionID,int recommendType){
+        ResultMessage resultMessage =missionService.addAcceptedMission(username,missionID,recommendType );
+        OptMessage result = new OptMessage(false);
+
+        if(ResultMessage.SUCCESS == resultMessage){
+            result.setResult(true);
+        }
+        result.setMessage(resultMessage.toString());
+
+        return result;
     }
 
     @RequestMapping(
@@ -333,8 +345,8 @@ public class MissionController {
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public AcceptedMission getAcceptMission(String username,int missionID){
-        return null;
+    public List<AcceptedMission> getAcceptMissionByUsername(String username){
+        return missionService.findAcceptedMissionByUsername(username);
     }
 
     /**
@@ -349,7 +361,7 @@ public class MissionController {
     )
     @ResponseBody
     public ResultMessage updateAcceptMission(@RequestBody AcceptedMission acceptedMission){
-        return null;
+        return missionService.updateAcceptedMission(acceptedMission);
     }
 
 

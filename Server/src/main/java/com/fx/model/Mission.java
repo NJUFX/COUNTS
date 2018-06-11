@@ -60,21 +60,13 @@ public class Mission {
      */
     private int points;
     /**
-     * 标注类型 0代表人工标注 1代表自动标注 2代表人工标注+自动标注
-     */
-    private int annotationType;
-    /**
      * 任务内容的标签
      */
     private List<String> tags;
-
-    public int getAnnotationType() {
-        return annotationType;
-    }
-
-    public void setAnnotationType(int annotationType) {
-        this.annotationType = annotationType;
-    }
+    /**
+     * 该任务需要标注的总图片数
+     */
+    private int sum;
 
     public List<String> getTags() {
         return tags;
@@ -137,6 +129,14 @@ public class Mission {
 
     public void setMaxNumber(int maxNumber) {
         this.maxNumber = maxNumber;
+    }
+
+    public int getSum() {
+        return sum;
+    }
+
+    public void setSum(int sum) {
+        this.sum = sum;
     }
 
     public Mission() {

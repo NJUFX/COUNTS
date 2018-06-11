@@ -1,14 +1,16 @@
 package com.fx.service.impl;
 
 import com.fx.bean.MissionPresentation;
-import com.fx.bean.OptMessage;
 import com.fx.controller.ImageController;
+import com.fx.model.AcceptedMission;
 import com.fx.model.AutoMission;
 import com.fx.model.Mission;
 import com.fx.model.User;
+import com.fx.repository.AcceptMissionRepository;
 import com.fx.repository.AutoMissionRepository;
 import com.fx.repository.MissionRepository;
 import com.fx.repository.UserRepository;
+import com.fx.repository.impl.AcceptMissionRepositoryImpl;
 import com.fx.repository.impl.AutoMissionRepositoryImpl;
 import com.fx.repository.impl.MissionRepositoryImpl;
 import com.fx.repository.impl.UserRepositoryImpl;
@@ -30,9 +32,39 @@ import java.util.List;
 public class MissionServiceImpl implements MissionService {
     MissionRepository missionRepository;
     AutoMissionRepository autoMissionRepository;
+    AcceptMissionRepository acceptMissionRepository;
+
+    @Override
+    public ResultMessage addAcceptedMission(String username, int id, int recommendType) {
+        Mission mission = findMissionByID(id);
+        if (mission.getCurrentNumber() > mission.getMaxNumber())
+            return ResultMessage.FALSE;
+        AcceptedMission acceptedMission = new AcceptedMission(username, mission, recommendType);
+
+        ResultMessage message = acceptMissionRepository.addAcceptMission(acceptedMission);
+        if (message == ResultMessage.SUCCESS) {
+            mission.setCurrentNumber(mission.getCurrentNumber() + 1);
+            missionRepository.updateMission(mission);
+            return ResultMessage.SUCCESS;
+        } else
+            return message;
+    }
+
+
+    @Override
+    public ResultMessage updateAcceptedMission(AcceptedMission acceptedMission) {
+        return acceptMissionRepository.updateAcceptMission(acceptedMission);
+    }
+
+    @Override
+    public List<AcceptedMission> findAcceptedMissionByUsername(String username) {
+        return acceptMissionRepository.findAcceptMissionByUsername(username);
+    }
+
     public MissionServiceImpl() {
         missionRepository = new MissionRepositoryImpl();
         autoMissionRepository = new AutoMissionRepositoryImpl();
+        acceptMissionRepository = new AcceptMissionRepositoryImpl();
     }
 
     /**
@@ -44,8 +76,7 @@ public class MissionServiceImpl implements MissionService {
         List<Mission> missions = new ArrayList<>();
         List<Mission> results = missionRepository.getAllMission();
         for (int j = i; j <= i + 11 && j < results.size(); j++) {
-            if (results.get(j).getAnnotationType()==0||results.get(j).getAnnotationType()==2)
-                missions.add(results.get(j));
+            missions.add(results.get(j));
         }
         return missions;
     }
@@ -116,8 +147,8 @@ public class MissionServiceImpl implements MissionService {
 
         User requestor = userRepository.findUserByUsername(id);
 
-        requestor.setExp(requestor.getExp()+mission.getPoints());
-        requestor.setPoints(requestor.getPoints()-mission.getPoints());
+        requestor.setExp(requestor.getExp() + mission.getPoints());
+        requestor.setPoints(requestor.getPoints() - mission.getPoints());
         userRepository.updateUser(requestor);
 
         return missionRepository.addMission(mission);

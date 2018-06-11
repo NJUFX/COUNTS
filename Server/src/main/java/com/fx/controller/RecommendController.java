@@ -1,6 +1,8 @@
 package com.fx.controller;
 
 import com.fx.bean.RecommendResult;
+import com.fx.service.RecommendService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/counts/recommend")
 @CrossOrigin
 public class RecommendController{
+    @Autowired
+    RecommendService recommendService;
     @RequestMapping(
             value = "/mission",
             method = RequestMethod.POST,
@@ -22,6 +26,6 @@ public class RecommendController{
     )
     @ResponseBody
     public RecommendResult recommend(String username){
-        return null;
+        return recommendService.recommend(username);
     }
 }
