@@ -32,10 +32,63 @@
         <span style="font-size: 16px; ">{{labeled}}/{{imgList.length}}</span>
       </div>
     </div>
-
+<div id="menubar" style="position: absolute; left: 35%; top:100px ;height:100px">
+  <el-tabs type="border-card" style="width: 500px">
+    <el-tab-pane class="el-tab-pane">
+      <span slot="label"><i class="el-icon-info"></i> 图片信息</span>
+      <div style="height: 10px"></div>
+      <el-row>
+        <span>点击按钮或双击图片查看当前图片标注信息</span>
+        <el-tooltip  content="标注信息" placement="bottom">
+          <el-button type="info" icon="el-icon-info" size="mini" round  @click="selectDialog"></el-button>
+        </el-tooltip>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane class="el-tab-pane">
+      <span slot="label"><i class="el-icon-success"></i> 正确判断</span>
+      <span>当前标注结果是否正确？</span>
+      <div style="height: 5px"></div>
+      <el-row>
+        <el-button type="success" icon="el-icon-check" size="small">正确，下一张</el-button>
+        <el-button type="info" icon="el-icon-close" size="small">有问题，重新标注</el-button>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane class="el-tab-pane">
+      <span slot="label"><i class="el-icon-edit-outline"></i> 标注工具</span>
+      <el-row>
+        <el-tooltip  content="上一张" placement="bottom-start">
+          <el-button icon="el-icon-caret-left" circle @click="prevImg"></el-button>
+        </el-tooltip>
+        <el-tooltip  content="添加标注信息" placement="bottom">
+          <el-button type="primary" icon="el-icon-edit" circle @click="selectDialog"></el-button>
+        </el-tooltip>
+        <el-tooltip  content="保存图片并提交" placement="bottom">
+          <el-button type="success" icon="el-icon-upload" circle @click="commitImg" ></el-button>
+        </el-tooltip>
+        <el-tooltip  content="加载任务数据" placement="bottom-start">
+          <el-button type="info" icon="el-icon-download" circle @click="downloadSource" ></el-button>
+        </el-tooltip>
+        <el-tooltip  content="重新标注当前图片" placement="bottom-end">
+          <el-button type="danger" icon="el-icon-refresh" circle @click="reLabelImg"></el-button>
+        </el-tooltip>
+        <el-tooltip  content="给项目评分" placement="bottom">
+          <el-button type="warning" icon="el-icon-star-on" circle @click="rateProject"></el-button>
+        </el-tooltip>
+        <el-tooltip  content="下一张" placement="bottom">
+          <el-button icon="el-icon-caret-right" circle @click="nextImg"></el-button>
+        </el-tooltip>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane class="el-tab-pane">
+      <span slot="label"><i class="el-icon-time"></i> 项目进度</span>
+      <div style="height: 10px"></div>
+      <el-progress :text-inside="true" :stroke-width="18" :percentage="(labeled/imgList.length)*100"></el-progress>
+    </el-tab-pane>
+  </el-tabs>
+</div>
     <div class="work_place">
-      <div class="block">
-        <canvas id="myCanvas" v-model="canvas" @click="drawShapes" @dblclick="selectDialog"  width="900px" height="500px"></canvas>
+      <div class="block" >
+        <canvas style="background: black" id="myCanvas" v-model="canvas" @click="drawShapes" @dblclick="selectDialog"  width="900px" height="500px"></canvas>
       </div>
     </div>
     <div style="position: fixed; top: 0px; left: 0px; width: 18%; height: 680px; z-index:-10000;background-color: #e9e9e9;border: 1px solid rgba(156, 162, 148, 0.75);border-top: none" >
@@ -996,7 +1049,7 @@ export default {
 
   .work_place {
     position: absolute;
-    top: 140px;
+    top: 240px;
     width: 60%;
     left: 20.5%;
 
@@ -1124,6 +1177,10 @@ export default {
   #title{
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     color: #6699cc;
+  }
+
+  .el-tab-pane{
+    height: 55px;
   }
 
 
