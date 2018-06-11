@@ -7,9 +7,11 @@ import com.fx.util.ResultMessage;
  */
 public class TrainServer {
 
-    public void startTrain(String missionName){
+    public void startClassificationTrain(String missionName){
 
     }
+
+
 
 
 

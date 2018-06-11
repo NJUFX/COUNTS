@@ -1,8 +1,11 @@
 package com.fx.machinelearning;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
-import java.io.PrintStream;
+
 
 import java.nio.charset.Charset;
 
@@ -10,24 +13,16 @@ import java.nio.file.*;
 
 
 
-import java.util.Arrays;
+
 
 import java.util.List;
 
 
-import org.tensorflow.DataType;
-import org.tensorflow.Graph;
-
-import org.tensorflow.Output;
-
-import org.tensorflow.Session;
-
-import org.tensorflow.Tensor;
-
-import org.tensorflow.TensorFlow;
+import org.tensorflow.*;
 
 import org.tensorflow.types.UInt8;
 
+import javax.imageio.ImageIO;
 
 
 /** Sample use of the TensorFlow Java API to label images using a pre-trained model. */
@@ -39,7 +34,7 @@ public class PBServer {
 
 
 
-    public void predictLabel(String imageFile,String modelDir,String[] labels,String PBName){
+    public void predictClassificationLabel(String imageFile,String modelDir,String[] labels,String PBName){
 
 
         byte[] data = readAllBytesOrExit(Paths.get(imageFile));
@@ -64,6 +59,111 @@ public class PBServer {
             }
         }
     }
+
+    public void predicObjectDetectionLabel(String imageFile,String modelDir,String[] labels,String PBName){
+
+        int width=0,height=0;
+        try {
+            File picture = new File(imageFile);
+            BufferedImage sourceImg = ImageIO.read(new FileInputStream(picture));
+
+            width=sourceImg.getWidth();
+
+            height=sourceImg.getHeight();
+        }catch (Exception  e){
+            e.printStackTrace();
+        }
+        byte[] data = readAllBytesOrExit(Paths.get(imageFile));
+
+        byte[] graphDef = readAllBytesOrExit(Paths.get(modelDir, "frozen_inference_graph.pb"));
+        Graph g = new Graph();
+
+        g.importGraphDef(graphDef);
+        Session s = new Session(g);
+        Operation operation = g.operation("detection_boxes");
+
+        Output output = new Output(operation,0);
+
+        //Tensor input = Tensor.create(reshapedata);
+        Tensor<UInt8> input =constructAndExecuteGraphToNormalizeImage(data,width,height);
+        //Tensor<Float> result = s.runner().feed("DecodeJpeg/contents", input).fetch("final_result").run().get(0).expect(Float.class);
+        Tensor<Float> boxes = s.runner().feed("image_tensor",input).fetch(output).run().get(0).expect(Float.class);
+        long[] rshape = boxes.shape();
+        System.out.println(rshape.length);
+        for(int i=0;i<=rshape.length-1;i++){
+            System.out.println(rshape[i]);
+        }
+    }
+
+
+    /**
+     *下面是tensorflow的私有方法
+     *
+     */
+
+
+    private static Tensor<UInt8> constructAndExecuteGraphToNormalizeImage(byte[] imageBytes,int width,int heigth) {
+
+        try (Graph g = new Graph()) {
+
+            GraphBuilder b = new GraphBuilder(g);
+
+            // Some constants specific to the pre-trained model at:
+
+            // https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip
+
+            //
+
+            // - The model was trained with images scaled to 224x224 pixels.
+
+            // - The colors, represented as R, G, B in 1-byte each were converted to
+
+            //   float using (value - Mean)/Scale.
+
+            final int H = heigth;
+
+            final int W = width;
+
+            /*
+            final float mean = 117f;
+
+            final float scale = 1f;
+            */
+
+
+            // Since the graph is being constructed once per execution here, we can use a constant for the
+
+            // input image. If the graph were to be re-used for multiple input images, a placeholder would
+
+            // have been more appropriate.
+
+            final Output<String> input = b.constant("image_tensor", imageBytes);
+
+            final Output<Float> output =
+                    b.cast(
+                            b.resizeBilinear(
+
+                                    b.expandDims(
+
+                                            b.decodeJpeg(input, 3),
+
+                                            b.constant("make_batch", 0)),
+
+                                    b.constant("size", new int[] {H, W})),DataType.UINT8);
+
+
+
+
+            try (Session s = new Session(g)) {
+
+                return s.runner().fetch(output.op().name()).run().get(0).expect(UInt8.class);
+
+            }
+
+        }
+
+    }
+
 
 
 
@@ -155,71 +255,7 @@ public class PBServer {
 
 
 /*
-    private static Tensor<Float> constructAndExecuteGraphToNormalizeImage(byte[] imageBytes) {
 
-        try (Graph g = new Graph()) {
-
-            GraphBuilder b = new GraphBuilder(g);
-
-            // Some constants specific to the pre-trained model at:
-
-            // https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip
-
-            //
-
-            // - The model was trained with images scaled to 224x224 pixels.
-
-            // - The colors, represented as R, G, B in 1-byte each were converted to
-
-            //   float using (value - Mean)/Scale.
-
-            final int H = 224;
-
-            final int W = 224;
-
-            final float mean = 117f;
-
-            final float scale = 1f;
-
-
-
-            // Since the graph is being constructed once per execution here, we can use a constant for the
-
-            // input image. If the graph were to be re-used for multiple input images, a placeholder would
-
-            // have been more appropriate.
-
-            final Output<String> input = b.constant("DecodeJpeg/contents", imageBytes);
-
-            final Output<Float> output =
-
-                    b.div(
-
-                            b.sub(
-
-                                    b.resizeBilinear(
-
-                                            b.expandDims(
-
-                                                    b.cast(b.decodeJpeg(input, 3), Float.class),
-
-                                                    b.constant("make_batch", 0)),
-
-                                            b.constant("size", new int[] {H, W})),
-
-                                    b.constant("mean", mean)),
-
-                            b.constant("scale", scale));
-
-            try (Session s = new Session(g)) {
-
-                return s.runner().fetch(output.op().name()).run().get(0).expect(Float.class);
-
-            }
-
-        }
-
-    }
 
 
 
@@ -370,9 +406,9 @@ public class PBServer {
 
 
 
-        <T, U> Output<U> cast(Output<T> value, Class<U> type) {
+        <T, U> Output<U> cast(Output<T> value, DataType dtype) {
 
-            DataType dtype = DataType.fromClass(type);
+            //DataType dtype = DataType.fromClass(type);
 
             return g.opBuilder("Cast", "Cast")
 

@@ -336,6 +336,12 @@ public class MissionController {
     public AcceptedMission getAcceptMission(String username,int missionID){
         return null;
     }
+
+    /**
+     * 更新工人完成任务的信息
+     * @param acceptedMission
+     * @return
+     */
     @RequestMapping(
             value = "/updateAcceptMission",
             method = RequestMethod.POST,
@@ -345,4 +351,7 @@ public class MissionController {
     public ResultMessage updateAcceptMission(@RequestBody AcceptedMission acceptedMission){
         return null;
     }
+
+
+
 }

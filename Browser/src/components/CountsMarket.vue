@@ -1,8 +1,9 @@
 <template>
   <div>
     <div style="position: absolute; top: 57px; left: 0px; width: 100%; height: 140px;">
-      <div style="position: absolute; left: 300px; width: 700px">
+      <div style="position: absolute; left: 50%; width: 260px;margin-left: -180px">
         <div style="position: relative;">
+          <!--
           <span style="position:absolute; top: 10px; color: #d81e06; left: 0px;">筛选</span>
           <img src="../assets/shaixuan.png" style="position: absolute;width:20px; top:12px; left: 35px;">
           <div>
@@ -31,21 +32,21 @@
           </div>
           -->
           <div>
-            <span style="position:absolute; top: 110px; color: #d81e06; left: 0px;">排序</span>
-            <img src="../assets/sort.png" style="position: absolute;width:20px; top:112px; left: 35px;">
+            <span style="position:absolute; top: 10px; color: #d81e06; left: 0px;">排序</span>
+            <img src="../assets/sort.png" style="position: absolute;width:20px; top:12px; left: 35px;">
             <div>
-              <el-button type="text" style="position: absolute; left: 101px; top: 101px;">综合</el-button>
-              <span style="position: absolute; left: 150px; top: 110px;">|</span>
-              <el-button type="text" style="position: absolute; left: 170px; top: 101px;">积分 <i v-bind:class="countIcon"></i></el-button>
-              <span style="position: absolute; left: 220px; top: 110px;">|</span>
-              <el-button type="text" style="position: absolute; left: 240px; top: 101px;">时间 <i v-bind:class="timeIcon"></i></el-button>
+              <el-button type="text" style="position: absolute; left: 101px; top: 1px;">综合</el-button>
+              <span style="position: absolute; left: 150px; top: 10px;">|</span>
+              <el-button type="text" style="position: absolute; left: 170px; top: 1px;">积分 <i v-bind:class="countIcon"></i></el-button>
+              <span style="position: absolute; left: 220px; top: 10px;">|</span>
+              <el-button type="text" style="position: absolute; left: 240px; top: 1px;">时间 <i v-bind:class="timeIcon"></i></el-button>
               </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div style="position: absolute; top: 210px; left: 4%;width: 92%;height:370px;">
+    <div style="position: absolute; top: 110px; left: 4%;width: 92%;height:370px;">
       <el-carousel height="370px">
         <el-carousel-item>
           <img src="../assets/carouse1.png" style="width: 100%">
@@ -56,11 +57,11 @@
       </el-carousel>
     </div>
 
-    <div style="position: absolute; top:610px; width:100%;height: 70px;">
+    <div style="position: absolute; top:500px; width:100%;height: 70px;">
       <span style="font-size: 32px; color: black">— 标 / 注 / 项 / 目 —</span>
     </div>
 
-    <div style="position: absolute; top:670px; width:100%;">
+    <div style="position: absolute; top:560px; width:100%;">
       <div style="float: left;width:92%; margin-left: 4%;">
         <div v-for="item in projects" :key="item">
           <el-card class="el_card" :body-style="{padding:'0px'}">
@@ -69,7 +70,7 @@
               <el-tag v-show="item.isContinue" style="position: absolute; left: 20px; top: 10px; color:white; " color="#4CAF50">进行中...</el-tag>
               <el-tag v-show="item.isEnd" style="position: absolute; left: 20px; top: 10px; color:white; " color="#E97506">已满员</el-tag>
               <el-tag v-show="item.isEnd2" style="position: absolute; left: 20px; top: 10px; color:white;width: 60px " color="#E97506">已截止</el-tag>
-              <div style="height: 130px;position:absolute; top: 150px; width: 98%; left: 1%; background-color: white">
+              <div style="position:absolute; top: 150px;bottom:5px; right:1%; left: 1%; background-color: white">
                 <span style="font-size: 20px; color: #4CAF50; width:100%">{{item.missionname}}</span>
                 <span class="time" style="position: absolute; left: 5px;top: 25px;font-size: 14px;">时间：{{item.dateStart}} - {{item.dateEnd}}</span>
                 <span style="position: absolute; left: 5px;top: 47px;font-size: 14px;">类型：{{item.type}}</span>
@@ -205,6 +206,7 @@
       var _this = this
       xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
           var arrays = JSON.parse(xmlhttp.responseText)
           _this.project_total = arrays.length
           for (var i = 0; i < arrays.length; i++) {
@@ -224,6 +226,7 @@
               isContinue:true,
               isEnd:false,
               isEnd2: false,
+              tags:e.tags
             }
 
             _this.projects.push(info)
@@ -380,6 +383,7 @@
         var _this = this
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log('return info')
             if (JSON.parse(xmlhttp.responseText).result == true) {
               _this.openSucc('操作成功！')
             }else{
@@ -392,7 +396,7 @@
         formData.append('missionid', str)
         var name = localStorage.getItem('userid')
         formData.append('userid',name)
-        console.log(name)
+        console.log('join project send')
         var path = localStorage.getItem('server')+'/counts/user/acceptmission'
         xmlhttp.open('POST', path, true)
         xmlhttp.send(formData)
