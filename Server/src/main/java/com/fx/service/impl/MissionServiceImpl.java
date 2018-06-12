@@ -313,7 +313,18 @@ public class MissionServiceImpl implements MissionService {
     }
 
 
-    private void mkdirsForAutoClassification(int id,List<String> types) {
+    @Override
+    public AcceptedMission findAcceptedMissionByUsernameAndMissionID(String username, int missionID) {
+       List<AcceptedMission> missions = acceptMissionRepository.findAcceptMissionByUsername(username);
+        for (int i = 0; i < missions.size(); i++) {
+            AcceptedMission acceptedMission = missions.get(i);
+            if (acceptedMission.getId() == missionID)
+                return acceptedMission;
+        }
+       return null;
+    }
+
+    private void mkdirsForAutoClassification(int id, List<String> types) {
         String dirname = "../data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
