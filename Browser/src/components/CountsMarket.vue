@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <div style="position: absolute; top: 110px; left: 4%;width: 92%;height:370px;">
+    <div style="position: absolute; top: 80px; left: 4%;width: 92%;height:370px;">
       <el-carousel height="370px">
         <el-carousel-item>
           <img src="../assets/carouse1.png" style="width: 100%">
@@ -58,8 +58,9 @@
       </el-carousel>
     </div>
 
-    <div style="position: absolute; top:500px; width:100%;height: 70px;">
+    <div style="position: absolute; top:470px; width:100%;height: 70px;">
       <span style="font-size: 32px; color: black">— 标 / 注 / 项 / 目 —</span>
+      <el-button type="text" icon="el-icon-refresh" style="position:absolute;font-size: 16px; margin-left: 10px;margin-top: 3px" v-bind:onclick="getRecommandMission">换一批</el-button>
     </div>
 
     <div style="position: absolute; top:560px; width:100%;">
@@ -85,7 +86,6 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
                 <el-progress style="position: absolute; top: 72px; left:140px;width: 170px; color: black;font-size: 12px;" :percentage="item.percent" :stroke-width="16" :text-inside="true"></el-progress>
               </div>
@@ -99,7 +99,7 @@
           </el-card>
         </div>
       </div>
-      <div style="float: left; width: 100%;">
+      <div v-show="!isRecommand" style="float: left; width: 100%;">
         <el-pagination @current-change="handleCurrentChange" background :current-page=1 :page-size="12"
                        layout="total, prev, pager, next, jumper" v-bind:total="project_total">
         </el-pagination>
@@ -126,6 +126,8 @@
     name: 'CountsMarket',
     data () {
       return {
+        isRecommand:false,
+        recommandType:0,
         project_total: 0,
         count: 1,
         timepart: '',
@@ -148,147 +150,88 @@
           isEnd: false,
           isBan:true,
         },
-      /*  projects: [
-           {
-             cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
-             missionname: 'mission',
-             counts: 5,
-             details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
-             dateStart: '2018/04/12',
-             dateEnd: '2018/09/27',
-             worker_total_number: 30,
-             worker_now_number: 16,
-             percent: (16 / 30 * 100).toFixed(2),
-             type: '方框标注',
-             id: '001002',
-             isContinue:true,
-             isEnd: false,
-             isBan:true,
-             tags:['dog','tech','java']
-           }, {
-             cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
-             missionname: 'mission',
-             counts: 5,
-             details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
-             dateStart: '2018/04/12',
-             dateEnd: '2018/09/27',
-             worker_total_number: 30,
-             worker_now_number: 16,
-             percent: (16 / 30 * 100).toFixed(2),
-             type: '方框标注',
-             id: '001002',
-             isContinue:true,
-             isEnd: false,
-             isBan:true,
-             tags:['cat','apple','win10']
-           }, {
-             cover: 'http://localhost:8080/static/img/home_back.00f1c22.png',
-             missionname: 'mission',
-             counts: 5,
-             details: '根据标注需求，对图像中的目标物体进行画框，比如图像中的车辆、车牌、行人、道路、建筑、船只、文字、人体部位等画框并打上对应标签，以跟ImageNet同样的XML格式输出数据。',
-             dateStart: '2018/04/12',
-             dateEnd: '2018/09/27',
-             worker_total_number: 30,
-             worker_now_number: 16,
-             percent: (16 / 30 * 100).toFixed(2),
-             type: '方框标注',
-             id: '001002',
-             isContinue:true,
-             isEnd: false,
-             isBan:true,
-             tags:['soft','database','mini','horse','padding','steve bob',]
-           }
-         ]*/
         projects:[]
       }
     },
     created () {
-      var xmlhttp = new XMLHttpRequest()
-      var _this = this
-      xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-
-          var arrays = JSON.parse(xmlhttp.responseText)
-          _this.project_total = arrays.length
-          for (var i = 0; i < arrays.length; i++) {
-            var e = arrays[i]
-            var info = {
-              cover: '',
-              missionname: e.missionName,
-              counts: e.points,
-              details: e.description,
-              dateStart: e.begin,
-              dateEnd: e.end,
-              worker_total_number: e.maxNumber,
-              worker_now_number: e.currentNumber,
-              percent: (e.currentNumber / e.maxNumber * 100).toFixed(2),
-              type: e.type,
-              id: e.id,
-              isContinue:true,
-              isEnd:false,
-              isEnd2: false,
-              tags:e.tags
-            }
-
-            _this.projects.push(info)
-          }
-          for(var i=0;i<_this.projects.length;i++){
-            var time = _this.projects[i].dateEnd.split('-');
-            var end = new Date(time[0], parseInt(time[1])-1, parseInt(time[2])+1)
-            var now = new Date()
-            if(now <= end){
-              _this.projects[i].isEnd2=false;
-              if(_this.projects[i].worker_now_number<_this.projects[i].worker_total_number) {
-                _this.projects[i].isContinue = true;
-                _this.projects[i].isEnd = false;
-              }else{
-                _this.projects[i].isContinue = false;
-                _this.projects[i].isEnd = true;
-              }
-            }else{
-              _this.projects[i].isEnd2 = true;
-              _this.projects[i].isEnd = false;
-              _this.projects[i].isContinue = false;
-            }
-            _this.projects[i].isBan = !_this.projects[i].isContinue;
-            if(localStorage.getItem('identify')=='requester'){
-              _this.projects[i].isBan = true;
-            }
-            _this.getCoverImg(_this.projects[i].id, i);
-          }
-        }
+      if(localStorage.getItem('username') == 'visitor'){
+        this.getAllMissionLogOut()
+      }else{
+        this.getRecommandMission()
       }
-      let formData = new FormData()
-      formData.append('i', '1')
-      xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getmission', true)
-      xmlhttp.send(formData)
     },
     methods: {
-      getCoverImg (missionid, i) {
-        var cover = ''
-        var _this = this
+      getRecommandMission(){
+        this.isRecommand=true;
+        this.projects= []
         var xmlhttp = new XMLHttpRequest()
+        var _this = this
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            cover = xmlhttp.responseText
-            _this.projects[i].cover = cover
+            console.log(JSON.parse(xmlhttp.responseText))
+            _this.recommandType = JSON.parse(xmlhttp.responseText).type
+            var arrays = JSON.parse(xmlhttp.responseText).missions
+            _this.project_total = arrays.length
+            for (var i = 0; i < arrays.length; i++) {
+              var e = arrays[i]
+              var info = {
+                cover: '',
+                missionname: e.missionName,
+                counts: e.points,
+                details: e.description,
+                dateStart: e.begin,
+                dateEnd: e.end,
+                worker_total_number: e.maxNumber,
+                worker_now_number: e.currentNumber,
+                percent: (e.currentNumber / e.maxNumber * 100).toFixed(2),
+                type: e.type,
+                id: e.id,
+                isContinue:true,
+                isEnd:false,
+                isEnd2: false,
+                tags:e.tags
+              }
+              _this.projects.push(info)
+            }
+            for(var i=0;i<_this.projects.length;i++){
+              var time = _this.projects[i].dateEnd.split('-');
+              var end = new Date(time[0], parseInt(time[1])-1, parseInt(time[2])+1)
+              var now = new Date()
+              if(now <= end){
+                _this.projects[i].isEnd2=false;
+                if(_this.projects[i].worker_now_number<_this.projects[i].worker_total_number) {
+                  _this.projects[i].isContinue = true;
+                  _this.projects[i].isEnd = false;
+                }else{
+                  _this.projects[i].isContinue = false;
+                  _this.projects[i].isEnd = true;
+                }
+              }else{
+                _this.projects[i].isEnd2 = true;
+                _this.projects[i].isEnd = false;
+                _this.projects[i].isContinue = false;
+              }
+              _this.projects[i].isBan = !_this.projects[i].isContinue;
+              if(localStorage.getItem('identify')=='requester'){
+                _this.projects[i].isBan = true;
+              }
+              _this.getCoverImg(_this.projects[i].id, i);
+            }
           }
         }
         let formData = new FormData()
-        var str = '' + missionid
-        formData.append('missionid', str)
-        var path = localStorage.getItem('server')+'/counts/mission/get/firstimage'
-        xmlhttp.open('POST',path, true)
+        console.log(localStorage.getItem('username'))
+        formData.append('username',localStorage.getItem('username'))
+        xmlhttp.open('POST', 'http://localhost:8080/counts/recommend/mission', true)
         xmlhttp.send(formData)
-      },
 
-      handleCurrentChange (val) {
-        console.log(val)
+      },
+      getAllMissionLogOut(){
         var xmlhttp = new XMLHttpRequest()
         var _this = this
-        this.projects = []
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
             var arrays = JSON.parse(xmlhttp.responseText)
             _this.project_total = arrays.length
             for (var i = 0; i < arrays.length; i++) {
@@ -332,6 +275,88 @@
                 _this.projects[i].isContinue = false;
               }
               _this.projects[i].isBan = !_this.projects[i].isContinue;
+              if(localStorage.getItem('identify')=='requester'){
+                _this.projects[i].isBan = true;
+              }
+              _this.getCoverImg(_this.projects[i].id, i);
+            }
+          }
+        }
+        let formData = new FormData()
+        formData.append('i', '1')
+        xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getmission', true)
+        xmlhttp.send(formData)
+      },
+      getCoverImg (missionid, i) {
+        var cover = ''
+        var _this = this
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            cover = xmlhttp.responseText
+            _this.projects[i].cover = cover
+          }
+        }
+        let formData = new FormData()
+        var str = '' + missionid
+        formData.append('missionid', str)
+        var path = localStorage.getItem('server')+'/counts/mission/get/firstimage'
+        xmlhttp.open('POST',path, true)
+        xmlhttp.send(formData)
+      },
+
+      handleCurrentChange (val) {
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+            var arrays = JSON.parse(xmlhttp.responseText)
+            _this.project_total = arrays.length
+            for (var i = 0; i < arrays.length; i++) {
+              var e = arrays[i]
+              var info = {
+                cover: '',
+                missionname: e.missionName,
+                counts: e.points,
+                details: e.description,
+                dateStart: e.begin,
+                dateEnd: e.end,
+                worker_total_number: e.maxNumber,
+                worker_now_number: e.currentNumber,
+                percent: (e.currentNumber / e.maxNumber * 100).toFixed(2),
+                type: e.type,
+                id: e.id,
+                isContinue:true,
+                isEnd:false,
+                isEnd2: false,
+                tags:e.tags
+              }
+
+              _this.projects.push(info)
+            }
+            for(var i=0;i<_this.projects.length;i++){
+              var time = _this.projects[i].dateEnd.split('-');
+              var end = new Date(time[0], parseInt(time[1])-1, parseInt(time[2])+1)
+              var now = new Date()
+              if(now <= end){
+                _this.projects[i].isEnd2=false;
+                if(_this.projects[i].worker_now_number<_this.projects[i].worker_total_number) {
+                  _this.projects[i].isContinue = true;
+                  _this.projects[i].isEnd = false;
+                }else{
+                  _this.projects[i].isContinue = false;
+                  _this.projects[i].isEnd = true;
+                }
+              }else{
+                _this.projects[i].isEnd2 = true;
+                _this.projects[i].isEnd = false;
+                _this.projects[i].isContinue = false;
+              }
+              _this.projects[i].isBan = !_this.projects[i].isContinue;
+              if(localStorage.getItem('identify')=='requester'){
+                _this.projects[i].isBan = true;
+              }
               _this.getCoverImg(_this.projects[i].id, i);
             }
           }
@@ -388,21 +413,33 @@
             if (JSON.parse(xmlhttp.responseText).result == true) {
               _this.openSucc('操作成功！')
             }else{
-              _this.openInfo('您已经加入该项目')
+              _this.openInfo('您已经加入该项目');
+              for(var i=0;i<_this.projectInfo.length;i++){
+                if(_this.projectInfo[i].id==id){
+                  _this.openProject(_this.projectInfo[i]);
+                  break;
+                }
+              }
             }
           }
         }
         let formData = new FormData()
         var str = '' + id
-        formData.append('missionid', str)
-        var name = localStorage.getItem('userid')
-        formData.append('userid',name)
-        console.log('join project send')
-        var path = localStorage.getItem('server')+'/counts/user/acceptmission'
+        var name = localStorage.getItem('username')
+        formData.append('username',name)
+        formData.append('missionID', str)
+        formData.append('recommandType', ''+this.recommandType);
+        var path = localStorage.getItem('server')+'/counts/user/addAcceptmission'
         xmlhttp.open('POST', path, true)
         xmlhttp.send(formData)
       },
-
+      openProject (item) {
+        localStorage.setItem('missionType', item.type)
+        localStorage.setItem('missionID', item.id)
+        var path = '/' + localStorage.getItem('username')
+        this.$router.push({path: path + '/worker'})
+        window.location.reload()
+      },
       handleProjectDetails (id) {
         localStorage.setItem('missionID', id)
         var path = '#/' + localStorage.getItem('username') + '/countsMarket/' + id + '/projectDetails'

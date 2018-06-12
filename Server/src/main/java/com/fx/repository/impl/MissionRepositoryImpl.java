@@ -201,24 +201,7 @@ public class MissionRepositoryImpl implements MissionRepository {
         }
         return missions;
     }
-    /**
-     * 根据标注类型获得任务信息
-     * 0 代表人工 1代表自动 2代表人工+自动
-     *
-     * @param annotationType
-     * @return
-     */
-    @Override
-    public List<Mission> findMissionByAnnotationType(int annotationType) {
-        List<Mission> missions = getAllMission();
-        List<Mission> result = new ArrayList<>();
-        for (int i = 0; i < missions.size(); i++) {
-            if (missions.get(i).getAnnotationType() == annotationType){
-                result.add(missions.get(i));
-            }
-        }
-        return result;
-    }
+
     private void printAllMission(List<Mission> missions) {
         try {
             PrintWriter printWriter = new PrintWriter(file);

@@ -47,7 +47,7 @@
                        @change="handleLabelTypeChange">
           </el-cascader>
         </div>
-        <div style="position: absolute; top: 50px; left: 20px">
+        <div style="position: absolute; top: 50px; left: 0px; padding-left: 20px; background-color:white">
           <div v-for="item in projectInfo" style="float: left" :key="item">
             <el-card v-show="item.show" class="el_card" :body-style="{padding:'0px'}">
               <el-tag v-show="item.isContinue" style="position: absolute; left: 20px; top: 10px; color:white; width: 70px " color="#4CAF50">进行中...</el-tag>
@@ -66,13 +66,22 @@
               </div>
             </el-card>
           </div>
+          <div v-for="item in autoProjects" style="float: left" :key="item">
+            <el-card v-show="item.show" class="el_card" :body-style="{padding:'0px'}">
+              <img v-bind:src="item.cover" class="image" v-bind:id="item.missionname">
+              <div style="height: 130px;position:absolute; top: 150px; width: 97%; left: 1.5%; background-color: white">
+                <span style="font-size: 20px; color: #4CAF50">{{item.missionname}}</span>
+                <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
+                <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
+                <el-button style="position: absolute; left: 190px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="downloadData(item.id)">标注数据</el-button>
+              </div>
+              <div class="imgOnClick" >
+                <img  src="../assets/img_1.png" style="width: 96%; position: absolute; left: 1.5%;top: 0px; height: 145px">
+                <p style="color:#ffffff;position: absolute; top: 10px; left: 6%; width: 88%;text-align: justify; font-size: 14px">{{item.details}}</p>
+              </div>
+            </el-card>
+          </div>
         </div>
-        <div v-show="hasProject" style="float: left; width: 100%;">
-          <el-pagination @current-change="handleCurrentChange" background :current-page=1 :page-size="12"
-                         layout="total, prev, pager, next, jumper" v-bind:total="project_total">
-          </el-pagination>
-        </div>
-
       </div>
 
     </div>
@@ -326,6 +335,7 @@
         default_index: '1',
         project_info: {},
         projectInfo: [],
+        autoProjects:[],
         project_total: 0,
         info: {
           id: '',
@@ -425,6 +435,7 @@
               _this.example2.img = info2.avatar
               _this.projectInfo = []
               _this.getAllProject()
+              _this.getAutoMissionFromBack()
             }
           }
         }
@@ -441,6 +452,77 @@
     },
 
     methods: {
+      downloadData(val){
+        //,,,,,,
+      },
+      getAutoMissionFromBack(){
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        xmlhttp.onreadystatechange = function () {
+          if (JSON.parse(xmlhttp.responseText) != null) {
+            var arrays = JSON.parse(xmlhttp.responseText)
+            _this.project_total = +arrays.length;
+            if(arrays.length!=0){
+              _this.hasProject = true
+            }
+            var cap = 0, seg = 0, dec = 0, attr = 0, cla = 0, fin = 0, unfin = 0
+            for (var i = 0; i < arrays.length; i++) {
+              _this.autoProjects.push({
+                id: arrays[i].id,
+                missionname: arrays[i].missionName,
+                type: arrays[i].type,
+                cover: '',
+                counts: arrays[i].points,
+                type: arrays[i].type,
+                percent:0,
+                details: arrays[i].description,
+                isAuto:1,
+                show:true,
+              })
+
+              var type = arrays[i].type
+              if (type == 'Classification') {
+                cla++
+              } else if (type == 'Detection') {
+                dec++
+              } else if (type == 'Segmentation') {
+                seg++
+              } else if (type == 'Caption') {
+                cap++
+              } else if (type == 'Attribute') {
+                attr++
+              }
+            }
+
+            var L = [cla, dec, seg, cap, attr];
+            var m = _this.max(L)
+            _this.myData.max += (parseInt(''+ m/10)+1)*10;
+            _this.project_total += arrays.length;
+            _this.myData.attribute += attr
+            _this.myData.caption += cap
+            _this.myData.classification += cla
+            _this.myData.segmentation += seg
+            _this.myData.detection += dec
+            _this.myData.finished += fin
+            _this.myData.unfinished += unfin
+
+            for(var i=0;i<_this.autoProjects.length;i++){
+              if(_this.autoProjects[i].avatar='')
+                _this.getCoverImg(_this.autoProjects[i].id, i);
+            }
+            _this.drawPieCharts()
+            _this.drawRadarCharts()
+
+          }
+        }
+        let formData = new FormData()
+        var str = localStorage.getItem('username')
+        formData.append('username', str)
+        var path = localStorage.getItem('server')+'/counts/mission/getAutoMission/requestor'
+        xmlhttp.open('POST',path, true)
+        xmlhttp.send(formData)
+      },
+
       handleLabelTypeChange(val){
         if(val[0]=='man'){
           for(var i=0;i<this.projectInfo.length;i++){
@@ -528,7 +610,7 @@
                 isEnd:false,
                 isContinue:true,
                 details: arrays[i].description,
-                isAuto:arrays[i].annotationType,
+                isAuto:0,
                 show:true,
 
               })
@@ -573,15 +655,6 @@
               _this.projectInfo[i].percent = (_this.projectInfo[i].imgFinished/(_this.projectInfo[i].imgToDo+_this.projectInfo[i].imgFinished)).toFixed(2)
               _this.getCoverImg(_this.projectInfo[i].id, i);
             }
-
-
-            _this.myData.attribute = attr
-            _this.myData.caption = cap
-            _this.myData.classification = cla
-            _this.myData.segmentation = seg
-            _this.myData.detection = dec
-            _this.myData.finished = fin
-            _this.myData.unfinished = unfin
             _this.drawPieCharts()
             _this.drawRadarCharts()
 

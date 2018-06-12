@@ -51,7 +51,10 @@ public class AcceptedMission {
      * 用户对任务的评分
      */
     private int score;
-
+    /**
+     * 该任务所占有的积分
+     */
+    private int point;
     /**
      * 以哪一种推荐接受到任务的
      * 1代表topFive
@@ -61,6 +64,18 @@ public class AcceptedMission {
     private int recommendType;
 
     public AcceptedMission() {
+    }
+
+    public AcceptedMission(String username ,Mission mission,int recommendType) {
+        this.id = mission.getID();
+        this.sum = mission.getSum();
+        this.missionName =mission.getMissionName();
+        this.begin = mission.getBegin();
+        this.end = mission.getEnd();
+        this.type = mission.getType();
+        this.username = username;
+        this.point = mission.getPoints();
+        this.recommendType = recommendType;
     }
 
     public AcceptedMission(int id, String missionName, String begin, String end, String type, int finished, int sum) {

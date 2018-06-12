@@ -16,10 +16,12 @@
           <div id="autoLabel" style="position: absolute; left: 178px;" class="labelType" @click="selectAutoLabel">自动化标注</div>
         </div>
         <div v-show="isAutoLabel">
-          <span style="position: absolute; left: 32px;top: 40px;font-size: 14px">任务详情</span>
-          <el-input style="position: absolute; left: 100px;top: 40px;font-size: 14px;width: 390px" type="textarea" :rows="7" placeholder="输入任务的具体要求" v-model="autoForm.contents"></el-input>
-          <span style="position: absolute; left: 32px;top: 233px;font-size: 14px">标注方式</span>
-          <el-select @change="labelChange2" style="position: absolute; left:100px;top: 233px;" v-model="autoForm.type" placeholder="选择标注方式">
+          <span style="position: absolute; left: 32px;top: 40px;font-size: 14px">任务标题</span>
+          <el-input style="position: absolute; left: 100px;top: 40px;font-size: 14px;width: 390px" v-model="autoForm.topic" ></el-input>
+          <span style="position: absolute; left: 32px;top: 92px;font-size: 14px">任务详情</span>
+          <el-input style="position: absolute; left: 100px;top: 92px;font-size: 14px;width: 390px" type="textarea" :rows="5" placeholder="输入任务的具体要求" v-model="autoForm.contents"></el-input>
+          <span style="position: absolute; left: 32px;top: 240px;font-size: 14px">标注方式</span>
+          <el-select @change="labelChange2" style="position: absolute; left:100px;top: 240px;" v-model="autoForm.type" placeholder="选择标注方式">
             <div v-for="item in options" :key="item.value">
               <el-option :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
             </div>
@@ -213,7 +215,9 @@
       return {
         autoForm:{
           type: '',
-          contents: ''
+          contents: '',
+          missionName: '',
+          points: '',
         },
         doAutoLabel:false,
         isAutoLabel:false,
@@ -479,7 +483,32 @@
       },
 
       submitAutoForm(){
-
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        var username = localStorage.getItem('username')
+        var missionID = 0
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            missionID = xmlhttp.responseText
+            _this.uploadImg(missionID)
+            _this.openSucc('Submit successfully')
+            _this.goMyProject()
+          }
+        }
+        var autoMission = {
+          requestorID: username,
+          missionName: _this.autoForm.missionname,
+          description: _this.autoForm.contents,
+          type: _this.autoForm.type,
+          points: _this.autoForm.workerPoints,
+          types: []
+        }
+        if (autoMission.type == 'Classification') {
+          autoMission.types =  _this.selectsArray
+        }
+        xmlhttp.open('POST', 'http://localhost:8080/counts/misson/addAutoMission', true)
+        xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        xmlhttp.send(JSON.stringify(autoMission));
       },
 
       submitManForm () {
@@ -497,14 +526,7 @@
           }
         }
         var isValid = true
-        /*this.$refs[formName].validate((valid) => {
-          if (valid) {
-          } else {
-            console.log('error submit!!')
-            isValid = false
-            return false
-          }
-        })*/
+
         if (this.imgFileList.length == 0) {
           this.openWarn('您尚未上传任何图片。')
           isValid = false
@@ -519,10 +541,7 @@
               missionID = xmlhttp.responseText
               _this.uploadImg(missionID)
               _this.openSucc('Submit successfully')
-             // _this.doAutoLabel=true;
-             // _this.goMyProject()
-              _this.doAutoLabel=true;
-              // _this.goMyProject()
+              _this.goMyProject()
             }
           }
           let formData = new FormData()
@@ -541,7 +560,6 @@
           if (mission.type == 'Classification' || mission.type == 'Attribute') {
             mission.selects =  _this.selectsArray
           }
-          //console.log('ms '+ mission)
           xmlhttp.open('POST', 'http://localhost:8080/counts/image/addmission', true)
           xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
           xmlhttp.send(JSON.stringify(mission))
@@ -567,6 +585,7 @@
           xmlhttp.send(formData)
         }
       },
+
       resetForm (formName) {
         console.log(this.ruleForm.dateStart)
         this.ruleForm.workerNumber = 20
@@ -596,11 +615,9 @@
           this.openSucc('图片清除成功')
         })
       },
-
       fileClick () {
         document.getElementById('upload_file').click()
       },
-
       fileChange (el) {
         if (!el.target.files[0].size) return
         this.fileList(el.target)
@@ -618,7 +635,6 @@
           }
         }
       },
-      // 文件夹处理
       folders (files) {
         let _this = this
         // 判断是否为原生file
@@ -641,7 +657,6 @@
           _this.fileAdd(file)
         })
       },
-
       fileDel (index) {
         this.$confirm('确认要删除该图片吗？', 'Confirm', {
           confirmButtonText: '确定',

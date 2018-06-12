@@ -1,14 +1,16 @@
 package com.fx.service.impl;
 
 import com.fx.bean.MissionPresentation;
-import com.fx.bean.OptMessage;
 import com.fx.controller.ImageController;
+import com.fx.model.AcceptedMission;
 import com.fx.model.AutoMission;
 import com.fx.model.Mission;
 import com.fx.model.User;
+import com.fx.repository.AcceptMissionRepository;
 import com.fx.repository.AutoMissionRepository;
 import com.fx.repository.MissionRepository;
 import com.fx.repository.UserRepository;
+import com.fx.repository.impl.AcceptMissionRepositoryImpl;
 import com.fx.repository.impl.AutoMissionRepositoryImpl;
 import com.fx.repository.impl.MissionRepositoryImpl;
 import com.fx.repository.impl.UserRepositoryImpl;
@@ -20,6 +22,7 @@ import sun.misc.BASE64Encoder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +33,39 @@ import java.util.List;
 public class MissionServiceImpl implements MissionService {
     MissionRepository missionRepository;
     AutoMissionRepository autoMissionRepository;
+    AcceptMissionRepository acceptMissionRepository;
+
+    @Override
+    public ResultMessage addAcceptedMission(String username, int id, int recommendType) {
+        Mission mission = findMissionByID(id);
+        if (mission.getCurrentNumber() > mission.getMaxNumber())
+            return ResultMessage.FALSE;
+        AcceptedMission acceptedMission = new AcceptedMission(username, mission, recommendType);
+
+        ResultMessage message = acceptMissionRepository.addAcceptMission(acceptedMission);
+        if (message == ResultMessage.SUCCESS) {
+            mission.setCurrentNumber(mission.getCurrentNumber() + 1);
+            missionRepository.updateMission(mission);
+            return ResultMessage.SUCCESS;
+        } else
+            return message;
+    }
+
+
+    @Override
+    public ResultMessage updateAcceptedMission(AcceptedMission acceptedMission) {
+        return acceptMissionRepository.updateAcceptMission(acceptedMission);
+    }
+
+    @Override
+    public List<AcceptedMission> findAcceptedMissionByUsername(String username) {
+        return acceptMissionRepository.findAcceptMissionByUsername(username);
+    }
+
     public MissionServiceImpl() {
         missionRepository = new MissionRepositoryImpl();
         autoMissionRepository = new AutoMissionRepositoryImpl();
+        acceptMissionRepository = new AcceptMissionRepositoryImpl();
     }
 
     /**
@@ -44,8 +77,7 @@ public class MissionServiceImpl implements MissionService {
         List<Mission> missions = new ArrayList<>();
         List<Mission> results = missionRepository.getAllMission();
         for (int j = i; j <= i + 11 && j < results.size(); j++) {
-            if (results.get(j).getAnnotationType()==0||results.get(j).getAnnotationType()==2)
-                missions.add(results.get(j));
+            missions.add(results.get(j));
         }
         return missions;
     }
@@ -116,8 +148,8 @@ public class MissionServiceImpl implements MissionService {
 
         User requestor = userRepository.findUserByUsername(id);
 
-        requestor.setExp(requestor.getExp()+mission.getPoints());
-        requestor.setPoints(requestor.getPoints()-mission.getPoints());
+        requestor.setExp(requestor.getExp() + mission.getPoints());
+        requestor.setPoints(requestor.getPoints() - mission.getPoints());
         userRepository.updateUser(requestor);
 
         return missionRepository.addMission(mission);
@@ -231,11 +263,89 @@ public class MissionServiceImpl implements MissionService {
 
     @Override
     public ResultMessage addAutoMission(AutoMission autoMission) {
-        return autoMissionRepository.addAutoMission(autoMission);
+        ResultMessage message = autoMissionRepository.addAutoMission(autoMission);
+        int id = autoMission.getId();
+        switch (autoMission.getType()) {
+            case "Classification":
+                mkdirsForAutoClassification(id,autoMission.getTypes());
+                break;
+            case "Caption":
+                mkdirsForAutoCaption(id);
+
+                break;
+            case "Detection":
+                mkdirsForAutoDetection(id);
+                break;
+        }
+
+        return message;
+
     }
 
     @Override
     public AutoMission findAutoMissionByID(int id) {
         return autoMissionRepository.findAutoMissionByID(id);
+    }
+
+    private void mkdirsForAutoCaption(int id) {
+        String dirname = "../data/autoImage/" + id;
+        File dir = new File(dirname);
+        if (!dir.exists())
+            dir.mkdir();
+
+    }
+
+    private void mkdirsForAutoDetection(int id) {
+        String dirname = "../data/autoImage/" + id;
+        File dir = new File(dirname);
+        if (!dir.exists())
+            dir.mkdir();
+        File data = new File(dirname + "/data");
+        data.mkdir();
+        File images = new File(dirname + "/images");
+        images.mkdir();
+        File imagesTest = new File(dirname + "/images/test");
+        imagesTest.mkdir();
+        File imagesTrain = new File(dirname + "/images/train");
+        imagesTrain.mkdir();
+        File training = new File(dirname + "training");
+        training.mkdir();
+    }
+
+
+    private void mkdirsForAutoClassification(int id,List<String> types) {
+        String dirname = "../data/autoImage/" + id;
+        File dir = new File(dirname);
+        if (!dir.exists())
+            dir.mkdir();
+        File labels = new File(dirname + "/labels.txt");
+        try {
+            if (!labels.exists())
+                labels.createNewFile();
+            PrintWriter pw = new PrintWriter(labels);
+            for (int i = 0; i < types.size(); i++) {
+                pw.println(types.get(i));
+            }
+            pw.close();
+            String images = dirname + "/images";
+            File imagesDir = new File(images);
+            if (!imagesDir.exists())
+                imagesDir.mkdir();
+            String trainImage = images + "/trainimage";
+            File trainImageDir = new File(trainImage);
+            if (!trainImageDir.exists())
+                trainImageDir.mkdir();
+            File labels_dir = new File(dirname + "image_labels_dir");
+            if (!labels_dir.exists())
+                labels_dir.mkdir();
+            File autoMission = new File(dirname + "/autoMission.txt");
+            if (!autoMission.exists())
+                autoMission.createNewFile();
+            File allimages = new File(dirname + "/allimage");
+            if (!allimages.exists())
+                allimages.mkdir();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
