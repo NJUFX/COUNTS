@@ -3,10 +3,7 @@ package com.fx.service.impl;
 import com.fx.bean.MissionPresentation;
 import com.fx.controller.ImageController;
 import com.fx.model.*;
-import com.fx.repository.AcceptMissionRepository;
-import com.fx.repository.AutoMissionRepository;
-import com.fx.repository.MissionRepository;
-import com.fx.repository.UserRepository;
+import com.fx.repository.*;
 import com.fx.repository.impl.AcceptMissionRepositoryImpl;
 import com.fx.repository.impl.AutoMissionRepositoryImpl;
 import com.fx.repository.impl.MissionRepositoryImpl;
@@ -32,6 +29,7 @@ public class MissionServiceImpl implements MissionService {
     AutoMissionRepository autoMissionRepository;
     AcceptMissionRepository acceptMissionRepository;
     UserRepository userRepository;
+    AutoUserMissionRepository autoUserMissionRepository;
     @Override
     public ResultMessage addAcceptedMission(String username, int id, int recommendType) {
         Mission mission = findMissionByID(id);
@@ -64,6 +62,7 @@ public class MissionServiceImpl implements MissionService {
         autoMissionRepository = new AutoMissionRepositoryImpl();
         acceptMissionRepository = new AcceptMissionRepositoryImpl();
         userRepository = new UserRepositoryImpl();
+        autoMissionRepository = new AutoMissionRepositoryImpl();
     }
 
     /**
@@ -290,6 +289,8 @@ public class MissionServiceImpl implements MissionService {
             /**
              * 还空缺一个添加autousermission的方法
              */
+            autoUserMissionRepository.addAutoUserMission(users.get(i).getUsername(),mid);
+
         }
 
 
