@@ -16,4 +16,6 @@ public interface AutoClassificationLabelRepository {
     public ResultMessage updateAutoClassificationLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel);
 
     public List<AutoClassificationLabel> findAutoClassificationLabel(int autoMissionID);
+
+    public AutoClassificationLabel findAutoClassificationLabelByMissionIDandFilename(int missionID,String filename);
 }

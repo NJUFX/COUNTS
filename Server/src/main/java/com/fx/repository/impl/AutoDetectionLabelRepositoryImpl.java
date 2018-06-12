@@ -11,18 +11,24 @@ import java.util.List;
  * Created by Hanxinhu at 19:48 2018/6/12/012
  */
 public class AutoDetectionLabelRepositoryImpl implements AutoDetectionLabelReposity {
+    AutoLabelRepositoryHelper helper = new AutoLabelRepositoryHelper(AutoDetectionLabel.class);
     @Override
     public ResultMessage addAutoDetectionLabel(int missionID, AutoDetectionLabel autoDetectionLabel) {
-        return null;
+        return helper.addAutoLabel(missionID,autoDetectionLabel);
     }
 
     @Override
     public ResultMessage updateAutoDetectionLabel(int missionID, AutoDetectionLabel autoDetectionLabel) {
-        return null;
+        return helper.updateAutoLabel(missionID,autoDetectionLabel);
     }
 
     @Override
     public List<AutoDetectionLabel> findAutoDetectionLabel(int missionID) {
-        return null;
+        return helper.findAutoLabelByMissionID(missionID);
+    }
+
+    @Override
+    public AutoDetectionLabel findAutoDetectionLabelBymissionIDAndfilename(int missionID, String filename) {
+        return(AutoDetectionLabel) helper.findAutoLabelByMissionIDandFilename(missionID,filename);
     }
 }

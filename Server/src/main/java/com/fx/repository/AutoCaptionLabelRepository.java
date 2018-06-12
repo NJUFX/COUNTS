@@ -16,4 +16,5 @@ public interface AutoCaptionLabelRepository {
 
     public List<AutoCaptionLabel> findAutoCaptionLabel(int autoMissionID);
 
+    public AutoCaptionLabel findAutoCaptionLabelByMissionIDandFilename(int missionID,String filename);
 }

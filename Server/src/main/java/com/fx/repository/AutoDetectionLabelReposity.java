@@ -16,4 +16,6 @@ public interface AutoDetectionLabelReposity {
     public ResultMessage updateAutoDetectionLabel(int missionID, AutoDetectionLabel autoDetectionLabel);
 
     public List<AutoDetectionLabel> findAutoDetectionLabel(int missionID);
+
+    public AutoDetectionLabel findAutoDetectionLabelBymissionIDAndfilename(int missionID,String filename);
 }

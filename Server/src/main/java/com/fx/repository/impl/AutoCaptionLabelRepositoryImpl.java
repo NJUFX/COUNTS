@@ -11,18 +11,24 @@ import java.util.List;
  * Created by Hanxinhu at 19:46 2018/6/12/012
  */
 public class AutoCaptionLabelRepositoryImpl implements AutoCaptionLabelRepository {
+    AutoLabelRepositoryHelper helper = new AutoLabelRepositoryHelper(AutoCaptionLabel.class);
     @Override
     public ResultMessage addAutoCaptionLabel(int autoMissionID, AutoCaptionLabel autoCaptionLabel) {
-        return null;
+        return helper.addAutoLabel(autoMissionID,autoCaptionLabel);
     }
 
     @Override
     public ResultMessage updateAutoCaptionLabel(int autoMissionID, AutoCaptionLabel autoCaptionLabel) {
-        return null;
+        return helper.updateAutoLabel(autoMissionID,autoCaptionLabel);
     }
 
     @Override
     public List<AutoCaptionLabel> findAutoCaptionLabel(int autoMissionID) {
-        return null;
+        return helper.findAutoLabelByMissionID(autoMissionID);
+    }
+
+    @Override
+    public AutoCaptionLabel findAutoCaptionLabelByMissionIDandFilename(int missionID, String filename) {
+        return (AutoCaptionLabel)helper.findAutoLabelByMissionIDandFilename(missionID,filename);
     }
 }
