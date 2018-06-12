@@ -267,7 +267,7 @@ public class MissionController {
     }
 
     /**
-     * 发布自动化标注的任务
+     * 发布自动化标注的任务,并且指派工人！！！
      */
     @RequestMapping(
             value = "/addAutoMission",
