@@ -316,6 +316,7 @@ export default {
       ratingDialogVisible: false, //评分弹出框是否可见
       projectRate: null,
       activeName: '1', //选项卡选择哪一张
+      acceptMission: null, //存储项目评分，已完成数量等信息
 
     }
   },
@@ -569,7 +570,7 @@ export default {
           // 下载分类标注选项
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-              console.log(JSON.parse(xmlhttp.responseText).selects)
+              //console.log(JSON.parse(xmlhttp.responseText).selects)
               // 选项列表放入选项数组
               var selects = JSON.parse(xmlhttp.responseText).selects
               for (var i = 0; i < selects.length; i++) {
@@ -578,7 +579,7 @@ export default {
                   label: selects[i]
                 })
               }
-              console.log('00' + JSON.stringify(_this.classificationOptions))
+              //console.log('00' + JSON.stringify(_this.classificationOptions))
             }
           }
           let formDataCla = new FormData()
@@ -592,7 +593,7 @@ export default {
             if (xmlhttp0.readyState == 4 && xmlhttp0.status == 200) {
               // 加入下载结果
               _this.classificationInfoList = JSON.parse(xmlhttp0.responseText)
-              console.log('999' + JSON.stringify(_this.classificationInfoList))
+              //console.log('999' + JSON.stringify(_this.classificationInfoList))
               _this.setCurrentImgClassificationValue()
             }
           }
@@ -1040,14 +1041,15 @@ export default {
     },
     commitRating(){
       this.ratingDialogVisible = false;
-      //console.log(this.projectRate);
     },
     getAcceptMission(){
       if(localStorage.getItem('username')!="visitor"){
+        var _this = this;
         var xmlhttp = new XMLHttpRequest()
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var acceptMission = JSON.parse(xmlhttp.responseText)
+            _this.acceptMission = acceptMission;
             console.log(acceptMission);
           }
         }
