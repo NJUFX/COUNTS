@@ -267,7 +267,7 @@ public class MissionController {
     }
 
     /**
-     * 发布自动化标注的任务
+     * 发布自动化标注的任务,并且指派工人！！！
      */
     @RequestMapping(
             value = "/addAutoMission",
@@ -311,13 +311,23 @@ public class MissionController {
     }
 
     @RequestMapping(
-            value = "/getAcceptMission",
+            value = "/getAcceptedMission",
             method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
     public List<AcceptedMission> getAcceptMissionByUsername(String username) {
         return missionService.findAcceptedMissionByUsername(username);
+    }
+    @RequestMapping(
+            value = "/getAcceptedMissionByUsernameMissionID",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public AcceptedMission getAcceptMissionByUsernameAndMissionID(String username,int missionID) {
+
+        return missionService.findAcceptedMissionByUsernameAndMissionID(username,missionID);
     }
 
     /**
@@ -327,7 +337,7 @@ public class MissionController {
      * @return
      */
     @RequestMapping(
-            value = "/updateAcceptMission",
+            value = "/updateAcceptedMission",
             method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"}
     )

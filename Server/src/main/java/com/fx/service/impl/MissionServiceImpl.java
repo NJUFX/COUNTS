@@ -2,14 +2,8 @@ package com.fx.service.impl;
 
 import com.fx.bean.MissionPresentation;
 import com.fx.controller.ImageController;
-import com.fx.model.AcceptedMission;
-import com.fx.model.AutoMission;
-import com.fx.model.Mission;
-import com.fx.model.User;
-import com.fx.repository.AcceptMissionRepository;
-import com.fx.repository.AutoMissionRepository;
-import com.fx.repository.MissionRepository;
-import com.fx.repository.UserRepository;
+import com.fx.model.*;
+import com.fx.repository.*;
 import com.fx.repository.impl.AcceptMissionRepositoryImpl;
 import com.fx.repository.impl.AutoMissionRepositoryImpl;
 import com.fx.repository.impl.MissionRepositoryImpl;
@@ -34,7 +28,8 @@ public class MissionServiceImpl implements MissionService {
     MissionRepository missionRepository;
     AutoMissionRepository autoMissionRepository;
     AcceptMissionRepository acceptMissionRepository;
-
+    UserRepository userRepository;
+    AutoUserMissionRepository autoUserMissionRepository;
     @Override
     public ResultMessage addAcceptedMission(String username, int id, int recommendType) {
         Mission mission = findMissionByID(id);
@@ -66,6 +61,8 @@ public class MissionServiceImpl implements MissionService {
         missionRepository = new MissionRepositoryImpl();
         autoMissionRepository = new AutoMissionRepositoryImpl();
         acceptMissionRepository = new AcceptMissionRepositoryImpl();
+        userRepository = new UserRepositoryImpl();
+        autoMissionRepository = new AutoMissionRepositoryImpl();
     }
 
     /**
@@ -265,6 +262,39 @@ public class MissionServiceImpl implements MissionService {
     public ResultMessage addAutoMission(AutoMission autoMission) {
         ResultMessage message = autoMissionRepository.addAutoMission(autoMission);
         int id = autoMission.getId();
+        int numOfpicture = autoMission.getSize();
+        int extraUser = numOfpicture/100;
+
+        int numOfUser = 2+extraUser;
+
+        List<User> users =  userRepository.findUserByType("Worker");
+
+        users = quickSort(users,0,users.size());
+
+        if(users.size()<numOfUser){
+            System.out.println("系统中已有用户无法满足分配需求，已经为你指派最多用户");
+            numOfUser= users.size();
+        }
+        //添加该任务指派的User
+        for(int i=0;i<=numOfUser-1;i++){
+            AutoUserMission mid = new AutoUserMission();
+            mid.setFinishTest(false);
+            mid.setFinishTrain(false);
+            mid.setMissionId(autoMission.getId());
+            mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
+            mid.setTrainEnd((numOfpicture*(i+1))/(2*numOfUser)  -1);
+            mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
+            mid.setTestEnd((numOfpicture*(numOfUser+i+1))/(2*numOfUser)-1);
+
+            /**
+             * 还空缺一个添加autousermission的方法
+             */
+            autoUserMissionRepository.addAutoUserMission(users.get(i).getUsername(),mid);
+
+        }
+
+
+
         switch (autoMission.getType()) {
             case "Classification":
                 mkdirsForAutoClassification(id,autoMission.getTypes());
@@ -313,7 +343,18 @@ public class MissionServiceImpl implements MissionService {
     }
 
 
-    private void mkdirsForAutoClassification(int id,List<String> types) {
+    @Override
+    public AcceptedMission findAcceptedMissionByUsernameAndMissionID(String username, int missionID) {
+       List<AcceptedMission> missions = acceptMissionRepository.findAcceptMissionByUsername(username);
+        for (int i = 0; i < missions.size(); i++) {
+            AcceptedMission acceptedMission = missions.get(i);
+            if (acceptedMission.getId() == missionID)
+                return acceptedMission;
+        }
+       return null;
+    }
+
+    private void mkdirsForAutoClassification(int id, List<String> types) {
         String dirname = "../data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
@@ -347,5 +388,38 @@ public class MissionServiceImpl implements MissionService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<User> quickSort(List<User> a,int start,int end) {
+        int base = a.get(end).getExp();
+        //start一旦等于end，就说明左右两个指针合并到了同一位置，可以结束此轮循环。
+        while (start < end) {
+            while (start < end && a.get(start).getExp() <= base)
+                //从左边开始遍历，如果比基准值小，就继续向右走
+                start++;
+            //上面的while循环结束时，就说明当前的a[start]的值比基准值大，应与基准值进行交换
+            if (start < end) {
+                //交换
+                User temp = a.get(start);
+                a.set(start, a.get(end));
+                a.set(end, temp);
+                //交换后，此时的那个被调换的值也同时调到了正确的位置(基准值右边)，因此右边也要同时向前移动一位
+                end--;
+            }
+            while (start < end && a.get(end).getExp() >= base)
+                //从右边开始遍历，如果比基准值大，就继续向左走
+                end--;
+            //上面的while循环结束时，就说明当前的a[end]的值比基准值小，应与基准值进行交换
+            if (start < end) {
+                //交换
+                User temp = a.get(start);
+                a.set(start, a.get(end));
+                a.set(end, temp);
+                //交换后，此时的那个被调换的值也同时调到了正确的位置(基准值左边)，因此左边也要同时向后移动一位
+                start++;
+            }
+
+        }
+        return a;
     }
 }

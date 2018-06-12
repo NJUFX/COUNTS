@@ -135,4 +135,6 @@ public interface MissionService {
     public ResultMessage updateAcceptedMission(AcceptedMission acceptedMission);
 
     public List<AcceptedMission> findAcceptedMissionByUsername(String username);
+
+    public AcceptedMission findAcceptedMissionByUsernameAndMissionID(String username,int missionID);
 }

@@ -1,7 +1,6 @@
 package com.fx.service.impl;
 
-import com.fx.bean.LocalLabelBean;
-import com.fx.bean.OptMessage;
+import com.fx.bean.*;
 import com.fx.model.*;
 import com.fx.repository.*;
 import com.fx.repository.impl.*;
@@ -28,6 +27,10 @@ public class LabelServiceImpl implements LabelService{
     ClassificationLabelRepository classificationLabelRepository = new ClassificationLabelRepositoryImpl();
     DetectionLabelRepository detectionLabelRepository = new DetectionLabelRepositoryImpl();
     SegmentationLabelRepository segmentationLabelRepository = new SegmentationLabelRepositoryImpl();
+
+    AutoCaptionLabelRepository autoCaptionLabelRepository = new AutoCaptionLabelRepositoryImpl();
+    AutoClassificationLabelRepository autoClassificationLabelRepository = new AutoClassificationLabelRepositoryImpl();
+    AutoDetectionLabelReposity autoDetectionLabelReposity = new AutoDetectionLabelRepositoryImpl();
     public static final String canvasdir = "data/canvas/";
 
     /**
@@ -394,6 +397,34 @@ bytes[i] += 256;
 
     
     return userRepository.updateUser(user);
+    }
+
+    public ResultMessage addAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean){
+        return autoClassificationLabelRepository.addAutoClassificationLabel(autoClassificationLabelBean.getMissionid(),autoClassificationLabelBean.getAutoClassificationLabel());
+    }
+
+
+    public ResultMessage addAutoCaptionLabel( AutoCaptionLabelBean autoCaptionLabelBean){
+        return autoCaptionLabelRepository.addAutoCaptionLabel(autoCaptionLabelBean.getMissionID(),autoCaptionLabelBean.getAutoCaptionLabel());
+    }
+
+
+    public ResultMessage addAutoDetectionLabel( AutoDetectionLabelBean autoDetectionLabelBean){
+        return  autoDetectionLabelReposity.addAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
+    }
+
+    public ResultMessage updateAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean){
+        return autoClassificationLabelRepository.updateAutoClassificationLabel(autoClassificationLabelBean.getMissionid(),autoClassificationLabelBean.getAutoClassificationLabel());
+    }
+
+
+    public ResultMessage updateAutoCaptionLabel( AutoCaptionLabelBean autoCaptionLabelBean){
+        return autoCaptionLabelRepository.updateAutoCaptionLabel(autoCaptionLabelBean.getMissionID(),autoCaptionLabelBean.getAutoCaptionLabel());
+    }
+
+
+    public ResultMessage updateAutoDetectionLabel( AutoDetectionLabelBean autoDetectionLabelBean){
+        return autoDetectionLabelReposity.updateAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
     }
 
 }

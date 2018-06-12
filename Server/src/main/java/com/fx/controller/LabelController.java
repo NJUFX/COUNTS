@@ -512,6 +512,112 @@ public class LabelController {
         return labelService.getSegmentationLabel(missionID, usernid);
     }
 
+    @RequestMapping(
+            value = "/auto/add/classificationlabel",
+            params = {"autoClassificationLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage addAutoClassificationLabel(@RequestParam(value = "autoClassificationLabelBean") AutoClassificationLabelBean autoClassificationLabelBean){
+        ResultMessage resultMessage = labelService.addAutoClassificationLabel(autoClassificationLabelBean);
+        OptMessage result = new OptMessage(false);
+
+        if(ResultMessage.SUCCESS == resultMessage){
+            result.setResult(true);
+        }
+        result.setMessage(resultMessage.toString());
+        return result;
+    }
+
+    @RequestMapping(
+            value = "/auto/add/captionlabel",
+            params = {"autoCaptionLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage addAutoCaptionLabel(@RequestParam(value="autoCaptionLabelBean") AutoCaptionLabelBean autoCaptionLabelBean){
+        ResultMessage resultMessage = labelService.addAutoCaptionLabel(autoCaptionLabelBean);
+        OptMessage result = new OptMessage(false);
+
+        if(ResultMessage.SUCCESS == resultMessage){
+            result.setResult(true);
+        }
+        result.setMessage(resultMessage.toString());
+        return result;
+    }
+
+    @RequestMapping(
+            value = "/auto/add/detectionlabel",
+            params = {"autoDetectionLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage addAutoDetectionLabel(@RequestParam(value="autoDetectionLabelBean") AutoDetectionLabelBean autoDetectionLabelBean){
+
+        ResultMessage resultMessage = labelService.addAutoDetectionLabel(autoDetectionLabelBean);
+        OptMessage result = new OptMessage(false);
+
+        if(ResultMessage.SUCCESS == resultMessage){
+            result.setResult(true);
+        }
+        result.setMessage(resultMessage.toString());
+        return result;
+    }
+
+
+    @RequestMapping(
+            value = "/auto/update/classificationlabel",
+            params = {"autoClassificationLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage updateAutoClassificationLabel(@RequestParam(value = "autoClassificationLabelBean") AutoClassificationLabelBean autoClassificationLabelBean){
+        ResultMessage resultMessage = labelService.updateAutoClassificationLabel(autoClassificationLabelBean);
+        OptMessage result = new OptMessage(false);
+
+        if(ResultMessage.SUCCESS == resultMessage){
+            result.setResult(true);
+        }
+        result.setMessage(resultMessage.toString());
+        return result;
+    }
+
+    @RequestMapping(
+            value = "/auto/update/captionlabel",
+            params = {"autoCaptionLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage updateAutoCaptionLabel(@RequestParam(value="autoCaptionLabelBean") AutoCaptionLabelBean autoCaptionLabelBean){
+        ResultMessage resultMessage = labelService.updateAutoCaptionLabel(autoCaptionLabelBean);
+        OptMessage result = new OptMessage(false);
+
+        if(ResultMessage.SUCCESS == resultMessage){
+            result.setResult(true);
+        }
+        result.setMessage(resultMessage.toString());
+        return result;
+    }
+
+    @RequestMapping(
+            value = "/auto/update/detectionlabel",
+            params = {"autoDetectionLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage updateAutoDetectionLabel(@RequestParam(value="autoDetectionLabelBean") AutoDetectionLabelBean autoDetectionLabelBean){
+
+        ResultMessage resultMessage = labelService.updateAutoDetectionLabel(autoDetectionLabelBean);
+        OptMessage result = new OptMessage(false);
+
+        if(ResultMessage.SUCCESS == resultMessage){
+            result.setResult(true);
+        }
+        result.setMessage(resultMessage.toString());
+        return result;
+    }
+
+
 
 
 
