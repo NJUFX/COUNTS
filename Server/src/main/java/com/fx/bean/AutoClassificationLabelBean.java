@@ -16,4 +16,12 @@ public class AutoClassificationLabelBean {
     public void setAutoClassificationLabel(AutoClassificationLabel autoClassificationLabel) {
         this.autoClassificationLabel = autoClassificationLabel;
     }
+
+    public int getMissionid() {
+        return missionid;
+    }
+
+    public void setMissionid(int missionid) {
+        this.missionid = missionid;
+    }
 }

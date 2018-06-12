@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class AutoDetectionLabelRepositoryImpl implements AutoDetectionLabelReposity {
     @Override
-    public ResultMessage addAutoDetectionLabel(int missionID, AutoDetectionLabelReposity autoDetectionLabelReposity) {
+    public ResultMessage addAutoDetectionLabel(int missionID, AutoDetectionLabel autoDetectionLabel) {
         return null;
     }
 

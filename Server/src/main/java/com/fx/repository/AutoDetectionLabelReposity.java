@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface AutoDetectionLabelReposity {
 
-    public ResultMessage addAutoDetectionLabel(int missionID, AutoDetectionLabelReposity autoDetectionLabelReposity);
+    public ResultMessage addAutoDetectionLabel(int missionID, AutoDetectionLabel autoDetectionLabel);
 
     public ResultMessage updateAutoDetectionLabel(int missionID, AutoDetectionLabel autoDetectionLabel);
 

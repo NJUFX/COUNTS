@@ -1,7 +1,6 @@
 package com.fx.service;
 
-import com.fx.bean.LocalLabelBean;
-import com.fx.bean.OptMessage;
+import com.fx.bean.*;
 import com.fx.model.*;
 import com.fx.util.ResultMessage;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -141,4 +140,22 @@ public interface LabelService {
      */
     public List<SegmentationLabel> getSegmentationLabel(int missionID,String userName);
     public ResultMessage addOne(int missionID,String userName,String FileName);
+
+
+
+    public ResultMessage addAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean);
+
+
+    public ResultMessage addAutoCaptionLabel( AutoCaptionLabelBean autoCaptionLabelBean);
+
+
+    public ResultMessage addAutoDetectionLabel( AutoDetectionLabelBean autoDetectionLabelBean);
+
+    public ResultMessage updateAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean);
+
+
+    public ResultMessage updateAutoCaptionLabel( AutoCaptionLabelBean autoCaptionLabelBean);
+
+
+    public ResultMessage updateAutoDetectionLabel( AutoDetectionLabelBean autoDetectionLabelBean);
 }
