@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface AutoClassificationLabelRepository {
 
-    public ResultMessage addAutoCaptionLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel);
+    public ResultMessage addAutoClassificationLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel);
 
-    public ResultMessage updateAutoCaptionLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel);
+    public ResultMessage updateAutoClassificationLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel);
 
-    public List<AutoClassificationLabel> findAutoCaptionLabel(int autoMissionID);
+    public List<AutoClassificationLabel> findAutoClassificationLabel(int autoMissionID);
 }

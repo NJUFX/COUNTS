@@ -13,17 +13,17 @@ import java.util.List;
  */
 public class AutoClassificationLabelRepositoryImpl implements AutoClassificationLabelRepository {
     @Override
-    public ResultMessage addAutoCaptionLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel) {
+    public ResultMessage addAutoClassificationLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel) {
         return null;
     }
 
     @Override
-    public ResultMessage updateAutoCaptionLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel) {
+    public ResultMessage updateAutoClassificationLabel(int autoMissionID, AutoClassificationLabel autoClassificationLabel) {
         return null;
     }
 
     @Override
-    public List<AutoClassificationLabel> findAutoCaptionLabel(int autoMissionID) {
+    public List<AutoClassificationLabel> findAutoClassificationLabel(int autoMissionID) {
         return null;
     }
 }
