@@ -32,9 +32,9 @@
         <span style="font-size: 16px; ">{{labeled}}/{{imgList.length}}</span>
       </div>
     </div>
-<div id="menubar" style="position: absolute; left: 35%; top:100px ;height:100px">
-  <el-tabs type="border-card" style="width: 500px">
-    <el-tab-pane class="el-tab-pane">
+<div id="menubar" style="position: absolute; left: 35%; top:100px ;height:100px" >
+  <el-tabs type="border-card" style="width: 500px" v-model="activeName">
+    <el-tab-pane class="el-tab-pane" name='1'>
       <span slot="label"><i class="el-icon-info"></i> 图片信息</span>
       <div style="height: 10px"></div>
       <el-row>
@@ -44,16 +44,16 @@
         </el-tooltip>
       </el-row>
     </el-tab-pane>
-    <el-tab-pane class="el-tab-pane">
+    <el-tab-pane class="el-tab-pane" name='2'>
       <span slot="label"><i class="el-icon-success"></i> 正确判断</span>
       <span>当前标注结果是否正确？</span>
       <div style="height: 5px"></div>
       <el-row>
-        <el-button type="success" icon="el-icon-check" size="small">正确，下一张</el-button>
-        <el-button type="info" icon="el-icon-close" size="small">有问题，重新标注</el-button>
+        <el-button type="success" icon="el-icon-check" size="small" @click="nextImg">正确，下一张</el-button>
+        <el-button type="info" icon="el-icon-close" size="small" @click="handleTabClick">有问题，重新标注</el-button>
       </el-row>
     </el-tab-pane>
-    <el-tab-pane class="el-tab-pane">
+    <el-tab-pane class="el-tab-pane" name='3'>
       <span slot="label"><i class="el-icon-edit-outline"></i> 标注工具</span>
       <el-row>
         <el-tooltip  content="上一张" placement="bottom-start">
@@ -79,7 +79,7 @@
         </el-tooltip>
       </el-row>
     </el-tab-pane>
-    <el-tab-pane class="el-tab-pane">
+    <el-tab-pane class="el-tab-pane" name='4'>
       <span slot="label"><i class="el-icon-time"></i> 项目进度</span>
       <div style="height: 10px"></div>
       <el-progress :text-inside="true" :stroke-width="18" :percentage="(labeled/imgList.length)*100"></el-progress>
@@ -88,15 +88,15 @@
 </div>
     <div class="work_place">
       <div class="block" >
-        <canvas style="background: black" id="myCanvas" v-model="canvas" @click="drawShapes" @dblclick="selectDialog"  width="900px" height="500px"></canvas>
+        <canvas  id="myCanvas" v-model="canvas" @click="drawShapes" @dblclick="selectDialog"  width="900px" height="500px"></canvas>
       </div>
     </div>
     <div style="position: fixed; top: 0px; left: 0px; width: 18%; height: 680px; z-index:-10000;background-color: #e9e9e9;border: 1px solid rgba(156, 162, 148, 0.75);border-top: none" >
-      <div style="position: absolute; left: 50px; height: 70px; top: 72px ">
+      <div style="position: absolute; left: 50px; height: 70px; top: 47px ">
         <h3 id="title">图片预览</h3>
       </div>
 
-      <happy-scroll class="happy_scroll" color="rgba(51,51,51,0.2)" hide-vertical="false">
+      <happy-scroll class="happy_scroll" color="rgba(51,51,51,0.2)" hide-vertical="false" style="top: 110px;">
         <div v-for="(item,index) of imgList" :key="item">
           <div class="upload_warp_img_div_top">
             <div class="upload_warp_img_div_text" style="font-size: 12px;">
@@ -106,8 +106,8 @@
           <img style="width: 100%; height: auto;" :src="item.url">
         </div>
       </happy-scroll>
+     </div>
 
-    </div>
 
     <div style="display: none">
       <el-button @click="dialogVisible=true"></el-button>
@@ -311,15 +311,19 @@ export default {
         */
       ],
       pointList: [],// 存储点集
+
       labeled: 0, //已标注数量
       ratingDialogVisible: false, //评分弹出框是否可见
       projectRate: null,
+      activeName: '1', //选项卡选择哪一张
 
     }
   },
   created () {
     this.missionType = localStorage.getItem('missionType')
     this.missionID = localStorage.getItem('missionID')
+    this.getAcceptMission()
+    this.downloadSource()
   },
   watch: {
     imgList: {
@@ -443,7 +447,7 @@ export default {
             _this.captionInfoList[i].caption = _this.captionDialogInfo
           }
         }
-        _this.commitImg()
+        _this.commitAndStay()
       }
       if (this.missionType == 'Classification') {
         // 重设classification标注
@@ -454,7 +458,7 @@ export default {
             // console.log("relabel")
           }
         }
-        _this.commitImg()
+        _this.commitAndStay()
       }
       if (this.missionType == 'Attribute') {
         for (var i = 0; i < _this.attributeTableData.length; i++) {
@@ -466,7 +470,7 @@ export default {
             // console.log("relabel")
           }
         }
-        _this.commitImg()
+        _this.commitAndStay()
       }
       if (this.missionType == 'Detection' || this.missionType == 'Segmentation') {
         this.colorPos = 0
@@ -713,6 +717,11 @@ export default {
 
     // 提交图片
     commitImg () {
+      this.commitAndStay()
+      this.nextImg()
+    },
+    //提交图片但不切换到下一张
+    commitAndStay(){
       var xmlhttp = new XMLHttpRequest()
       var xmlhttp1 = new XMLHttpRequest()
       var _this = this
@@ -783,6 +792,7 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
+
             } else {
               _this.$notify({
                 title: '提交失败',
@@ -820,6 +830,7 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
+
             } else {
               _this.$notify({
                 title: '提交失败',
@@ -860,6 +871,7 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
+
             } else {
               _this.$notify({
                 title: '提交失败',
@@ -1029,6 +1041,26 @@ export default {
     commitRating(){
       this.ratingDialogVisible = false;
       //console.log(this.projectRate);
+    },
+    getAcceptMission(){
+      if(localStorage.getItem('username')!="visitor"){
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var acceptMission = JSON.parse(xmlhttp.responseText)
+            console.log(acceptMission);
+          }
+        }
+        let formData = new FormData()
+        formData.append('username', localStorage.getItem('username'))
+        formData.append('missionID', localStorage.getItem('missionID'))
+        console.log(localStorage.getItem('missionID'))
+        xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAcceptedMissionByUsernameMissionID', true)
+        xmlhttp.send(formData)
+      }
+    },
+    handleTabClick(){
+      this.activeName = '3' ;//选项卡打开到标注工具栏
     },
 
   }
