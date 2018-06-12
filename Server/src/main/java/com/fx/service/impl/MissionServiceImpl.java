@@ -22,6 +22,7 @@ import sun.misc.BASE64Encoder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -266,11 +267,14 @@ public class MissionServiceImpl implements MissionService {
         int id = autoMission.getId();
         switch (autoMission.getType()) {
             case "Classification":
-                mkdirsForAutoClassification(id);
+                mkdirsForAutoClassification(id,autoMission.getTypes());
                 break;
             case "Caption":
+                mkdirsForAutoCaption(id);
+
                 break;
             case "Detection":
+                mkdirsForAutoDetection(id);
                 break;
         }
 
@@ -282,32 +286,34 @@ public class MissionServiceImpl implements MissionService {
     public AutoMission findAutoMissionByID(int id) {
         return autoMissionRepository.findAutoMissionByID(id);
     }
-    private void mkdirsForAutoCaption(int id){
+
+    private void mkdirsForAutoCaption(int id) {
         String dirname = "../data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
             dir.mkdir();
 
     }
-    private void mkdirsForAutoDetection(int id){
+
+    private void mkdirsForAutoDetection(int id) {
         String dirname = "../data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
             dir.mkdir();
-        File data = new File(dirname+"/data");
+        File data = new File(dirname + "/data");
         data.mkdir();
         File images = new File(dirname + "/images");
         images.mkdir();
-        File imagesTest = new File(dirname+"/images/test");
+        File imagesTest = new File(dirname + "/images/test");
         imagesTest.mkdir();
-        File imagesTrain = new File(dirname+"/images/train");
+        File imagesTrain = new File(dirname + "/images/train");
         imagesTrain.mkdir();
         File training = new File(dirname + "training");
         training.mkdir();
     }
 
 
-    private void mkdirsForAutoClassification(int id) {
+    private void mkdirsForAutoClassification(int id,List<String> types) {
         String dirname = "../data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
@@ -316,6 +322,11 @@ public class MissionServiceImpl implements MissionService {
         try {
             if (!labels.exists())
                 labels.createNewFile();
+            PrintWriter pw = new PrintWriter(labels);
+            for (int i = 0; i < types.size(); i++) {
+                pw.println(types.get(i));
+            }
+            pw.close();
             String images = dirname + "/images";
             File imagesDir = new File(images);
             if (!imagesDir.exists())
