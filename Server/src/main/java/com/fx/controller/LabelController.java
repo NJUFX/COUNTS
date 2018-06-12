@@ -512,6 +512,39 @@ public class LabelController {
         return labelService.getSegmentationLabel(missionID, usernid);
     }
 
+    @RequestMapping(
+            value = "/auto/add/classificationlabel",
+            params = {"autoClassificationLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage addAutoClassificationLabel(@RequestParam(value = "autoClassificationLabelBean") AutoClassificationLabelBean autoClassificationLabelBean){
+        return null;
+    }
+
+    @RequestMapping(
+            value = "/auto/add/captionlabel",
+            params = {"autoCaptionLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage addAutoCaptionLabel(@RequestParam(value="autoCaptionLabelBean") AutoCaptionLabelBean autoCaptionLabelBean){
+        return null;
+    }
+
+    @RequestMapping(
+            value = "/auto/add/detectionlabel",
+            params = {"autoDetectionLabelBean"},
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public OptMessage addAutoDetectionLabel(@RequestParam(value="autoDetectionLabelBean") AutoDetectionLabelBean autoDetectionLabelBean){
+
+        return null;
+    }
+
+
+
 
 
 

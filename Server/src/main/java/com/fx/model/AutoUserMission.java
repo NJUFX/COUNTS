@@ -6,9 +6,9 @@ package com.fx.model;
 public class AutoUserMission {
     private int missionId;
     private int trainStart;
-    private int trainLength;
+    private int trainEnd;
     private int testStart;
-    private int testLength;
+    private int testEnd;
     private boolean finishTrain;
     private boolean finishTest;
 
@@ -28,13 +28,6 @@ public class AutoUserMission {
         this.trainStart = trainStart;
     }
 
-    public int getTrainLength() {
-        return trainLength;
-    }
-
-    public void setTrainLength(int trainLength) {
-        this.trainLength = trainLength;
-    }
 
     public int getTestStart() {
         return testStart;
@@ -44,12 +37,20 @@ public class AutoUserMission {
         this.testStart = testStart;
     }
 
-    public int getTestLength() {
-        return testLength;
+    public int getTrainEnd() {
+        return trainEnd;
     }
 
-    public void setTestLength(int testLength) {
-        this.testLength = testLength;
+    public void setTrainEnd(int trainEnd) {
+        this.trainEnd = trainEnd;
+    }
+
+    public int getTestEnd() {
+        return testEnd;
+    }
+
+    public void setTestEnd(int testEnd) {
+        this.testEnd = testEnd;
     }
 
     public boolean isFinishTrain() {
