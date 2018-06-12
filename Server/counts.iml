@@ -104,11 +104,8 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.skyscreamer:jsonassert:1.5.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.5.1" level="project" />
-<<<<<<< HEAD
-=======
     <orderEntry type="library" name="Maven: org.tensorflow:tensorflow:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.tensorflow:libtensorflow:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.tensorflow:libtensorflow_jni:1.8.0" level="project" />
->>>>>>> e0cd593e7be976ba1131f67c6d6ceef946b21d5a
   </component>
 </module>
