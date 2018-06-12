@@ -53,16 +53,17 @@ public class ImageController {
         try {
             if (!file.exists())
                 file.mkdir();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @RequestMapping(
-            value = "/uploadAutoImg"
+            value = "/uploadAutoClassificationImg"
     )
     @ResponseBody
-    public void uploadAutoImg(int missionID,MultipartFile file[]) throws Exception{
+    public void uploadAutoClassificationImg(int missionID, MultipartFile file[]) throws Exception {
+        //xxx 不行 还是要坚持该下去
         for (MultipartFile f : file) {
 
             // System.out.println("missionname"+mission.getID());
@@ -70,7 +71,37 @@ public class ImageController {
             // String imgName = System.currentTimeMillis() + f.getOriginalFilename(); // 这里图片的名字用毫秒数+图片原来的名字拼接,迭代一暂时不考虑重名情况
             String imgName = f.getOriginalFilename();//这里图片还是以原名命名
             //上传文件
-            imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/"+"allimage", imgName);
+            imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/" + "allimage/", imgName);
+        }
+    }
+
+    @RequestMapping
+            (value = "/uploadAutoCaptionImg")
+    @ResponseBody
+    public void uploadAutoCaptionImg(int missionID, MultipartFile file[]) throws Exception {
+
+        for (MultipartFile f : file) {
+
+
+            String imgName = f.getOriginalFilename();//这里图片还是以原名命名
+            imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/", imgName);
+        }
+    }
+
+    @RequestMapping(
+            value = "/uploadAutoDetectionImg"
+    )
+    @ResponseBody
+    public void uploadAutoDetectionImg(int missionID, MultipartFile file[]) throws Exception {
+        int size = file.length;
+        int i = 0;
+        for (MultipartFile f : file) {
+            String imgName = f.getOriginalFilename();//这里图片还是以原名命名
+            if (i <= size / 2)
+                imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/images/test", imgName);
+            else
+                imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/images/train", imgName);
+            i ++;
         }
     }
 
@@ -93,8 +124,6 @@ public class ImageController {
         //写给后端coder：file似乎不要用requestparam定义，不然会报错。。。
 
         //  missionService.addMission(mission);
-
-
         for (MultipartFile f : file) {
 
             // System.out.println("missionname"+mission.getID());

@@ -278,46 +278,17 @@ public class MissionController {
     public int addAutoMission(@RequestBody AutoMission autoMission) {
         missionService.addAutoMission(autoMission);
         int id = autoMission.getId();
-        ResultMessage message = mkdirsForAutoMission(id);
+
         return autoMission.getId();
     }
 
-    private ResultMessage mkdirsForAutoMission(int id) {
-        String dirname = "../data/autoImage/" + id;
-        File dir = new File(dirname);
-        if (!dir.exists())
-            dir.mkdir();
-        File labels = new File(dirname + "/labels.txt");
-        try {
-            if (!labels.exists())
-                labels.createNewFile();
-            String images = dirname + "/images";
-            File imagesDir = new File(images);
-            if (!imagesDir.exists())
-                imagesDir.mkdir();
-            String trainImage = images + "/trainimage";
-            File trainImageDir = new File(trainImage);
-            if (!trainImageDir.exists())
-                trainImageDir.mkdir();
-            File labels_dir = new File(dirname + "image_labels_dir");
-            if (!labels_dir.exists())
-                labels_dir.mkdir();
-            File autoMission = new File(dirname + "/autoMission.txt");
-            if (!autoMission.exists())
-                autoMission.createNewFile();
-            File allimages = new File(dirname + "/allimage");
-            if (!allimages.exists())
-                allimages.mkdir();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResultMessage.SUCCESS;
-    }
+
 
     /**
      * 工人接受任务
-     * @param username 用户名
-     * @param missionID 任务的id
+     *
+     * @param username      用户名
+     * @param missionID     任务的id
      * @param recommendType 推荐的类型
      * @return
      */
@@ -327,11 +298,11 @@ public class MissionController {
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addAcceptMission(String username,int missionID,int recommendType){
-        ResultMessage resultMessage =missionService.addAcceptedMission(username,missionID,recommendType );
+    public OptMessage addAcceptMission(String username, int missionID, int recommendType) {
+        ResultMessage resultMessage = missionService.addAcceptedMission(username, missionID, recommendType);
         OptMessage result = new OptMessage(false);
 
-        if(ResultMessage.SUCCESS == resultMessage){
+        if (ResultMessage.SUCCESS == resultMessage) {
             result.setResult(true);
         }
         result.setMessage(resultMessage.toString());
@@ -345,12 +316,13 @@ public class MissionController {
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public List<AcceptedMission> getAcceptMissionByUsername(String username){
+    public List<AcceptedMission> getAcceptMissionByUsername(String username) {
         return missionService.findAcceptedMissionByUsername(username);
     }
 
     /**
      * 更新工人完成任务的信息
+     *
      * @param acceptedMission
      * @return
      */
@@ -360,10 +332,9 @@ public class MissionController {
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public ResultMessage updateAcceptMission(@RequestBody AcceptedMission acceptedMission){
+    public ResultMessage updateAcceptMission(@RequestBody AcceptedMission acceptedMission) {
         return missionService.updateAcceptedMission(acceptedMission);
     }
-
 
 
 }

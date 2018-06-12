@@ -262,11 +262,79 @@ public class MissionServiceImpl implements MissionService {
 
     @Override
     public ResultMessage addAutoMission(AutoMission autoMission) {
-        return autoMissionRepository.addAutoMission(autoMission);
+        ResultMessage message = autoMissionRepository.addAutoMission(autoMission);
+        int id = autoMission.getId();
+        switch (autoMission.getType()) {
+            case "Classification":
+                mkdirsForAutoClassification(id);
+                break;
+            case "Caption":
+                break;
+            case "Detection":
+                break;
+        }
+
+        return message;
+
     }
 
     @Override
     public AutoMission findAutoMissionByID(int id) {
         return autoMissionRepository.findAutoMissionByID(id);
+    }
+    private void mkdirsForAutoCaption(int id){
+        String dirname = "../data/autoImage/" + id;
+        File dir = new File(dirname);
+        if (!dir.exists())
+            dir.mkdir();
+
+    }
+    private void mkdirsForAutoDetection(int id){
+        String dirname = "../data/autoImage/" + id;
+        File dir = new File(dirname);
+        if (!dir.exists())
+            dir.mkdir();
+        File data = new File(dirname+"/data");
+        data.mkdir();
+        File images = new File(dirname + "/images");
+        images.mkdir();
+        File imagesTest = new File(dirname+"/images/test");
+        imagesTest.mkdir();
+        File imagesTrain = new File(dirname+"/images/train");
+        imagesTrain.mkdir();
+        File training = new File(dirname + "training");
+        training.mkdir();
+    }
+
+
+    private void mkdirsForAutoClassification(int id) {
+        String dirname = "../data/autoImage/" + id;
+        File dir = new File(dirname);
+        if (!dir.exists())
+            dir.mkdir();
+        File labels = new File(dirname + "/labels.txt");
+        try {
+            if (!labels.exists())
+                labels.createNewFile();
+            String images = dirname + "/images";
+            File imagesDir = new File(images);
+            if (!imagesDir.exists())
+                imagesDir.mkdir();
+            String trainImage = images + "/trainimage";
+            File trainImageDir = new File(trainImage);
+            if (!trainImageDir.exists())
+                trainImageDir.mkdir();
+            File labels_dir = new File(dirname + "image_labels_dir");
+            if (!labels_dir.exists())
+                labels_dir.mkdir();
+            File autoMission = new File(dirname + "/autoMission.txt");
+            if (!autoMission.exists())
+                autoMission.createNewFile();
+            File allimages = new File(dirname + "/allimage");
+            if (!allimages.exists())
+                allimages.mkdir();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
