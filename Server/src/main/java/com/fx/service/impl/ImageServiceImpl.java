@@ -220,6 +220,59 @@ public class ImageServiceImpl implements ImageService{
      * @return
      */
     public List<Image> getAutoImage(String missionid,String username,int start,int end){
-        return null;
+
+
+
+        List<Image> result = new ArrayList<>();
+
+        String path = "";
+        /**
+         * 根据不同类型为path赋值
+         */
+        File file = new File(path);
+        System.out.println(file.getAbsolutePath());
+        if (!file.exists())
+            return null;
+
+        File [] files = file.listFiles();
+
+
+        /**
+         * 如果index超出界限，则返回null
+         */
+        if(start<0||end>files.length-1){
+            System.out.println("index超出界限");
+            return null;
+        }
+
+        for(int i=start;i<=end;i++) {
+            InputStream in = null;
+            byte[] data = null;
+            try {
+                in = new FileInputStream(files[i]);
+                data = new byte[in.available()];
+                in.read(data);
+                in.close();
+                LocalLabel localLabel = new LocalLabel();
+                BASE64Encoder encoder = new BASE64Encoder();
+                String url = encoder.encode(data);
+                String head = "data:image/" + files[i].getName().split("[.]")[1] + ";base64,";
+
+                // System.out.println(head+url);
+                result.add(new Image(files[i].getName(),head+url));
+                /*
+                localLabel.setUrl(head + url);
+                localLabel.setOtherComments(null);
+                localLabel.setOverallComment(null);
+                localLabel.setLocation(missionname + "/" + imgname);
+                */
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return result;
     }
 }
