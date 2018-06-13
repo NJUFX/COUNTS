@@ -158,4 +158,9 @@ public interface LabelService {
 
 
     public ResultMessage updateAutoDetectionLabel( AutoDetectionLabelBean autoDetectionLabelBean);
+
+    public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username);
+    public List<AutoClassificationLabel> getAutoClassificationLabel(String missionid,String username);
+
+    public List<AutoDetectionLabel> getAutoDetectionLabel(String missionid,String username);
 }

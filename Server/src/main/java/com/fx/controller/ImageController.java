@@ -266,6 +266,18 @@ public class ImageController {
 
 
 
+    public List<Image> getTargetUserTrainImages(String missionid,String username){
+        return imageService.getTargetUserTrainImages(missionid,username);
+    }
+
+    public List<Image> getTargetUserCheckImages(String missionid,String username){
+        return imageService.getTargetUserCheckImages(missionid, username);
+    }
+
+
+
+
+
 
 }
 

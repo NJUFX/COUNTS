@@ -3,7 +3,10 @@ package com.fx.service.impl;
 import com.fx.bean.Image;
 import com.fx.bean.MissionCompletion;
 import com.fx.controller.ImageController;
+import com.fx.model.AutoUserMission;
 import com.fx.model.LocalLabel;
+import com.fx.repository.AutoUserMissionRepository;
+import com.fx.repository.impl.AutoUserMissionRepositoryImpl;
 import com.fx.service.ImageService;
 import com.fx.util.DataConst;
 import org.springframework.mock.web.MockMultipartFile;
@@ -20,6 +23,8 @@ import java.util.List;
  */
 @Service
 public class ImageServiceImpl implements ImageService{
+
+    AutoUserMissionRepository autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
     /**
      * 根据任务名称返回对应图片集
      * @param mission
@@ -179,4 +184,42 @@ public class ImageServiceImpl implements ImageService{
         return null;
     }
 
+
+    public List<Image> getTargetUserTrainImages(String missionid,String username){
+        List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+
+        for(int i=0;i<=missions.size()-1;i++){
+            if(missions.get(i).getMissionId().equals(missionid)){
+                AutoUserMission mid = missions.get(i);
+                        return getAutoImage(mid.getMissionId(),username,mid.getTrainStart(),mid.getTrainEnd());
+            }
+
+        }
+        return null;
+    }
+
+    public List<Image> getTargetUserCheckImages(String missionid,String username){
+        List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+
+        for(int i=0;i<=missions.size()-1;i++){
+            if(missions.get(i).getMissionId().equals(missionid)){
+                AutoUserMission mid = missions.get(i);
+                return getAutoImage(mid.getMissionId(),username,mid.getTestStart(),mid.getTestEnd());
+            }
+
+        }
+        return null;
+    }
+
+    /**
+     * 如果需要获得一张图片直接就start=end就行
+     * @param missionid
+     * @param username
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<Image> getAutoImage(String missionid,String username,int start,int end){
+        return null;
+    }
 }

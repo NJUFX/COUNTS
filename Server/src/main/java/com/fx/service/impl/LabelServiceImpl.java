@@ -427,4 +427,19 @@ bytes[i] += 256;
         return autoDetectionLabelReposity.updateAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
     }
 
+    public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username){
+
+        return null;
+    }
+
+    public List<AutoClassificationLabel> getAutoClassificationLabel(String missionid,String username){
+
+        return null;
+    }
+
+    public List<AutoDetectionLabel> getAutoDetectionLabel(String missionid,String username){
+
+        return null;
+    }
+
 }
