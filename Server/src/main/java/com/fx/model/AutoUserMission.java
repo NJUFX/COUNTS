@@ -9,8 +9,8 @@ public class AutoUserMission {
     private int trainEnd;
     private int testStart;
     private int testEnd;
-    private boolean finishTrain;
-    private boolean finishTest;
+    private boolean finishTrain = true;
+    private boolean finishTest = false;
 
     public int getMissionId() {
         return missionId;

@@ -68,6 +68,22 @@
               </div>
             </el-card>
           </div>
+          <div v-for="item in autoProjects" style="float: left" :key="item">
+            <el-card v-show="item.show" class="el_card" :body-style="{padding:'0px'}">
+              <img v-bind:src="item.cover" class="image" v-bind:id="item.missionname">
+              <div class="imgOnClick">
+                <span>已标注：{{item.imgFinished}} 张</span>
+                <span>未标注：{{item.imgToDo}} 张</span>
+                <el-progress type="circle" v-bind:percentage="item.percent" color="#8e71c7"></el-progress>
+              </div>
+              <div style="height: 130px;position:absolute; top: 150px; width: 97%; left: 1.5%; background-color: white">
+                <span style="font-size: 20px; color: #4CAF50">{{item.missionname}}</span>
+                <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
+                <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
+                <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="openProject(item)">进入项目</el-button>
+              </div>
+            </el-card>
+          </div>
           <div v-show="hasProject" style="float: left; width: 100%;">
             <el-pagination @current-change="handleCurrentChange" background :current-page=1 :page-size="12"
                            layout="total, prev, pager, next, jumper" v-bind:total="project_total">
@@ -273,6 +289,7 @@ export default {
       }
     }
     return {
+      autoProjects:[],
       selectLabelTypeOption:[],
       labelTypeOptions:[
         {
@@ -494,6 +511,7 @@ export default {
             _this.example2.img = info2.avatar
             _this.projectInfo = []
             _this.getAllProject()
+            _this.getAllAutoProject()
           }
         }
       }
@@ -505,6 +523,80 @@ export default {
   },
 
   methods: {
+    getAllAutoProject(){
+      var xmlhttp = new XMLHttpRequest()
+      var _this = this
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          if (JSON.parse(xmlhttp.responseText) != null) {
+            var arrays = JSON.parse(xmlhttp.responseText);
+            console.log('automissions'+arrays)
+            var cap = 0, seg = 0, dec = 0, attr = 0, cla = 0, fin = 0, unfin = 0
+            for(var i =0;i<arrays.length;i++){
+              _this.autoProjects.push(
+                {
+                  id: arrays[i].id,
+                  missionname: arrays[i].missionName,
+                  charts_id: '' + arrays[i].id + '_charts',
+                  imgFinished: arrays[i].finished,
+                  imgToDo: (arrays[i].size - arrays[i].finished),
+                  type: arrays[i].type,
+                  cover: '',
+                  percent: 0,
+                  annotationType: 1,
+                  show: true
+                }
+              )
+              if (arrays[i].finished == arrays[i].sum) {
+                fin++
+              } else {
+                unfin++
+              }
+              var type = arrays[i].type
+              if (type == 'Classification') {
+                cla++
+              } else if (type == 'Detection') {
+                dec++
+              } else if (type == 'Segmentation') {
+                seg++
+              } else if (type == 'Caption') {
+                cap++
+              } else if (type == 'Attribute') {
+                attr++
+              }
+            }
+            var L = [cla, dec, seg, cap, attr];
+            var m = _this.max(L)
+            _this.myData.max = ((parseInt('' + m / 10) + 1) * 10>_this.myData.max)?(parseInt('' + m / 10) + 1) * 10:_this.myData.max;
+            _this.project_total += arrays.length;
+            _this.myData.attribute += attr
+            _this.myData.caption += cap
+            _this.myData.classification += cla
+            _this.myData.segmentation += seg
+            _this.myData.detection += dec
+            _this.myData.finished += fin
+            _this.myData.unfinished += unfin
+
+            for (var i = 0; i < _this.autoProjects.length; i++) {
+              _this.autoProjects[i].percent = (_this.autoProjects[i].imgFinished / (_this.autoProjects[i].imgToDo + _this.autoProjects[i].imgFinished) * 100).toFixed(2)
+         //     _this.getCoverImg(_this.autoProjects[i].id, i);
+            }
+
+            _this.drawPieCharts()
+            _this.drawRadarCharts()
+            _this.drawLineCharts()
+            _this.drawGradeCharts()
+            _this.getMyRankInfo()
+            _this.getRankingInfo()
+          }
+        }
+      }
+      let formData = new FormData()
+      formData.append('username', localStorage.getItem('username'))
+      xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/worker', true)
+      xmlhttp.send(formData)
+    },
+
     getAllProject(){
       var xmlhttp = new XMLHttpRequest()
       var _this = this
@@ -554,14 +646,14 @@ export default {
             var L = [cla, dec, seg, cap, attr];
             var m = _this.max(L)
             _this.myData.max = (parseInt('' + m / 10) + 1) * 10;
-            _this.project_total = arrays.length;
-            _this.myData.attribute = attr
-            _this.myData.caption = cap
-            _this.myData.classification = cla
-            _this.myData.segmentation = seg
-            _this.myData.detection = dec
-            _this.myData.finished = fin
-            _this.myData.unfinished = unfin
+            _this.project_total += arrays.length;
+            _this.myData.attribute += attr
+            _this.myData.caption += cap
+            _this.myData.classification += cla
+            _this.myData.segmentation += seg
+            _this.myData.detection += dec
+            _this.myData.finished += fin
+            _this.myData.unfinished += unfin
 
             for (var i = 0; i < _this.projectInfo.length; i++) {
               var time = _this.projectInfo[i].dateEnd.split('-');

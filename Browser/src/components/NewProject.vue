@@ -524,10 +524,10 @@
         if (autoMission.type == 'Classification') {
           autoMission.types =  _this.selectsArray
         }
-        console.log(this.selectsArray)
+       // console.log(this.selectsArray)
         xmlhttp.open('POST', 'http://localhost:8080/counts/mission/addAutoMission', true)
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-        console.log(JSON.stringify(autoMission))
+       // console.log(JSON.stringify(autoMission))
         xmlhttp.send(JSON.stringify(autoMission));
       },
 
@@ -601,6 +601,7 @@
           for (var i = 0; i < this.imgFileList.length; i++) {
             formData.append('file', _this.imgFileList[i])
           }
+          console.log('imglist'+this.imgFileList)
           xmlhttp.open('POST', 'http://localhost:8080/counts/image/uploadAutoCaptionImg', true)
           xmlhttp.send(formData)
         }
