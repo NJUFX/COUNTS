@@ -269,29 +269,31 @@ public class MissionServiceImpl implements MissionService {
 
         List<User> users =  userRepository.findUserByType("Worker");
 
-        users = quickSort(users,0,users.size());
+//
+//        users = quickSort(users,0,users.size());
+//
+//        if(users.size()<numOfUser){
+//            System.out.println("系统中已有用户无法满足分配需求，已经为你指派最多用户");
+//            numOfUser= users.size();
+//        }
+//        //添加该任务指派的User
+//        for(int i=0;i<=numOfUser-1;i++){
+//            AutoUserMission mid = new AutoUserMission();
+//            mid.setFinishTest(false);
+//            mid.setFinishTrain(false);
+//            mid.setMissionId(String.valueOf(autoMission.getId()));
+//            mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
+//            mid.setTrainEnd((numOfpicture*(i+1))/(2*numOfUser)  -1);
+//            mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
+//            mid.setTestEnd((numOfpicture*(numOfUser+i+1))/(2*numOfUser)-1);
+//
+//            /**
+//             * 还空缺一个添加autousermission的方法
+//             */
+//            autoUserMissionRepository.addAutoUserMission(users.get(i).getUsername(),mid);
+//
+//        }
 
-        if(users.size()<numOfUser){
-            System.out.println("系统中已有用户无法满足分配需求，已经为你指派最多用户");
-            numOfUser= users.size();
-        }
-        //添加该任务指派的User
-        for(int i=0;i<=numOfUser-1;i++){
-            AutoUserMission mid = new AutoUserMission();
-            mid.setFinishTest(false);
-            mid.setFinishTrain(false);
-            mid.setMissionId(autoMission.getId());
-            mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
-            mid.setTrainEnd((numOfpicture*(i+1))/(2*numOfUser)  -1);
-            mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
-            mid.setTestEnd((numOfpicture*(numOfUser+i+1))/(2*numOfUser)-1);
-
-            /**
-             * 还空缺一个添加autousermission的方法
-             */
-            autoUserMissionRepository.addAutoUserMission(users.get(i).getUsername(),mid);
-
-        }
 
 
 
