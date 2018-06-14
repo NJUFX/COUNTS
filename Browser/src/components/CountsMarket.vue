@@ -428,8 +428,8 @@
         var name = localStorage.getItem('username')
         formData.append('username',name)
         formData.append('missionID', str)
-        formData.append('recommandType', ''+this.recommandType);
-        var path = localStorage.getItem('server')+'/counts/user/addAcceptmission'
+        formData.append('recommendType', ''+this.recommandType);
+        var path = localStorage.getItem('server')+'/counts/mission/addAcceptMission'
         xmlhttp.open('POST', path, true)
         xmlhttp.send(formData)
       },
