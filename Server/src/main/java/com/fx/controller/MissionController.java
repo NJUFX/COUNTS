@@ -1,5 +1,6 @@
 package com.fx.controller;
 
+import com.fx.bean.AutoMissionPresentation;
 import com.fx.bean.MissionPresentation;
 import com.fx.bean.OptMessage;
 import com.fx.model.AcceptedMission;
@@ -265,6 +266,19 @@ public class MissionController {
     public List<AutoMission> getAutoMissionByRequestorID(String username) {
         return missionService.getAutoMissionByRequestorID(username);
     }
+
+    @RequestMapping(
+            value = "/getAutoMission/worker",
+            params = {"username"},
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public List<AutoMissionPresentation> getAutoMissionByWorkerID(String username){
+        return missionService.getAutoMissionByWorkerID(username);
+    }
+
+
 
     /**
      * 发布自动化标注的任务,并且指派工人！！！
