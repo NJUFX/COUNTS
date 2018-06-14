@@ -34,7 +34,7 @@ import java.util.List;
 public class ImageController {
     //图片存放地址
     // public static final String imageURL = "E:\\大二下\\软工\\ImageTest\\";
-    public static final String imageURL = "data/image/";
+    public static final String imageURL = "../data/image/";
     @Autowired
     ImageService imageService;
 
@@ -71,7 +71,7 @@ public class ImageController {
             // String imgName = System.currentTimeMillis() + f.getOriginalFilename(); // 这里图片的名字用毫秒数+图片原来的名字拼接,迭代一暂时不考虑重名情况
             String imgName = f.getOriginalFilename();//这里图片还是以原名命名
             //上传文件
-            imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/" + "allimage/", imgName);
+            imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/" + "allimage/", imgName);
         }
     }
 
@@ -84,7 +84,7 @@ public class ImageController {
 
 
             String imgName = f.getOriginalFilename();//这里图片还是以原名命名
-            imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/", imgName);
+            imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/", imgName);
         }
     }
 
@@ -98,10 +98,10 @@ public class ImageController {
         for (MultipartFile f : file) {
             String imgName = f.getOriginalFilename();//这里图片还是以原名命名
             if (i <= size / 2)
-                imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/images/test", imgName);
+                imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/images/test", imgName);
             else
-                imageService.uploadFileUtil(f.getBytes(), autoDirName + missionID + "/images/train", imgName);
-            i ++;
+                imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/images/train", imgName);
+            i++;
         }
     }
 
@@ -265,18 +265,13 @@ public class ImageController {
     }
 
 
-
-    public List<Image> getTargetUserTrainImages(int missionid, String username){
-        return imageService.getTargetUserTrainImages(missionid,username);
+    public List<Image> getTargetUserTrainImages(int missionid, String username) {
+        return imageService.getTargetUserTrainImages(missionid, username);
     }
 
-    public List<Image> getTargetUserCheckImages(int missionid, String username){
+    public List<Image> getTargetUserCheckImages(int missionid, String username) {
         return imageService.getTargetUserCheckImages(missionid, username);
     }
-
-
-
-
 
 
 }
