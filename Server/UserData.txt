@@ -1,2 +1,2 @@
-{"id":1,"username":"fjx","name":"fjx","info":"","avatar":"","password":"123456","email":"152@163.com","phone":"18851826150","role":"Requestor","missions":[],"points":-25,"exp":25,"level":1,"rate":0.0,"city":"秦皇岛市","tags":["horse","padding","steve bob"]}
 {"id":2,"username":"worker","name":"worker","info":"","avatar":"","password":"123456","email":"123@123.com","phone":"18851826150","role":"Worker","missions":[],"points":0,"exp":0,"level":1,"rate":0.0,"city":"北京市","tags":["dog","element","iphone","gakki","animal"]}
+{"id":1,"username":"fjx","name":"fjx","info":"","avatar":"","password":"123456","email":"152@163.com","phone":"18851826150","role":"Requestor","missions":[],"points":-30,"exp":30,"level":1,"rate":0.0,"city":"秦皇岛市","tags":["horse","padding","steve bob"]}

@@ -493,9 +493,27 @@ export default {
             _this.headImage = info2.avatar
             _this.example2.img = info2.avatar
             _this.projectInfo = []
-            var arrays = item.missions
+            _this.getAllProject()
+          }
+        }
+      }
+      let formData = new FormData()
+      formData.append('username', localStorage.getItem('username'))
+      xmlhttp.open('POST', 'http://localhost:8080/counts/user/getuser', true)
+      xmlhttp.send(formData)
+    }
+  },
+
+  methods: {
+    getAllProject(){
+      var xmlhttp = new XMLHttpRequest()
+      var _this = this
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          if (JSON.parse(xmlhttp.responseText) != null) {
+            var arrays = JSON.parse(xmlhttp.responseText)
             var cap = 0, seg = 0, dec = 0, attr = 0, cla = 0, fin = 0, unfin = 0
-            if(arrays.length!=0){
+            if (arrays.length != 0) {
               _this.hasProject = true
             }
             for (var i = 0; i < arrays.length; i++) {
@@ -503,17 +521,17 @@ export default {
                 id: arrays[i].id,
                 missionname: arrays[i].missionName,
                 dateStart: arrays[i].begin,
-                dateEnd:arrays[i].end,
-                charts_id: ''+ arrays[i].id + '_charts',
+                dateEnd: arrays[i].end,
+                charts_id: '' + arrays[i].id + '_charts',
                 imgFinished: arrays[i].finished,
                 imgToDo: (arrays[i].sum - arrays[i].finished),
                 type: arrays[i].type,
                 cover: '',
-                percent:0,
-                isEnd:false,
-                isContinue:true,
-                annotationType:0,
-                show:true
+                percent: 0,
+                isEnd: false,
+                isContinue: true,
+                annotationType: 0,
+                show: true
               })
               if (arrays[i].finished == arrays[i].sum) {
                 fin++
@@ -535,7 +553,7 @@ export default {
             }
             var L = [cla, dec, seg, cap, attr];
             var m = _this.max(L)
-            _this.myData.max = (parseInt(''+ m/10)+1)*10;
+            _this.myData.max = (parseInt('' + m / 10) + 1) * 10;
             _this.project_total = arrays.length;
             _this.myData.attribute = attr
             _this.myData.caption = cap
@@ -545,18 +563,18 @@ export default {
             _this.myData.finished = fin
             _this.myData.unfinished = unfin
 
-            for(var i=0;i<_this.projectInfo.length;i++){
+            for (var i = 0; i < _this.projectInfo.length; i++) {
               var time = _this.projectInfo[i].dateEnd.split('-');
-              var end = new Date(time[0], parseInt(time[1])-1, time[2])
+              var end = new Date(time[0], parseInt(time[1]) - 1, time[2])
               var now = new Date()
-              if(now<end){
+              if (now < end) {
                 _this.projectInfo[i].isEnd = false;
                 _this.projectInfo[i].isContinue = true;
-              }else{
+              } else {
                 _this.projectInfo[i].isEnd = true;
                 _this.projectInfo[i].isContinue = false;
               }
-              _this.projectInfo[i].percent = (_this.projectInfo[i].imgFinished/(_this.projectInfo[i].imgToDo+_this.projectInfo[i].imgFinished)*100).toFixed(2)
+              _this.projectInfo[i].percent = (_this.projectInfo[i].imgFinished / (_this.projectInfo[i].imgToDo + _this.projectInfo[i].imgFinished) * 100).toFixed(2)
 
               _this.getCoverImg(_this.projectInfo[i].id, i);
             }
@@ -572,17 +590,9 @@ export default {
       }
       let formData = new FormData()
       formData.append('username', localStorage.getItem('username'))
-      xmlhttp.open('POST', 'http://localhost:8080/counts/user/getuser', true)
+      xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAcceptedMission', true)
       xmlhttp.send(formData)
-
-      var list = [].slice.call(document.querySelectorAll('pre code'))
-      list.forEach((val, index) => {
-        hljs.highlightBlock(val)
-      })
-    }
-  },
-
-  methods: {
+    },
     handleLabelTypeChange(val){
       if(val[0]=='man'){
         this.selectManLabel()

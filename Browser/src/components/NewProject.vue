@@ -277,7 +277,6 @@
             value: 'Detection',
             label: '方框描述',
             info: '把图片中指定类型的元素用矩形标注出来',
-            disabled:false,
           },
           {
             value: 'Segmentation',
@@ -498,11 +497,18 @@
         var _this = this
         var username = localStorage.getItem('username')
         var missionID = 0
+        var type = _this.autoForm.type;
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             console.log('missionID'+xmlhttp.responseText)
             missionID = xmlhttp.responseText
-            _this.uploadImg(missionID)
+            if(type=='Detection'){
+              _this.uploadAutoDectionImg(missionID)
+            }else if(type=='Caption'){
+              _this.uploadAutoCaptionImg(missionID)
+            }else if(type == 'Classification'){
+              _this.uploadAutoClassificationImg(missionID)
+            }
             _this.openSucc('Submit successfully')
             _this.goMyProject()
           }
@@ -580,6 +586,63 @@
         }
       },
 
+      uploadAutoCaptionImg(missionID){
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        if (missionID != 0) {
+          xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+              console.log(missionID)
+            }
+          }
+          let formData = new FormData()
+          var str = '' + missionID
+          formData.append('missionID', str)
+          for (var i = 0; i < this.imgFileList.length; i++) {
+            formData.append('file', _this.imgFileList[i])
+          }
+          xmlhttp.open('POST', 'http://localhost:8080/counts/image/uploadAutoCaptionImg', true)
+          xmlhttp.send(formData)
+        }
+      },
+      uploadAutoClassificationImg(missionID){
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        if (missionID != 0) {
+          xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+              console.log(missionID)
+            }
+          }
+          let formData = new FormData()
+          var str = '' + missionID
+          formData.append('missionID', str)
+          for (var i = 0; i < this.imgFileList.length; i++) {
+            formData.append('file', _this.imgFileList[i])
+          }
+          xmlhttp.open('POST', 'http://localhost:8080/counts/image/uploadAutoClassificationImg', true)
+          xmlhttp.send(formData)
+        }
+      },
+      uploadAutoDectionImg(missionID){
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        if (missionID != 0) {
+          xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+              console.log(missionID)
+            }
+          }
+          let formData = new FormData()
+          var str = '' + missionID
+          formData.append('missionID', str)
+          for (var i = 0; i < this.imgFileList.length; i++) {
+            formData.append('file', _this.imgFileList[i])
+          }
+          xmlhttp.open('POST', 'http://localhost:8080/counts/image/uploadAutoDetectionImg', true)
+          xmlhttp.send(formData)
+        }
+      },
       uploadImg (missionID) {
         var xmlhttp = new XMLHttpRequest()
         var _this = this
