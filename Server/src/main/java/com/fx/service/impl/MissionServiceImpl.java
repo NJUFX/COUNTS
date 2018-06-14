@@ -326,7 +326,10 @@ public class MissionServiceImpl implements MissionService {
         File dir = new File(dirname);
         if (!dir.exists())
             dir.mkdir();
-
+        String allimage= dirname+"/allimage";
+        File all = new File(allimage);
+        if(!all.exists())
+            all.mkdir();
     }
 
     public void mkdirsForAutoDetection(int id) {
