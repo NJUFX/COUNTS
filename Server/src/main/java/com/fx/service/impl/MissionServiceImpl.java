@@ -283,9 +283,7 @@ public class MissionServiceImpl implements MissionService {
 //            AutoUserMission mid = new AutoUserMission();
 //            mid.setFinishTest(false);
 //            mid.setFinishTrain(false);
-
-//            mid.setMissionId(String.valueOf(autoMission.getId()));
-
+//            mid.setMissionId(autoMission.getId());
 //            mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
 //            mid.setTrainEnd((numOfpicture*(i+1))/(2*numOfUser)  -1);
 //            mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
@@ -385,9 +383,8 @@ public class MissionServiceImpl implements MissionService {
             File labels_dir = new File(dirname + "/image_labels_dir");
             if (!labels_dir.exists())
                 labels_dir.mkdir();
-            File autoMission = new File(dirname + "/autoMission.txt");
-            if (!autoMission.exists())
-                autoMission.createNewFile();
+//
+
             File allimages = new File(dirname + "/allimage");
             if (!allimages.exists())
                 allimages.mkdir();
