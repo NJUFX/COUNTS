@@ -3,7 +3,10 @@ package com.fx.service.impl;
 import com.fx.bean.Image;
 import com.fx.bean.MissionCompletion;
 import com.fx.controller.ImageController;
+import com.fx.model.AutoUserMission;
 import com.fx.model.LocalLabel;
+import com.fx.repository.AutoUserMissionRepository;
+import com.fx.repository.impl.AutoUserMissionRepositoryImpl;
 import com.fx.service.ImageService;
 import com.fx.util.DataConst;
 import org.springframework.mock.web.MockMultipartFile;
@@ -20,6 +23,8 @@ import java.util.List;
  */
 @Service
 public class ImageServiceImpl implements ImageService{
+
+    AutoUserMissionRepository autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
     /**
      * 根据任务名称返回对应图片集
      * @param mission
@@ -179,4 +184,95 @@ public class ImageServiceImpl implements ImageService{
         return null;
     }
 
+
+    public List<Image> getTargetUserTrainImages(String missionid,String username){
+        List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+
+        for(int i=0;i<=missions.size()-1;i++){
+            if(missions.get(i).getMissionId().equals(missionid)){
+                AutoUserMission mid = missions.get(i);
+                        return getAutoImage(mid.getMissionId(),username,mid.getTrainStart(),mid.getTrainEnd());
+            }
+
+        }
+        return null;
+    }
+
+    public List<Image> getTargetUserCheckImages(String missionid,String username){
+        List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+
+        for(int i=0;i<=missions.size()-1;i++){
+            if(missions.get(i).getMissionId().equals(missionid)){
+                AutoUserMission mid = missions.get(i);
+                return getAutoImage(mid.getMissionId(),username,mid.getTestStart(),mid.getTestEnd());
+            }
+
+        }
+        return null;
+    }
+
+    /**
+     * 如果需要获得一张图片直接就start=end就行
+     * @param missionid
+     * @param username
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<Image> getAutoImage(String missionid,String username,int start,int end){
+
+
+
+        List<Image> result = new ArrayList<>();
+
+        String path = "";
+        /**
+         * 根据不同类型为path赋值
+         */
+        File file = new File(path);
+        System.out.println(file.getAbsolutePath());
+        if (!file.exists())
+            return null;
+
+        File [] files = file.listFiles();
+
+
+        /**
+         * 如果index超出界限，则返回null
+         */
+        if(start<0||end>files.length-1){
+            System.out.println("index超出界限");
+            return null;
+        }
+
+        for(int i=start;i<=end;i++) {
+            InputStream in = null;
+            byte[] data = null;
+            try {
+                in = new FileInputStream(files[i]);
+                data = new byte[in.available()];
+                in.read(data);
+                in.close();
+                LocalLabel localLabel = new LocalLabel();
+                BASE64Encoder encoder = new BASE64Encoder();
+                String url = encoder.encode(data);
+                String head = "data:image/" + files[i].getName().split("[.]")[1] + ";base64,";
+
+                // System.out.println(head+url);
+                result.add(new Image(files[i].getName(),head+url));
+                /*
+                localLabel.setUrl(head + url);
+                localLabel.setOtherComments(null);
+                localLabel.setOverallComment(null);
+                localLabel.setLocation(missionname + "/" + imgname);
+                */
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return result;
+    }
 }

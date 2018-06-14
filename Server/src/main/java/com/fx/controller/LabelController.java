@@ -617,6 +617,20 @@ public class LabelController {
         return result;
     }
 
+    public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username){
+        return labelService.getAutoCaptionLabel(missionid, username);
+    }
+
+    public List<AutoClassificationLabel> getAutoClassificationLabel(String missionid,String username){
+
+        return labelService.getAutoClassificationLabel(missionid, username);
+    }
+
+    public List<AutoDetectionLabel> getAutoDetectionLabel(String missionid,String username){
+
+        return labelService.getAutoDetectionLabel(missionid,username);
+    }
+
 
 
 
