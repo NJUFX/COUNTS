@@ -17,7 +17,7 @@
         </div>
         <div v-show="isAutoLabel">
           <span style="position: absolute; left: 32px;top: 40px;font-size: 14px">任务标题</span>
-          <el-input style="position: absolute; left: 100px;top: 40px;font-size: 14px;width: 390px" v-model="autoForm.topic" ></el-input>
+          <el-input style="position: absolute; left: 100px;top: 40px;font-size: 14px;width: 390px" v-model="autoForm.missionName" ></el-input>
           <span style="position: absolute; left: 32px;top: 92px;font-size: 14px">任务详情</span>
           <el-input style="position: absolute; left: 100px;top: 92px;font-size: 14px;width: 390px" type="textarea" :rows="5" placeholder="输入任务的具体要求" v-model="autoForm.contents"></el-input>
           <span style="position: absolute; left: 32px;top: 240px;font-size: 14px">标注方式</span>
@@ -217,7 +217,7 @@
           type: '',
           contents: '',
           missionName: '',
-          points: '',
+          points: 10,
         },
         doAutoLabel:false,
         isAutoLabel:false,
@@ -483,12 +483,18 @@
       },
 
       submitAutoForm(){
+
+        if (this.imgFileList.length == 0) {
+          this.openWarn('您尚未上传任何图片。')
+          return;
+        }
         var xmlhttp = new XMLHttpRequest()
         var _this = this
         var username = localStorage.getItem('username')
         var missionID = 0
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log('missionID'+xmlhttp.responseText)
             missionID = xmlhttp.responseText
             _this.uploadImg(missionID)
             _this.openSucc('Submit successfully')
@@ -497,17 +503,18 @@
         }
         var autoMission = {
           requestorID: username,
-          missionName: _this.autoForm.missionname,
+          missionName: _this.autoForm.missionName,
           description: _this.autoForm.contents,
           type: _this.autoForm.type,
-          points: _this.autoForm.workerPoints,
+          points: _this.autoForm.points,
           types: []
         }
         if (autoMission.type == 'Classification') {
           autoMission.types =  _this.selectsArray
         }
-        xmlhttp.open('POST', 'http://localhost:8080/counts/misson/addAutoMission', true)
+        xmlhttp.open('POST', 'http://localhost:8080/counts/mission/addAutoMission', true)
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        console.log(JSON.stringify(autoMission))
         xmlhttp.send(JSON.stringify(autoMission));
       },
 

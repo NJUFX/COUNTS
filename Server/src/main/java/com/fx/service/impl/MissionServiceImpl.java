@@ -262,12 +262,15 @@ public class MissionServiceImpl implements MissionService {
     public ResultMessage addAutoMission(AutoMission autoMission) {
         ResultMessage message = autoMissionRepository.addAutoMission(autoMission);
         int id = autoMission.getId();
-//        int numOfpicture = autoMission.getSize();
-//        int extraUser = numOfpicture/100;
-//
-//        int numOfUser = 2+extraUser;
-//
-//        List<User> users =  userRepository.findUserByType("Worker");
+
+        int numOfpicture = autoMission.getSize();
+        int extraUser = numOfpicture/100;
+
+        int numOfUser = 2+extraUser;
+
+        List<User> users =  userRepository.findUserByType("Worker");
+
+
 //
 //        users = quickSort(users,0,users.size());
 //
@@ -280,10 +283,8 @@ public class MissionServiceImpl implements MissionService {
 //            AutoUserMission mid = new AutoUserMission();
 //            mid.setFinishTest(false);
 //            mid.setFinishTrain(false);
-
 //            mid.setMissionId(autoMission.getId());
-//
-//  mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
+//            mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
 //            mid.setTrainEnd((numOfpicture*(i+1))/(2*numOfUser)  -1);
 //            mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
 //            mid.setTestEnd((numOfpicture*(numOfUser+i+1))/(2*numOfUser)-1);
@@ -294,6 +295,7 @@ public class MissionServiceImpl implements MissionService {
 //            autoUserMissionRepository.addAutoUserMission(users.get(i).getUsername(),mid);
 //
 //        }
+
 
 
 
