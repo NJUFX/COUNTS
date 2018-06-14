@@ -32,6 +32,7 @@
       }
     },
     created(){
+      
       for(var i=0;i<15;i++){
         this.messageList.push({
           index: i,
