@@ -1,9 +1,3 @@
 {"id":1,"finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
 {"id":2,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
-<<<<<<< HEAD
-{"id":3,"requestorID":"fjx","finished":false,"size":0,"type":"Caption","points":10,"missionName":"auto","description":"auto","types":[]}
-{"id":4,"requestorID":"fjx","finished":false,"size":0,"type":"Classification","points":10,"missionName":"autoMission","description":"auto mission 1","types":[]}
-{"id":5,"requestorID":"fjx","finished":false,"size":0,"type":"Classification","points":10,"missionName":"auto class test","description":"test","types":[]}
-{"id":6,"requestorID":"fjx","finished":false,"size":0,"type":"Classification","points":10,"missionName":"auto test2","description":"TTR","types":["dog","cat"]}
-=======
->>>>>>> bb91e51971c3f38482aed11a07b09170054b7773
+{"id":3,"requestorID":"fjx","finished":false,"size":0,"type":"Caption","points":10,"missionName":"auto 2","description":"auto2","types":[]}
