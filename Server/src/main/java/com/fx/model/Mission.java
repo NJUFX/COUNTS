@@ -6,7 +6,8 @@ import java.util.List;
  * Created by thinkpad on 2018/4/2.
  */
 
-//此model为迭代2新增
+//此model为迭
+// 代2新增
 public class Mission {
     /**
      * 任务的唯一标识

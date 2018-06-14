@@ -1,8 +1,11 @@
 package com.fx.controller;
 
 import com.fx.model.Message;
+import com.fx.service.MessageService;
 import com.fx.util.ResultMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +18,8 @@ import java.util.List;
 @RequestMapping("/counts/message")
 @CrossOrigin
 public class MessageController {
+    @Autowired
+    MessageService messageService;
     @RequestMapping(
             value = "getMessage",
             method = RequestMethod.POST,
@@ -24,7 +29,7 @@ public class MessageController {
     @ResponseBody
     public List<Message> getMessageByUsername(String username){
 
-        return null;
+        return messageService.findMessageByUsername(username);
     }
 
     /**
@@ -40,7 +45,6 @@ public class MessageController {
     )
     @ResponseBody
     public ResultMessage updateMessage(int id){
-        System.out.println(id);
-        return null;
+        return messageService.updateMessage(id);
     }
 }

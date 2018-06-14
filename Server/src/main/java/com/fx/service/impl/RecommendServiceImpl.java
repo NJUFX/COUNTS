@@ -10,6 +10,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ * 写在开始
+ * 由于是众包市场 既要让requestor满意又要让worker找到自己喜欢的算法
+ * 所以 在让requestor 的任务能够完成
+ * worker也要找到自己的喜欢工作的类型 所以距离开始时间越久 结束时间越近的权重应该越大
+ *
+ * 推荐算法的正确率怎么计算呢
+ * 点击率 + 评分值
+ * 点击率 = 接受任务数 + 推荐总数
+ * 评分值 = average(评分值) // todo 待定
+ */
+
+/**
  * Description:
  * Created by Hanxinhu at 22:46 2018/6/10/010
  */

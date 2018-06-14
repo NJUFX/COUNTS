@@ -1,3 +1,5 @@
 {"id":1,"finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
 {"id":2,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
 {"id":3,"requestorID":"fjx","finished":false,"size":0,"type":"Caption","points":10,"missionName":"auto 2","description":"auto2","types":[]}
+{"id":4,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
+{"id":5,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
