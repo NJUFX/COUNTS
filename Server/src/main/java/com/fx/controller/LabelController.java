@@ -12,7 +12,6 @@ import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -338,17 +337,12 @@ public class LabelController {
             produces =  {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addAttributeLabel(@RequestBody AttributeLabelBean attributeLabel){
+    public ResultMessage addAttributeLabel(@RequestBody AttributeLabelBean attributeLabel) {
 
         //System.out.println(attributeLabel.getAttributeLabel().getFileName());
         ResultMessage resultMessage = labelService.addAttributeLabel(attributeLabel.getMissionID(),attributeLabel.getUserName(), attributeLabel.getAttributeLabel());
-        OptMessage result = new OptMessage(false);
 
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
+        return resultMessage;
 
     }
 
@@ -365,17 +359,12 @@ public class LabelController {
             produces =  {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addCaptionLabel( @RequestBody CaptionLabelBean captionLabel){
+    public ResultMessage addCaptionLabel(@RequestBody CaptionLabelBean captionLabel) {
 
         //System.out.println("9999");
         ResultMessage resultMessage = labelService.addCaptionLabel(captionLabel.getMissionID(),captionLabel.getUserName(), captionLabel.getCaptionLabel());
-        OptMessage result = new OptMessage(false);
 
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
+        return resultMessage;
 
     }
 
@@ -392,16 +381,11 @@ public class LabelController {
             produces =  {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addClassificationLabel(@RequestBody ClassificationLabelBean classificationLabel){
+    public ResultMessage addClassificationLabel(@RequestBody ClassificationLabelBean classificationLabel) {
 
         ResultMessage resultMessage = labelService.addClassificationLabel(classificationLabel.getMissionID(),classificationLabel.getUserName(),classificationLabel.getClassificationLabel());
-        OptMessage result = new OptMessage(false);
 
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
+        return resultMessage;
 
     }
 
@@ -418,17 +402,12 @@ public class LabelController {
             produces =  {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addDetectionLabel(@RequestParam(value = "missionid") int missionID,@RequestParam(value = "username") String userName, @RequestParam(value="detectionlabel") @RequestBody DetectionLabel detectionLabel){
+    public ResultMessage addDetectionLabel(@RequestParam(value = "missionid") int missionID, @RequestParam(value = "username") String userName, @RequestParam(value = "detectionlabel") @RequestBody DetectionLabel detectionLabel) {
 
 
         ResultMessage resultMessage = labelService.addDetectionLabel(missionID,userName, detectionLabel);
-        OptMessage result = new OptMessage(false);
 
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
+        return resultMessage;
 
     }
 
@@ -445,15 +424,10 @@ public class LabelController {
             produces =  {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addSegmentationLabel(@RequestParam(value = "missionid") int missionID,@RequestParam(value = "username") String userName,@RequestBody @RequestParam(value = "segmentationlabel") SegmentationLabel segmentationLabel){
+    public ResultMessage addSegmentationLabel(@RequestParam(value = "missionid") int missionID, @RequestParam(value = "username") String userName, @RequestBody @RequestParam(value = "segmentationlabel") SegmentationLabel segmentationLabel) {
         ResultMessage resultMessage = labelService.addSegmentationLabel(missionID,userName, segmentationLabel);
-        OptMessage result = new OptMessage(false);
 
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
+        return resultMessage;
     }
 
 
