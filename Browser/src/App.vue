@@ -38,7 +38,7 @@
       return {
         sakura_show:true,
         headImg: HeadImg,
-        unreadInfoNumber:localStorage.getItem('unreadInfoNumber')
+        unreadInfoNumber:0
       }
     },
     created () {
@@ -87,17 +87,37 @@
         formData.append('username', localStorage.getItem('username'))
         xmlhttp.open('POST', 'http://localhost:8080/counts/user/getuser', true)
         xmlhttp.send(formData)
+        this.getMessageNumber();
       }
     },
 
     methods: {
-
+      getMessageNumber(){
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (JSON.parse(xmlhttp.responseText) != null) {
+              var arrays = JSON.parse(xmlhttp.responseText)
+              for(var i=0;i<arrays.length;i++){
+                if(arrays[i].isRead=false){
+                  _this.unreadInfoNumber++;
+                }
+              }
+              localStorage.setItem('unreadInfoNumber',''+_this.unreadInfoNumber)
+            }
+          }
+        }
+        let formData = new FormData()
+        formData.append('username', localStorage.getItem('username'))
+        xmlhttp.open('POST', 'http://localhost:8080/counts/message/getMessage', true)
+        xmlhttp.send(formData)
+      },
       readMessage(){
         var path = '/' + localStorage.getItem('username')
         var id = localStorage.getItem('identify')
         if (id == 'logout') {
           this.openInfo("You haven't logged in")
-          //    this.$router.push({path: '/login'})
         }else{
           var p = '/'+localStorage.getItem('username')+'/message'
           this.$router.push({path: p})

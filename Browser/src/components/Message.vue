@@ -15,7 +15,7 @@
       <div style="position: absolute; width: 800px;top: 130px; left: 330px; height: 350px;">
         <span style="font-size: 24px">{{topic}}</span>
         <p style="top: 150px; text-align: justify;font-size: 16px;">{{mainInfo}}</p>
-        <el-button v-show="goProject" type="text" style="font-size: 16px">点此进入项目</el-button>
+       <!-- <el-button v-show="goProject" type="text" style="font-size: 16px">点此进入项目</el-button>-->
       </div>
     </div>
 </template>
@@ -32,23 +32,51 @@
       }
     },
     created(){
-      
-      for(var i=0;i<15;i++){
-        this.messageList.push({
-          index: i,
-          topic: '自动化标注 审查',
-          content: "自动化项目已添加到您的项目列表中，您需要对自动化标注的结果进行审查。\n审查过程：对每张图片的结果正确与否选择“是”或“否”。",
-          unread:true,
-
-        })
+      if(localStorage.getItem('username')!='visitor'){
+        var _this = this
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (JSON.parse(xmlhttp.responseText) != null) {
+              var arrays = JSON.parse(xmlhttp.responseText)
+              for(var i=0;i<arrays.length;i++){
+                _this.messageList.push({
+                  index: arrays[i].id,
+                  topic: arrays[i].title,
+                  content: arrays[i].content,
+                  unread:!arrays[i].isRead,
+                })
+              }
+            }
+          }
+        }
+        let formData = new FormData()
+        formData.append('username', localStorage.getItem('username'))
+        xmlhttp.open('POST', 'http://localhost:8080/counts/message/getMessage', true)
+        xmlhttp.send(formData)
       }
     },
     methods:{
+
       showInfo(i){
         this.topic = this.messageList[i].topic;
         this.mainInfo = this.messageList[i].content;
         this.messageList[i].unread = false;
         this.goProject = true;
+
+        var _this = this
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (JSON.parse(xmlhttp.responseText) != null) {
+              console.log(JSON.parse(xmlhttp.responseText))
+            }
+          }
+        }
+        let formData = new FormData()
+        formData.append('id', i)
+        xmlhttp.open('POST', 'http://localhost:8080/counts/message/updateMessage', true)
+        xmlhttp.send(formData)
       }
     }
   }
