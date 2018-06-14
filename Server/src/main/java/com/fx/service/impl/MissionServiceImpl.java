@@ -1,5 +1,6 @@
 package com.fx.service.impl;
 
+import com.fx.bean.AutoMissionPresentation;
 import com.fx.bean.MissionPresentation;
 import com.fx.controller.ImageController;
 import com.fx.model.*;
@@ -427,5 +428,36 @@ public class MissionServiceImpl implements MissionService {
 
         }
         return a;
+    }
+
+    public List<AutoMissionPresentation> getAutoMissionByWorkerID(String username){
+
+        List<AutoUserMission> autoUserMissions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+
+        List<AutoMissionPresentation> autoMissions = new ArrayList<>();
+        for(int i=0;i<=autoUserMissions.size()-1;i++){
+           AutoMission autoMission = autoMissionRepository.findAutoMissionByID(autoUserMissions.get(i).getMissionId());
+           AutoMissionPresentation mid = new AutoMissionPresentation();
+           mid.setContent(autoMission.getDescription());
+           mid.setId(autoMission.getId());
+           mid.setType(autoMission.getType());
+
+           if(!autoUserMissions.get(i).isFinishTrain()){
+               mid.setStatus("Train");
+               mid.setSize(autoUserMissions.get(i).getTrainEnd()-autoUserMissions.get(i).getTrainStart()+1);
+           }
+           else if(autoUserMissions.get(i).isFinishTrain()&&!autoUserMissions.get(i).isFinishTest()){
+               mid.setStatus("Test");
+               mid.setSize(autoUserMissions.get(i).getTestEnd()-autoUserMissions.get(i).getTestStart()+1);
+
+           }
+
+           autoMissions.add(mid);
+
+
+            //if(autoUserMissions.get(i).get)
+        }
+        return autoMissions;
+
     }
 }

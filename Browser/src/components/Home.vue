@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div style="float: top; left: 0px;top: 0px; width: 100%; height: 600px;">
+    <div style="float: top; left: 0px;top: 0px; width: 100%; height: 700px;">
       <div>
-        <img id="backImg" src="../assets/home_back.png" style="position: absolute;top: 0px;left: 0px;background-size: 100%;">
+        <img id="backImg" src="../assets/home_back.png" style="position: absolute;top: 0px;left: 0px;width:100%">
       </div>
       <img src="./logo.png" style="width: 150px;position: absolute;top: 25px;left: 100px;">
       <span style="position: absolute; top: 40px; left: 270px;color: #f2f2f2; font-size: 28px">众包标注系统</span>
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div style="float: top; left: 0px;top: 1100px;width: 100%; height: 610px">
+    <div style="float: top; left: 0px;top: 1100px;width: 100%; height: 680px">
       <div style="position: relative;">
         <div style="position: absolute; width: 5px; height:30px; background-color:#108cee; left: 30px;"></div>
         <span style="position: absolute; left: 40px;font-size: 22px; font-weight: bold">产品流程</span>

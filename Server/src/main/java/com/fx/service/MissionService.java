@@ -1,5 +1,6 @@
 package com.fx.service;
 
+import com.fx.bean.AutoMissionPresentation;
 import com.fx.bean.MissionPresentation;
 import com.fx.model.AcceptedMission;
 import com.fx.model.AutoMission;
@@ -137,4 +138,6 @@ public interface MissionService {
     public List<AcceptedMission> findAcceptedMissionByUsername(String username);
 
     public AcceptedMission findAcceptedMissionByUsernameAndMissionID(String username,int missionID);
+
+    public List<AutoMissionPresentation> getAutoMissionByWorkerID(String username);
 }
