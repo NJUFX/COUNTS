@@ -3,9 +3,12 @@ package com.fx.service.impl;
 import com.fx.bean.Image;
 import com.fx.bean.MissionCompletion;
 import com.fx.controller.ImageController;
+import com.fx.model.AutoMission;
 import com.fx.model.AutoUserMission;
 import com.fx.model.LocalLabel;
+import com.fx.repository.AutoMissionRepository;
 import com.fx.repository.AutoUserMissionRepository;
+import com.fx.repository.impl.AutoMissionRepositoryImpl;
 import com.fx.repository.impl.AutoUserMissionRepositoryImpl;
 import com.fx.service.ImageService;
 import com.fx.util.DataConst;
@@ -25,6 +28,7 @@ import java.util.List;
 public class ImageServiceImpl implements ImageService{
 
     AutoUserMissionRepository autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
+    AutoMissionRepository autoMissionRepository = new AutoMissionRepositoryImpl();
     /**
      * 根据任务名称返回对应图片集
      * @param mission
@@ -222,10 +226,25 @@ public class ImageServiceImpl implements ImageService{
     public List<Image> getAutoImage(int missionid, String username, int start, int end){
 
 
+        AutoMission autoMission = autoMissionRepository.findAutoMissionByID(missionid);
 
         List<Image> result = new ArrayList<>();
 
-        String path = "";
+        String path = "../data/autoImage/"+missionid+"/";
+
+        if(autoMission.getType().equals("Classification")){
+
+            path = path+"allimage";
+        }
+        else if(autoMission.getType().equals("Caption")){
+
+            path = path+"images";
+        }
+        else{
+
+            path = path + "allimage";
+        }
+
         /**
          * 根据不同类型为path赋值
          */
