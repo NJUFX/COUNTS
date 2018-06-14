@@ -483,10 +483,16 @@
       },
 
       submitAutoForm(){
-
         if (this.imgFileList.length == 0) {
           this.openWarn('您尚未上传任何图片。')
           return;
+        }
+        if (this.autoForm.type == 'Classification') {
+          for (var i = 0; i < this.classArray.length; i++) {
+            if (this.LTrim(this.RTrim(this.classArray[i].value)) != '') {
+              this.selectsArray.push(this.LTrim(this.RTrim(this.classArray[i].value)))
+            }
+          }
         }
         var xmlhttp = new XMLHttpRequest()
         var _this = this
@@ -512,6 +518,7 @@
         if (autoMission.type == 'Classification') {
           autoMission.types =  _this.selectsArray
         }
+        console.log(this.selectsArray)
         xmlhttp.open('POST', 'http://localhost:8080/counts/mission/addAutoMission', true)
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         console.log(JSON.stringify(autoMission))

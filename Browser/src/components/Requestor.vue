@@ -460,6 +460,7 @@
         var _this = this
         xmlhttp.onreadystatechange = function () {
           if (JSON.parse(xmlhttp.responseText) != null) {
+            _this.autoProjects=[]
             var arrays = JSON.parse(xmlhttp.responseText)
             _this.project_total = +arrays.length;
             if(arrays.length!=0){
