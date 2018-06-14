@@ -1,6 +1,8 @@
 package com.fx.service.impl;
 
 import com.fx.model.Message;
+import com.fx.repository.MessageRepository;
+import com.fx.repository.impl.MessageRepositoryImpl;
 import com.fx.service.MessageService;
 import com.fx.util.ResultMessage;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ import java.util.List;
  */
 @Service
 public class MessageServiceImpl implements MessageService {
-
+    MessageRepository messageRepository = new MessageRepositoryImpl();
     /**
      * 添加单条信息
      *
@@ -21,7 +23,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public ResultMessage addMessage(Message message) {
-        return null;
+        return messageRepository.addMessage(message);
     }
 
     /**
@@ -32,7 +34,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public ResultMessage addMessages(List<Message> messages) {
-        return null;
+        return messageRepository.addMessages(messages);
     }
 
     /**
@@ -43,7 +45,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public List<Message> findMessageByUsername(String username) {
-        return null;
+        return messageRepository.findMessageByUsername(username);
     }
 
     /**
@@ -54,6 +56,6 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public ResultMessage updateMessage(int id) {
-        return null;
+        return messageRepository.updateMessage(id);
     }
 }

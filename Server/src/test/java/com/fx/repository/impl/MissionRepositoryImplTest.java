@@ -44,7 +44,7 @@ public class MissionRepositoryImplTest {
         assertEquals(mission.getEnd(), missionAfter.getEnd());
 
     }
-
+    @Ignore
     @Test
     public void deleteMission() {
         ResultMessage message = missionRepository.deleteMission(3);
