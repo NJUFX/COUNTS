@@ -28,16 +28,14 @@ public class CaptionLabelRepositoryImpl implements CaptionLabelRepository {
     @Override
     public ResultMessage addCaptionLabel(int missionID, String username, CaptionLabel captionLabel) {
         List<CaptionLabel> labels = helper.getAllLabels(missionID, username);
-        boolean exist = false;
         for (int i = 0; i < labels.size(); i++) {
             CaptionLabel c = labels.get(i);
             if (c.getFileName().equals(captionLabel.getFileName())) {
-                exist = true;
                 c.setCaption(captionLabel.getCaption());
-                break;
+                helper.printAllLabels(missionID,username,labels);
+                return ResultMessage.EXIST;
             }
         }
-        if (!exist)
             labels.add(captionLabel);
 
 

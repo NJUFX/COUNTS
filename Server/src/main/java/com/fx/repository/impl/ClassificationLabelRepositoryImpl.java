@@ -28,17 +28,15 @@ public class ClassificationLabelRepositoryImpl implements ClassificationLabelRep
     @Override
     public ResultMessage addClassificationLabel(int missionID, String username, ClassificationLabel classificationLabel) {
         List<ClassificationLabel> labels = helper.getAllLabels(missionID, username);
-        boolean exist = false;
         for (int i = 0; i < labels.size(); i++) {
             ClassificationLabel c = labels.get(i);
             if (c.getFileName().equals(classificationLabel.getFileName())) {
                 c.setSelect(classificationLabel.getSelect());
-                exist = true;
-                break;
+                helper.printAllLabels(missionID, username, labels);
+                return ResultMessage.EXIST;
             }
 
         }
-        if (!exist)
             labels.add(classificationLabel);
 
         boolean success = helper.printAllLabels(missionID, username, labels);

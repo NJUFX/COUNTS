@@ -29,11 +29,11 @@ public class DetectionLabelRepositoryImpl implements DetectionLabelRepository {
         List<DetectionLabel> labels = helper.getAllLabels(missionID, username);
         for (DetectionLabel l : labels) {
             if (l.getFileName().equals(detectionLabel.getFileName())) {
-                isExisted = true;
                 l.setRectangles(detectionLabel.getRectangles());
+                helper.printAllLabels(missionID, username, labels);
+                return ResultMessage.EXIST;
             }
         }
-        if (!isExisted)
             labels.add(detectionLabel);
 
         helper.printAllLabels(missionID, username, labels);

@@ -32,12 +32,11 @@ public class AttributeLabelRepositoryImpl implements AttributeLabelRepository {
         for (int i = 0; i < labels.size() ; i++) {
             AttributeLabel label = labels.get(i);
             if (label.getFileName().equals(attributeLabel.getFileName())) {
-                exist = true;
                 label.setAttributes(attributeLabel.getAttributes());
-                break;
+                helper.printAllLabels(missionID,username,labels);
+                return ResultMessage.EXIST;
             }
         }
-        if (!exist)
             labels.add(attributeLabel);
 
         boolean success = helper.printAllLabels(missionID, username, labels);

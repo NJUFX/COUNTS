@@ -1,38 +1,6 @@
 <template>
   <el-container>
-    <div id="toolbox" style="border-radius: 6px; background: #409eff; width: 525px;height: 42px; position: absolute; left:35%; top:57px">
-      <el-button-group style="padding: 1px; position: absolute; top:-10px; left: 160px;">
-        <el-tooltip class="item" effect="dark" content="添加标注信息" placement="bottom">
-          <el-button type="primary" icon="el-icon-edit" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="重新标注当前图片" placement="bottom-end">
-          <el-button type="primary" icon="el-icon-ali-xiangpica" style="font-size: 14px;" size="mini" @click="reLabelImg"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="保存图片并提交" placement="bottom">
-          <el-button type="primary" icon="el-icon-upload" style="font-size: 14px;" size="mini" @click="commitImg" ></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="加载任务数据" placement="bottom-start">
-          <el-button type="primary" icon="el-icon-download" size="mini" style="font-size: 14px;" @click="downloadSource" ></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="上一张" placement="bottom-start">
-          <el-button type="primary" icon="el-icon-caret-left" style="font-size: 14px;" size="mini" @click="prevImg"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="下一张" placement="bottom">
-          <el-button type="primary" icon="el-icon-caret-right" style="font-size: 14px;" size="mini" @click="nextImg"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="标注信息" placement="bottom">
-          <el-button type="primary" icon="el-icon-info" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="给项目评分" placement="bottom">
-          <el-button type="primary" icon="el-icon-star-on" style="font-size: 14px;" size="mini" @click="rateProject"></el-button>
-        </el-tooltip>
-      </el-button-group>
-      <div style="width: 100px;height: 42px; background: #e4e4e4; top:5px;">
-        <span style="font-size: 17px; ">完成/总数 </span>
-        <span style="font-size: 16px; ">{{labeled}}/{{imgList.length}}</span>
-      </div>
-    </div>
-<div id="menubar" style="position: absolute; left: 35%; top:100px ;height:100px" >
+<div id="menubar" style="position: absolute; left: 35%; top:57px ;height:100px" >
   <el-tabs type="border-card" style="width: 500px" v-model="activeName">
     <el-tab-pane class="el-tab-pane" name='1'>
       <span slot="label"><i class="el-icon-info"></i> 图片信息</span>
@@ -44,7 +12,7 @@
         </el-tooltip>
       </el-row>
     </el-tab-pane>
-    <el-tab-pane class="el-tab-pane" name='2'>
+    <el-tab-pane class="el-tab-pane" name='2' :disabled="correctJudge">
       <span slot="label"><i class="el-icon-success"></i> 正确判断</span>
       <span>当前标注结果是否正确？</span>
       <div style="height: 5px"></div>
@@ -72,7 +40,7 @@
           <el-button type="danger" icon="el-icon-refresh" circle @click="reLabelImg"></el-button>
         </el-tooltip>
         <el-tooltip  content="给项目评分" placement="bottom">
-          <el-button type="warning" icon="el-icon-star-on" circle @click="rateProject"></el-button>
+          <el-button type="warning" icon="el-icon-star-on" circle @click="rateProject" :disabled="ratingAccess"></el-button>
         </el-tooltip>
         <el-tooltip  content="下一张" placement="bottom">
           <el-button icon="el-icon-caret-right" circle @click="nextImg"></el-button>
@@ -317,13 +285,24 @@ export default {
       projectRate: null,
       activeName: '1', //选项卡选择哪一张
       acceptMission: null, //存储项目评分，已完成数量等信息
+      autoMission: null, //自动化项目的信息
+      isAutoLabel: '0',
+      correctJudge: false,
+      ratingAccess: true,
 
     }
   },
   created () {
     this.missionType = localStorage.getItem('missionType')
     this.missionID = localStorage.getItem('missionID')
-    this.getAcceptMission()
+    this.isAutoLabel = localStorage.getItem('isAutoLabel')
+    if(this.isAutoLabel){
+      this.getAutoMission()
+    }else{
+      this.getAcceptMission()
+      this.correctJudge = true; //控制一部分组件不可用
+      this.ratingAccess = false;
+    }
     this.downloadSource()
   },
   watch: {
@@ -567,6 +546,7 @@ export default {
           break
         }
         case 'Classification': {
+
           // 下载分类标注选项
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -720,6 +700,7 @@ export default {
     commitImg () {
       this.commitAndStay()
       this.nextImg()
+      this.updateAcceptMission();
     },
     //提交图片但不切换到下一张
     commitAndStay(){
@@ -748,7 +729,7 @@ export default {
 
         xmlhttp1.onreadystatechange = function () {
           if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
-            if (JSON.parse(xmlhttp1.responseText).result == true) {
+            if (JSON.parse(xmlhttp1.responseText) == 'SUCCESS') {
               _this.$notify({
                 title: '提交成功',
                 message: '图片已上传！',
@@ -756,7 +737,18 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
-            } else {
+              _this.labeled++;
+            }
+            else if(JSON.parse(xmlhttp1.responseText) == 'EXIST'){
+              _this.$notify({
+                title: '提交成功',
+                message: '图片已上传！',
+                type: 'success',
+                duration: 2000,
+                position: 'top-left'
+              })
+            }
+            else{
               _this.$notify({
                 title: '提交失败',
                 message: '图片上传失败，请重试！',
@@ -784,8 +776,7 @@ export default {
         console.log(data)
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            if (JSON.parse(xmlhttp.responseText).result == true) {
-              // console.log("commitsucc")
+            if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
               _this.$notify({
                 title: '提交成功',
                 message: '图片已上传！',
@@ -793,8 +784,18 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
-
-            } else {
+              _this.labeled++;
+            }
+            else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
+              _this.$notify({
+                title: '提交成功',
+                message: '图片已上传！',
+                type: 'success',
+                duration: 2000,
+                position: 'top-left'
+              })
+            }
+            else{
               _this.$notify({
                 title: '提交失败',
                 message: '图片上传失败，请重试！',
@@ -823,7 +824,8 @@ export default {
         }
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            if (JSON.parse(xmlhttp.responseText).result == true) {
+            console.log(JSON.parse(xmlhttp.responseText))
+            if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
               _this.$notify({
                 title: '提交成功',
                 message: '图片已上传！',
@@ -831,8 +833,18 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
-
-            } else {
+              _this.labeled++;
+            }
+            else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
+              _this.$notify({
+                title: '提交成功',
+                message: '图片已上传！',
+                type: 'success',
+                duration: 2000,
+                position: 'top-left'
+              })
+            }
+            else{
               _this.$notify({
                 title: '提交失败',
                 message: '图片上传失败，请重试！',
@@ -864,7 +876,7 @@ export default {
         }
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            if (JSON.parse(xmlhttp.responseText).result == true) {
+            if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
               _this.$notify({
                 title: '提交成功',
                 message: '图片已上传！',
@@ -872,8 +884,18 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
-
-            } else {
+              _this.labeled++;
+            }
+            else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
+              _this.$notify({
+                title: '提交成功',
+                message: '图片已上传！',
+                type: 'success',
+                duration: 2000,
+                position: 'top-left'
+              })
+            }
+            else{
               _this.$notify({
                 title: '提交失败',
                 message: '图片上传失败，请重试！',
@@ -1041,6 +1063,7 @@ export default {
     },
     commitRating(){
       this.ratingDialogVisible = false;
+      this.updateAcceptMission();
     },
     getAcceptMission(){
       if(localStorage.getItem('username')!="visitor"){
@@ -1050,7 +1073,10 @@ export default {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var acceptMission = JSON.parse(xmlhttp.responseText)
             _this.acceptMission = acceptMission;
-            console.log(acceptMission);
+            _this.missionType = _this.acceptMission.type;
+            _this.labeled = _this.acceptMission.finished;
+            _this.projectRate = _this.acceptMission.score;
+            _this.missionID = _this.acceptMission.id;
           }
         }
         let formData = new FormData()
@@ -1060,6 +1086,59 @@ export default {
         xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAcceptedMissionByUsernameMissionID', true)
         xmlhttp.send(formData)
       }
+    },
+    getAutoMission(){
+      if(localStorage.getItem('uesrname')!='visitor'){
+        var _this = this;
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var autoMission = JSON.parse(xmlhttp.responseText)
+            _this.AutoMission = autoMission;
+            _this.missionType = _this.acceptMission.type;
+            _this.labeled = _this.acceptMission.finished;
+            _this.missionID = _this.acceptMission.id;
+          }
+        }
+        let formData = new FormData()
+        formData.append('username', localStorage.getItem('username'))
+        formData.append('missionID', localStorage.getItem('missionID'))
+        console.log(localStorage.getItem('missionID'))
+        xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', true)
+        xmlhttp.send(formData)
+      }
+    },
+    updateAcceptMission(){
+      this.acceptMission.score = this.projectRate;
+      this.acceptMission.finished = this.labeled;
+      var _this = this;
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
+            _this.$notify({
+              title: '评分成功',
+              message: '您的评分已上传！',
+              type: 'success',
+              duration: 2000,
+              position: 'top-left'
+            })
+
+          } else {
+            _this.$notify({
+              title: '评分失败',
+              message: '评分上传失败，请重试！',
+              type: 'warning',
+              duration: 2000,
+              position: 'top-left'
+            })
+          }
+        }
+      }
+      xmlhttp.open('POST', 'http://localhost:8080/counts/mission//updateAcceptedMission', true)
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xmlhttp.send(JSON.stringify(this.acceptMission))
+
     },
     handleTabClick(){
       this.activeName = '3' ;//选项卡打开到标注工具栏

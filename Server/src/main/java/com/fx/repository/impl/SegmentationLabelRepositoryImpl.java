@@ -26,15 +26,14 @@ public class SegmentationLabelRepositoryImpl implements SegmentationLabelReposit
     @Override
     public ResultMessage addSegmentationLabel(int missionID, String username, SegmentationLabel segmentationLabel) {
         List<SegmentationLabel> labels = helper.getAllLabels(missionID, username);
-        boolean exist = false;
         for (int i = 0; i < labels.size(); i++) {
             SegmentationLabel s = labels.get(i);
             if (s.getFileName().equals(segmentationLabel.getFileName())){
                 s.setDots(segmentationLabel.getDots());
-                exist = true;
+                helper.printAllLabels(missionID,username,labels);
+                return ResultMessage.EXIST;
             }
         }
-        if (!exist)
             labels.add(segmentationLabel);
         
         helper.printAllLabels(missionID, username, labels);

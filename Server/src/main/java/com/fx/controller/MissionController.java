@@ -278,6 +278,23 @@ public class MissionController {
         return missionService.getAutoMissionByWorkerID(username);
     }
 
+    @RequestMapping(
+            value = "/getAutoMission/signalworker",
+            params = {"username","missionid"},
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public AutoMissionPresentation getAutoMissionBySignalWorkerID(String username,String missionid){
+
+        List<AutoMissionPresentation> lists = missionService.getAutoMissionByWorkerID(username);
+        for(int i=0;i<=lists.size()-1;i++){
+            if(lists.get(i).getId()==Integer.parseInt(missionid)){
+                return lists.get(i);
+            }
+        }
+        return null;
+    }
 
 
     /**
