@@ -262,12 +262,14 @@ public class MissionServiceImpl implements MissionService {
     public ResultMessage addAutoMission(AutoMission autoMission) {
         ResultMessage message = autoMissionRepository.addAutoMission(autoMission);
         int id = autoMission.getId();
+
         int numOfpicture = autoMission.getSize();
         int extraUser = numOfpicture/100;
 
         int numOfUser = 2+extraUser;
 
         List<User> users =  userRepository.findUserByType("Worker");
+
 
 //
 //        users = quickSort(users,0,users.size());
@@ -281,7 +283,9 @@ public class MissionServiceImpl implements MissionService {
 //            AutoUserMission mid = new AutoUserMission();
 //            mid.setFinishTest(false);
 //            mid.setFinishTrain(false);
+
 //            mid.setMissionId(String.valueOf(autoMission.getId()));
+
 //            mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
 //            mid.setTrainEnd((numOfpicture*(i+1))/(2*numOfUser)  -1);
 //            mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
@@ -319,7 +323,7 @@ public class MissionServiceImpl implements MissionService {
         return autoMissionRepository.findAutoMissionByID(id);
     }
 
-    private void mkdirsForAutoCaption(int id) {
+    public void mkdirsForAutoCaption(int id) {
         String dirname = "../data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
@@ -327,7 +331,7 @@ public class MissionServiceImpl implements MissionService {
 
     }
 
-    private void mkdirsForAutoDetection(int id) {
+    public void mkdirsForAutoDetection(int id) {
         String dirname = "../data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
@@ -340,7 +344,7 @@ public class MissionServiceImpl implements MissionService {
         imagesTest.mkdir();
         File imagesTrain = new File(dirname + "/images/train");
         imagesTrain.mkdir();
-        File training = new File(dirname + "training");
+        File training = new File(dirname + "/training");
         training.mkdir();
     }
 
@@ -356,7 +360,7 @@ public class MissionServiceImpl implements MissionService {
        return null;
     }
 
-    private void mkdirsForAutoClassification(int id, List<String> types) {
+    public void mkdirsForAutoClassification(int id, List<String> types) {
         String dirname = "../data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
@@ -378,7 +382,7 @@ public class MissionServiceImpl implements MissionService {
             File trainImageDir = new File(trainImage);
             if (!trainImageDir.exists())
                 trainImageDir.mkdir();
-            File labels_dir = new File(dirname + "image_labels_dir");
+            File labels_dir = new File(dirname + "/image_labels_dir");
             if (!labels_dir.exists())
                 labels_dir.mkdir();
             File autoMission = new File(dirname + "/autoMission.txt");
