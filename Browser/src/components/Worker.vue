@@ -1,38 +1,6 @@
 <template>
   <el-container>
-    <div id="toolbox" style="border-radius: 6px; background: #409eff; width: 525px;height: 42px; position: absolute; left:35%; top:57px">
-      <el-button-group style="padding: 1px; position: absolute; top:-10px; left: 160px;">
-        <el-tooltip class="item" effect="dark" content="添加标注信息" placement="bottom">
-          <el-button type="primary" icon="el-icon-edit" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="重新标注当前图片" placement="bottom-end">
-          <el-button type="primary" icon="el-icon-ali-xiangpica" style="font-size: 14px;" size="mini" @click="reLabelImg"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="保存图片并提交" placement="bottom">
-          <el-button type="primary" icon="el-icon-upload" style="font-size: 14px;" size="mini" @click="commitImg" ></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="加载任务数据" placement="bottom-start">
-          <el-button type="primary" icon="el-icon-download" size="mini" style="font-size: 14px;" @click="downloadSource" ></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="上一张" placement="bottom-start">
-          <el-button type="primary" icon="el-icon-caret-left" style="font-size: 14px;" size="mini" @click="prevImg"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="下一张" placement="bottom">
-          <el-button type="primary" icon="el-icon-caret-right" style="font-size: 14px;" size="mini" @click="nextImg"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="标注信息" placement="bottom">
-          <el-button type="primary" icon="el-icon-info" style="font-size: 14px;" size="mini" @click="selectDialog"></el-button>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="给项目评分" placement="bottom">
-          <el-button type="primary" icon="el-icon-star-on" style="font-size: 14px;" size="mini" @click="rateProject"></el-button>
-        </el-tooltip>
-      </el-button-group>
-      <div style="width: 100px;height: 42px; background: #e4e4e4; top:5px;">
-        <span style="font-size: 17px; ">完成/总数 </span>
-        <span style="font-size: 16px; ">{{labeled}}/{{imgList.length}}</span>
-      </div>
-    </div>
-<div id="menubar" style="position: absolute; left: 35%; top:100px ;height:100px" >
+<div id="menubar" style="position: absolute; left: 35%; top:57px ;height:100px" >
   <el-tabs type="border-card" style="width: 500px" v-model="activeName">
     <el-tab-pane class="el-tab-pane" name='1'>
       <span slot="label"><i class="el-icon-info"></i> 图片信息</span>
@@ -72,7 +40,7 @@
           <el-button type="danger" icon="el-icon-refresh" circle @click="reLabelImg"></el-button>
         </el-tooltip>
         <el-tooltip  content="给项目评分" placement="bottom">
-          <el-button type="warning" icon="el-icon-star-on" circle @click="rateProject" :disabled="correctJudge"></el-button>
+          <el-button type="warning" icon="el-icon-star-on" circle @click="rateProject" :disabled="ratingAccess"></el-button>
         </el-tooltip>
         <el-tooltip  content="下一张" placement="bottom">
           <el-button icon="el-icon-caret-right" circle @click="nextImg"></el-button>
@@ -320,6 +288,7 @@ export default {
       autoMission: null, //自动化项目的信息
       isAutoLabel: '0',
       correctJudge: false,
+      ratingAccess: true,
 
     }
   },
@@ -332,6 +301,7 @@ export default {
     }else{
       this.getAcceptMission()
       this.correctJudge = true; //控制一部分组件不可用
+      this.ratingAccess = false;
     }
     this.downloadSource()
   },
