@@ -50,8 +50,8 @@ public interface ImageService {
     public List<MissionCompletion> degreeOfCompletion( String userid);
 
 
-    public List<Image> getTargetUserTrainImages(String missionid,String username);
+    public List<Image> getTargetUserTrainImages(int missionid, String username);
 
-    public List<Image> getTargetUserCheckImages(String missionid,String username);
+    public List<Image> getTargetUserCheckImages(int missionid, String username);
 
 }
