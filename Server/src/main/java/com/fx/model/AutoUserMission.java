@@ -4,7 +4,7 @@ package com.fx.model;
  * Created by thinkpad on 2018/6/12.
  */
 public class AutoUserMission {
-    private String missionId;
+    private int missionId;
     private int trainStart;
     private int trainEnd;
     private int testStart;
@@ -12,11 +12,11 @@ public class AutoUserMission {
     private boolean finishTrain;
     private boolean finishTest;
 
-    public String getMissionId() {
+    public int getMissionId() {
         return missionId;
     }
 
-    public void setMissionId(String missionId) {
+    public void setMissionId(int missionId) {
         this.missionId = missionId;
     }
 

@@ -185,11 +185,11 @@ public class ImageServiceImpl implements ImageService{
     }
 
 
-    public List<Image> getTargetUserTrainImages(String missionid,String username){
+    public List<Image> getTargetUserTrainImages(int missionid, String username){
         List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
 
         for(int i=0;i<=missions.size()-1;i++){
-            if(missions.get(i).getMissionId().equals(missionid)){
+            if(missions.get(i).getMissionId() == missionid){
                 AutoUserMission mid = missions.get(i);
                         return getAutoImage(mid.getMissionId(),username,mid.getTrainStart(),mid.getTrainEnd());
             }
@@ -198,11 +198,11 @@ public class ImageServiceImpl implements ImageService{
         return null;
     }
 
-    public List<Image> getTargetUserCheckImages(String missionid,String username){
+    public List<Image> getTargetUserCheckImages(int missionid, String username){
         List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
 
         for(int i=0;i<=missions.size()-1;i++){
-            if(missions.get(i).getMissionId().equals(missionid)){
+            if(missions.get(i).getMissionId()==(missionid)){
                 AutoUserMission mid = missions.get(i);
                 return getAutoImage(mid.getMissionId(),username,mid.getTestStart(),mid.getTestEnd());
             }
@@ -219,7 +219,7 @@ public class ImageServiceImpl implements ImageService{
      * @param end
      * @return
      */
-    public List<Image> getAutoImage(String missionid,String username,int start,int end){
+    public List<Image> getAutoImage(int missionid, String username, int start, int end){
 
 
 
