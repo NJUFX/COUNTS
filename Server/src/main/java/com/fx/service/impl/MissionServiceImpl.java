@@ -338,7 +338,7 @@ public class MissionServiceImpl implements MissionService {
         imagesTest.mkdir();
         File imagesTrain = new File(dirname + "/images/train");
         imagesTrain.mkdir();
-        File training = new File(dirname + "training");
+        File training = new File(dirname + "/training");
         training.mkdir();
     }
 
