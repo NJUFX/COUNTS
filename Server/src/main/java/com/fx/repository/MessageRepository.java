@@ -11,11 +11,11 @@ import java.util.List;
  */
 public interface MessageRepository {
 
-    public ResultMessage addMessage(Message message);
+    public ResultMessage addMessage(String username, Message message);
 
-    public ResultMessage addMessages(List<Message> messages);
+    public ResultMessage addMessages(String username, List<Message> messages);
 
-    public ResultMessage updateMessage(int messageID);
+    public ResultMessage updateMessage(String username,int messageID);
 
     public List<Message> findMessageByUsername(String username);
 

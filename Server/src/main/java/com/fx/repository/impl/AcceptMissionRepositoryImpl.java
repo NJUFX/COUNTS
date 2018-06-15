@@ -35,7 +35,7 @@ public class AcceptMissionRepositoryImpl implements AcceptMissionRepository {
                 return ResultMessage.EXIST;
         }
         missions.add(acceptedMission);
-        write(missions,username);
+        write(missions, username);
         return ResultMessage.SUCCESS;
     }
 
@@ -46,15 +46,20 @@ public class AcceptMissionRepositoryImpl implements AcceptMissionRepository {
         List<AcceptedMission> missions = findAcceptMissionByUsername(username);
         System.out.println(acceptedMission.getId());
         for (int i = 0; i < missions.size(); i++) {
+<<<<<<< HEAD
             if (missions.get(i).getId() == id)
             {
                 missions.set(i,acceptedMission);
                 write(missions,username);
                 System.out.println("finished: " + acceptedMission.getFinished());
+=======
+            if (missions.get(i).getId() == id) {
+                missions.set(i, acceptedMission);
+                write(missions, username);
+>>>>>>> 545ff5650f42139a521481934ac3f7f7da295734
                 return ResultMessage.SUCCESS;
             }
         }
-
         return ResultMessage.NOT_EXIST;
     }
 
@@ -64,12 +69,15 @@ public class AcceptMissionRepositoryImpl implements AcceptMissionRepository {
         ArrayList<AcceptedMission> missions = new ArrayList<>();
         File file = new File(filename);
         try {
+            if (!file.exists())
+                file.createNewFile();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String s = scanner.nextLine();
                 AcceptedMission acceptedMission = gson.fromJson(s, AcceptedMission.class);
                 missions.add(acceptedMission);
             }
+            scanner.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
