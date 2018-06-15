@@ -12,15 +12,6 @@
         </el-tooltip>
       </el-row>
     </el-tab-pane>
-    <el-tab-pane class="el-tab-pane" name='2' :disabled="correctJudge">
-      <span slot="label"><i class="el-icon-success"></i> 正确判断</span>
-      <span>当前标注结果是否正确？</span>
-      <div style="height: 5px"></div>
-      <el-row>
-        <el-button type="success" icon="el-icon-check" size="small" @click="nextImg">正确，下一张</el-button>
-        <el-button type="info" icon="el-icon-close" size="small" @click="handleTabClick">有问题，重新标注</el-button>
-      </el-row>
-    </el-tab-pane>
     <el-tab-pane class="el-tab-pane" name='3'>
       <span slot="label"><i class="el-icon-edit-outline"></i> 标注工具</span>
       <el-row>
@@ -40,7 +31,7 @@
           <el-button type="danger" icon="el-icon-refresh" circle @click="reLabelImg"></el-button>
         </el-tooltip>
         <el-tooltip  content="给项目评分" placement="bottom">
-          <el-button type="warning" icon="el-icon-star-on" circle @click="rateProject" :disabled="ratingAccess"></el-button>
+          <el-button type="warning" icon="el-icon-star-on" circle @click="rateProject" ></el-button>
         </el-tooltip>
         <el-tooltip  content="下一张" placement="bottom">
           <el-button icon="el-icon-caret-right" circle @click="nextImg"></el-button>
@@ -287,8 +278,8 @@ export default {
       acceptMission: null, //存储项目评分，已完成数量等信息
       autoMission: null, //自动化项目的信息
       isAutoLabel: '0',
-      correctJudge: false,
-      ratingAccess: true,
+      //correctJudge: false,
+      //ratingAccess: true,
 
     }
   },
@@ -296,13 +287,7 @@ export default {
     this.missionType = localStorage.getItem('missionType')
     this.missionID = localStorage.getItem('missionID')
     this.isAutoLabel = localStorage.getItem('isAutoLabel')
-    if(this.isAutoLabel==1){
-      this.getAutoMission()
-    }else{
-      this.getAcceptMission()
-      this.correctJudge = true; //控制正确判断不可用
-      this.ratingAccess = false; //控制评分可用
-    }
+    this.getAcceptMission()
     this.downloadSource()
   },
   watch: {
@@ -521,7 +506,7 @@ export default {
         let formData3 = new FormData()
         formData3.append('missionid', localStorage.getItem('missionID'))
         console.log(localStorage.getItem('missionID'))
-        xmlhttp1.open('POST', 'http://localhost:8080/counts/image/originmission', true)
+        xmlhttp1.open('POST', 'http://localhost:8080/counts/image/originmission', false)
         xmlhttp1.send(formData3)
       }
       // 判断任务类型下载任务数据
@@ -572,8 +557,22 @@ export default {
           xmlhttp0.onreadystatechange = function () {
             if (xmlhttp0.readyState == 4 && xmlhttp0.status == 200) {
               // 加入下载结果
-              _this.classificationInfoList = JSON.parse(xmlhttp0.responseText)
-              //console.log('999' + JSON.stringify(_this.classificationInfoList))
+              var classificationResult = JSON.parse(xmlhttp0.responseText)
+              console.log(classificationResult)
+              console.log(_this.imgList.length)
+              for(var i=0;i<_this.imgList.length;i++){
+                _this.classificationInfoList.push({
+                  fileName: _this.imgList[i].filename,
+                  select: 0
+                })
+                for(var j=0;j<classificationResult.length;j++){
+                  if(_this.classificationInfoList[i].fileName==classificationResult[j].fileName){
+                    _this.classificationInfoList[i].select = classificationResult[j].select
+                  }
+                }
+              }
+              //_this.classificationInfoList = JSON.parse(xmlhttp0.responseText)
+              //console.log('999' + _this.classificationInfoList)
               _this.setCurrentImgClassificationValue()
             }
           }
@@ -607,26 +606,23 @@ export default {
               result = JSON.parse(xmlhttp0.responseText)
               console.log(result)
               // 把结果加入infoList
-              for (var i = 0; i < result.length; i++) {
+              for (var i = 0; i < _this.imgList.length; i++) {
                 // console.log("00000")
-                var filename = result[i].fileName
+                var filename = _this.imgList[i].filename
                 var info = []
-                for (var j = 0; j < selects.length; j++) {
-                  if (result[i].attributes != null) {
-                    info.push({
-                      attributeValue: selects[j],
-                      label: result[i].attributes[j]
-                    })
-                  } else {
-                    // console.log("123456")
-                    info.push({
-                      attributeValue: selects[j],
-                      label: ''
-                    })
-                  }
-                  // console.log(info);
+                for(var j=0;j<selects.length;j++){
+                  info.push({
+                    attributeValue: selects[j],
+                    label: ''
+                  })
                 }
-
+                for(var k = 0; k < result.length;k++){
+                  if(result[k].fileName==filename) {
+                    for (var j = 0; j < selects.length; j++) {
+                      info[j].label = result[k].attributes[j]
+                    }
+                  }
+                }
                 _this.attributeInfoList.push({
                   fileName: filename,
                   info: info
@@ -660,6 +656,7 @@ export default {
       }
     },
     setCurrentImgClassificationValue () {
+
       var _this = this
       for (var i = 0; i < _this.classificationInfoList.length; i++) {
         if (_this.classificationInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
@@ -699,8 +696,10 @@ export default {
     // 提交图片
     commitImg () {
       this.commitAndStay()
+      console.log(this.labeled)
+      this.updateLabeled(this.labeled);
       this.nextImg()
-      this.updateAcceptMission();
+
     },
     //提交图片但不切换到下一张
     commitAndStay(){
@@ -729,6 +728,7 @@ export default {
 
         xmlhttp1.onreadystatechange = function () {
           if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+            console.log(JSON.parse(xmlhttp1.responseText))
             if (JSON.parse(xmlhttp1.responseText) == 'SUCCESS') {
               _this.$notify({
                 title: '提交成功',
@@ -759,7 +759,7 @@ export default {
             }
           }
         }
-        xmlhttp1.open('POST', 'http://localhost:8080/counts/label/savecanvas', true)
+        xmlhttp1.open('POST', 'http://localhost:8080/counts/label/savecanvas', false)
         xmlhttp1.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         xmlhttp1.send(JSON.stringify(data))
       }
@@ -806,7 +806,7 @@ export default {
             }
           }
         }
-        xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/captionlabel', true)
+        xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/captionlabel', false)
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         xmlhttp.send(JSON.stringify(data))
       }
@@ -834,6 +834,7 @@ export default {
                 position: 'top-left'
               })
               _this.labeled++;
+              console.log(_this.labeled)
             }
             else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
               _this.$notify({
@@ -843,6 +844,7 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
+              console.log(_this.labeled)
             }
             else{
               _this.$notify({
@@ -855,7 +857,7 @@ export default {
             }
           }
         }
-        xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/classificationlabel', true)
+        xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/classificationlabel', false)
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         xmlhttp.send(JSON.stringify(data))
       }
@@ -876,7 +878,9 @@ export default {
         }
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log(JSON.parse(xmlhttp.responseText))
             if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
+              _this.labeled++;
               _this.$notify({
                 title: '提交成功',
                 message: '图片已上传！',
@@ -884,7 +888,6 @@ export default {
                 duration: 2000,
                 position: 'top-left'
               })
-              _this.labeled++;
             }
             else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
               _this.$notify({
@@ -906,7 +909,7 @@ export default {
             }
           }
         }
-        xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/attributelabel', true)
+        xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/attributelabel', false)
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         xmlhttp.send(JSON.stringify(data))
       }
@@ -1063,54 +1066,7 @@ export default {
     },
     commitRating(){
       this.ratingDialogVisible = false;
-      this.updateAcceptMission();
-    },
-    getAcceptMission(){
-      if(localStorage.getItem('username')!="visitor"){
-        var _this = this;
-        var xmlhttp = new XMLHttpRequest()
-        xmlhttp.onreadystatechange = function () {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            var acceptMission = JSON.parse(xmlhttp.responseText)
-            _this.acceptMission = acceptMission;
-            _this.missionType = _this.acceptMission.type;
-            _this.labeled = _this.acceptMission.finished;
-            _this.projectRate = _this.acceptMission.score;
-            _this.missionID = _this.acceptMission.id;
-          }
-        }
-        let formData = new FormData()
-        formData.append('username', localStorage.getItem('username'))
-        formData.append('missionID', localStorage.getItem('missionID'))
-        console.log(localStorage.getItem('missionID'))
-        xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAcceptedMissionByUsernameMissionID', true)
-        xmlhttp.send(formData)
-      }
-    },
-    getAutoMission(){
-      if(localStorage.getItem('uesrname')!='visitor'){
-        var _this = this;
-        var xmlhttp = new XMLHttpRequest()
-        xmlhttp.onreadystatechange = function () {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            var autoMission = JSON.parse(xmlhttp.responseText)
-            _this.AutoMission = autoMission;
-            _this.missionType = _this.acceptMission.type;
-            _this.labeled = _this.acceptMission.finished;
-            _this.missionID = _this.acceptMission.id;
-          }
-        }
-        let formData = new FormData()
-        formData.append('username', localStorage.getItem('username'))
-        formData.append('missionid', localStorage.getItem('missionID'))
-        console.log(localStorage.getItem('missionID'))
-        xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', true)
-        xmlhttp.send(formData)
-      }
-    },
-    updateAcceptMission(){
       this.acceptMission.score = this.projectRate;
-      this.acceptMission.finished = this.labeled;
       var _this = this;
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function () {
@@ -1138,11 +1094,52 @@ export default {
       xmlhttp.open('POST', 'http://localhost:8080/counts/mission//updateAcceptedMission', true)
       xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
       xmlhttp.send(JSON.stringify(this.acceptMission))
+    },
+    getAcceptMission(){
+      if(localStorage.getItem('username')!="visitor"){
+        var _this = this;
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var acceptMission = JSON.parse(xmlhttp.responseText)
+            _this.acceptMission = acceptMission;
+            _this.missionType = _this.acceptMission.type;
+            _this.labeled = _this.acceptMission.finished;
+            //console.log(acceptMission.id)
+            //console.log(_this.labeled)
+            _this.projectRate = _this.acceptMission.score;
+            _this.missionID = _this.acceptMission.id;
+          }
+        }
+        let formData = new FormData()
+        formData.append('username', localStorage.getItem('username'))
+        formData.append('missionID', localStorage.getItem('missionID'))
+        console.log(localStorage.getItem('missionID'))
+        xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAcceptedMissionByUsernameMissionID', true)
+        xmlhttp.send(formData)
+      }
+    },
+    updateLabeled(labeled){
+      console.log("labeled")
+      var _this = this;
+      _this.acceptMission.finished = labeled;
+      //console.log(this.labeled)
+      console.log(_this.acceptMission.finished)
+      var _this = this;
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
+            console.log("labeled更新成功")
+          }
+        }
+      }
+      xmlhttp.open('POST', 'http://localhost:8080/counts/mission//updateAcceptedMission', true)
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xmlhttp.send(JSON.stringify(_this.acceptMission))
 
     },
-    handleTabClick(){
-      this.activeName = '3' ;//选项卡打开到标注工具栏
-    },
+
 
   }
 }
