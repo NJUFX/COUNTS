@@ -16,20 +16,22 @@ import java.util.Scanner;
  * Created by Hanxinhu at 15:11 2018/6/10/010
  */
 public class MessageRepositoryImpl implements MessageRepository {
-    private static final  String dirname = "../data/message";
+    private static final String dirname = "../data/message";
 
     Gson gson = new Gson();
-    public MessageRepositoryImpl(){
+
+    public MessageRepositoryImpl() {
         File file = new File(dirname);
-      try {
-          if (file.exists())
-              file.mkdir();
-      }catch (Exception e){
-          e.printStackTrace();
-      }
+        try {
+            if (file.exists())
+                file.mkdir();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
     @Override
-    public ResultMessage addMessage( String username, Message message){
+    public ResultMessage addMessage(String username, Message message) {
         int maxID = 0;
         List<Message> messages = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
@@ -38,7 +40,7 @@ public class MessageRepositoryImpl implements MessageRepository {
         }
         message.setId(maxID);
         messages.add(message);
-        writeAll(username,messages);
+        writeAll(username, messages);
         return ResultMessage.SUCCESS;
     }
 
@@ -55,19 +57,18 @@ public class MessageRepositoryImpl implements MessageRepository {
             messages.get(i).setId(maxID++);
         }
         oldMessages.addAll(messages);
-        writeAll(username,oldMessages);
+        writeAll(username, oldMessages);
         return ResultMessage.SUCCESS;
     }
 
     @Override
-    public ResultMessage updateMessage(String username,int messageID) {
+    public ResultMessage updateMessage(String username, int messageID) {
         List<Message> messages = findMessageByUsername(username);
         for (int i = 0; i < messages.size(); i++) {
             Message message = messages.get(i);
-            if (message.getId() == messageID)
-            {
+            if (message.getId() == messageID) {
                 message.setRead(true);
-                writeAll(username,messages);
+                writeAll(username, messages);
                 return ResultMessage.SUCCESS;
             }
         }
@@ -93,20 +94,22 @@ public class MessageRepositoryImpl implements MessageRepository {
         }
         return messages;
     }
-    public void writeAll(String username,List<Message> messages){
-        String  filename = getFilename(username);
+
+    public void writeAll(String username, List<Message> messages) {
+        String filename = getFilename(username);
         File file = new File(filename);
-        try{
+        try {
             PrintWriter pw = new PrintWriter(file);
-           for (Message i : messages){
-               pw.println(gson.toJson(i));
-           }
-           pw.close();
-        }catch (Exception e){
+            for (Message i : messages) {
+                pw.println(gson.toJson(i));
+            }
+            pw.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public String getFilename(String username){
+
+    public String getFilename(String username) {
         return dirname + "/" + username + ".txt";
     }
 }

@@ -40,9 +40,9 @@ public class Message {
      * @param type      标注类型
      */
     public Message(String username, int missionID, String type) {
-        setContent(username,missionID,type);
+        setContent(username, missionID, type);
         this.title = "您有新的任务！";
-        this.isRead  = false;
+        this.isRead = false;
     }
 
     private void setContent(String username, int missionID, String type) {

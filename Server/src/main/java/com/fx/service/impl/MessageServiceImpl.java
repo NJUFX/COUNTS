@@ -16,6 +16,7 @@ import java.util.List;
 @Service
 public class MessageServiceImpl implements MessageService {
     MessageRepository messageRepository = new MessageRepositoryImpl();
+
     /**
      * 添加单条信息
      *
@@ -29,7 +30,6 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * 添加多条信息
-     *
      *
      * @param username
      * @param messages
@@ -54,13 +54,12 @@ public class MessageServiceImpl implements MessageService {
     /**
      * 更新已读未读
      *
-     *
      * @param username
      * @param id
      * @return
      */
     @Override
     public ResultMessage updateMessage(String username, int id) {
-        return messageRepository.updateMessage(username,id);
+        return messageRepository.updateMessage(username, id);
     }
 }
