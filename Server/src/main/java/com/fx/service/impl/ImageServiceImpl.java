@@ -215,6 +215,25 @@ public class ImageServiceImpl implements ImageService{
         return null;
     }
 
+    public String getFirstAutoImages(int missionid, String username){
+        List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+
+        for(int i=0;i<=missions.size()-1;i++){
+            if(missions.get(i).getMissionId()==(missionid)){
+                AutoUserMission mid = missions.get(i);
+                if(missions.get(i).isFinishTrain()) {
+                    return getAutoImage(mid.getMissionId(), username, mid.getTestStart(), mid.getTestEnd()).get(0).getBase64();
+                }
+                else{
+                    return getAutoImage(mid.getMissionId(), username, mid.getTrainStart(), mid.getTrainEnd()).get(0).getBase64();
+                }
+            }
+
+        }
+        return null;
+
+    }
+
     /**
      * 如果需要获得一张图片直接就start=end就行
      * @param missionid
@@ -294,4 +313,6 @@ public class ImageServiceImpl implements ImageService{
         }
         return result;
     }
+
+
 }

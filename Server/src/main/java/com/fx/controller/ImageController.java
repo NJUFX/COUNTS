@@ -288,6 +288,17 @@ public class ImageController {
         return imageService.getTargetUserCheckImages(missionid, username);
     }
 
+    @RequestMapping(
+            value = "/get/firstautoimage",
+
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public String getFirstAutoImages(int missionid, String username) {
+        return imageService.getFirstAutoImages(missionid, username);
+    }
+
 
 }
 
