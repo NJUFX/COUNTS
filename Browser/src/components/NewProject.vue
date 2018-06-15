@@ -271,29 +271,32 @@
           {
             value: 'Caption',
             label: '整体标注',
-            info: '描述整张图片里的内容'
+            info: '描述整张图片里的内容',
+       //     disabled:false
           },
           {
             value: 'Detection',
             label: '方框描述',
             info: '把图片中指定类型的元素用矩形标注出来',
+      //      disabled:false
           },
           {
             value: 'Segmentation',
             label: '区域标注',
             info: '描画图片中指定类型的元素的轮廓',
-            disabled:false
+            disabled:true,
           },
           {
             value: 'Classification',
             label: '图像分类',
-            info: '对图片进行分类'
+            info: '对图片进行分类',
+        //    disabled:false
           },
           {
             value: 'Attribute',
             label: '属性描述',
             info: ' 标注图片中出现元素的属性',
-            disabled:false
+            disabled:true
           }
         ],
         value: ''
