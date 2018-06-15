@@ -100,7 +100,9 @@
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             if (JSON.parse(xmlhttp.responseText) != null) {
+
               var arrays = JSON.parse(xmlhttp.responseText)
+              console.log('message'+arrays)
               for(var i=0;i<arrays.length;i++){
                 if(arrays[i].isRead=false){
                   _this.unreadInfoNumber++;

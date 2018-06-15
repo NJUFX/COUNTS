@@ -220,24 +220,32 @@ public class ImageServiceImpl implements ImageService{
     }
 
     public String getFirstAutoImages(int missionid, String username){
+
+
+
         List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
 
         User user = userRepository.findUserByUsername(username);
 
 
+        if(user.getRole().equals("Requestor")){
+
+            return getAutoImage(missionid, username,0,0).get(0).getBase64();
+        }
+
         for(int i=0;i<=missions.size()-1;i++){
             if(missions.get(i).getMissionId()==(missionid)){
                 AutoUserMission mid = missions.get(i);
-                if(user.getRole().equals("Requestor")){
-                    return getAutoImage(mid.getMissionId(), username,0,0).get(0).getBase64();
-                }
-                else {
+
+
+
+
                     if (missions.get(i).isFinishTrain()) {
                         return getAutoImage(mid.getMissionId(), username, mid.getTestStart(), mid.getTestEnd()).get(0).getBase64();
                     } else {
                         return getAutoImage(mid.getMissionId(), username, mid.getTrainStart(), mid.getTrainEnd()).get(0).getBase64();
                     }
-                }
+
             }
 
         }
@@ -268,12 +276,14 @@ public class ImageServiceImpl implements ImageService{
         }
         else if(autoMission.getType().equals("Caption")){
 
-            path = path+"images";
+            path = path+"allimage";
         }
         else{
 
             path = path + "allimage";
         }
+
+        System.out.println(path);
 
         /**
          * 根据不同类型为path赋值

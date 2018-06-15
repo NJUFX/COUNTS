@@ -88,25 +88,20 @@ public class LabelController {
             value = "/savecanvas",
             method = RequestMethod.POST
     )
-    public OptMessage SaveCanvas(@RequestBody LocalLabel localLabel){
+    public ResultMessage SaveCanvas(@RequestBody LocalLabel localLabel){
         //  @RequestParam(value = "username") String userID,@RequestParam(value = "location") String location, @RequestParam(value = "imgstr") String imgStr
         //   userID 用户id
         // 图片位置 ,格式为:"任务名/图片名.jpg"
         // imgStr base64String
 
        // System.out.println("123");
-        OptMessage result = new OptMessage(false);
 
-        labelService.addOne(Integer.parseInt(localLabel.getMissionID()),localLabel.getUserName(),localLabel.getFileName());
+
         ResultMessage resultMessage = labelService.SaveCanvas(localLabel);
 
-        if(resultMessage==ResultMessage.SUCCESS){
-            result.setResult(true);
-        }
 
-        result.setMessage(resultMessage.toString());
 
-        return result;
+        return resultMessage;
 
     }
 
@@ -178,7 +173,7 @@ public class LabelController {
         //System.out.println(missionid + " ))"+userName);
         File f = new File(LabelServiceImpl.canvasdir+userName+"/"+missionid);
 
-        File imgpar = new File("data/image/"+missionid);
+        File imgpar = new File("../data/image/"+missionid);
         File[] imglist = imgpar.listFiles();
 
         //将未保存在canvas的imgae保存在canvas
@@ -257,7 +252,7 @@ public class LabelController {
                 String gp = pic.getParentFile().getParentFile().getName();
                 //没设置表头
 
-            File ori = new File("data/image/"+missionid);
+            File ori = new File("../data/image/"+missionid);
             File[] orilist = ori.listFiles();
             String type="";
             for(int j=0;j<=orilist.length-1;j++){

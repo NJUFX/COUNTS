@@ -296,6 +296,7 @@ public class ImageController {
     )
     @ResponseBody
     public String getFirstAutoImages(int missionid, String username) {
+
         return imageService.getFirstAutoImages(missionid, username);
     }
 

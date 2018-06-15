@@ -807,7 +807,7 @@ export default {
       var str = '' + missionid
       formData.append('missionid', str)
       formData.append('username',localStorage.getItem('username'))
-      var path = localStorage.getItem('server')+'/counts/mission/get/firstautoimage'
+      var path = localStorage.getItem('server')+'/counts/image/get/firstautoimage'
       xmlhttp.open('POST',path, true)
       xmlhttp.send(formData)
     },

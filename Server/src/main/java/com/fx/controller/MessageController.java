@@ -24,7 +24,7 @@ public class MessageController {
     MessageService messageService;
 
     @RequestMapping(
-            value = "getMessage",
+            value = "/getMessage",
             method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"}
 
@@ -42,13 +42,14 @@ public class MessageController {
      * @return
      */
     @RequestMapping(
-            value = "updateMessage",
+            value = "/updateMessage",
             method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"}
 
     )
     @ResponseBody
     public ResultMessage updateMessage(String username, int id) {
+        
         return messageService.updateMessage(username, id);
     }
 }

@@ -7,7 +7,7 @@ public class AutoMissionPresentation {
 
     private int id;
 
-    private String missinName;
+    private String missionName;
     //train 和check两种表示这个任务的两种状态
     private String status;
 
@@ -69,11 +69,11 @@ public class AutoMissionPresentation {
         this.content = content;
     }
 
-    public String getMissinName() {
-        return missinName;
+    public String getMissionName() {
+        return missionName;
     }
 
-    public void setMissinName(String missinName) {
-        this.missinName = missinName;
+    public void setMissionName(String missionName) {
+        this.missionName = missionName;
     }
 }

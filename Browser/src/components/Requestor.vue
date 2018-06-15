@@ -36,7 +36,7 @@
         </el-menu>
       </div>
     </div>
-    <div v-show="project_show" style="position: absolute; top: 400px;width: 100%; left: 0; top: 418px;">
+    <div v-show="project_show" style="position: absolute; top: 400px;width: 100%; left: 0; top: 418px;background-color:white">
       <div style="position: absolute; top: 0px;width: 1100px; left: 50%; margin-left: -550px; background-color: white;">
         <div style="position: absolute;top: 0;left: 0; width: 100%; height: 250px; background-color: white"></div>
         <div>
@@ -48,7 +48,7 @@
           </el-cascader>
         </div>
         <div style="position: absolute; top: 50px; left: 0px; padding-left: 20px; background-color:white">
-          <div v-for="item in projectInfo" style="float: left" :key="item">
+          <div v-for="item in projectInfo" style="float: left;background-color:white" :key="item">
             <el-card v-show="item.show" class="el_card" :body-style="{padding:'0px'}">
               <el-tag v-show="item.isContinue" style="position: absolute; left: 20px; top: 10px; color:white; width: 70px " color="#4CAF50">进行中...</el-tag>
               <el-tag v-show="item.isEnd" style="position: absolute; left: 20px; top: 10px; color:white;width: 60px " color="#E97506">已截止</el-tag>
@@ -66,7 +66,7 @@
               </div>
             </el-card>
           </div>
-          <div v-for="item in autoProjects" style="float: left" :key="item">
+          <div v-for="item in autoProjects" style="float: left;background-color:white" :key="item">
             <el-card v-show="item.show" class="el_card" :body-style="{padding:'0px'}">
               <img v-bind:src="item.cover" class="image" v-bind:id="item.missionname">
               <div style="height: 130px;position:absolute; top: 150px; width: 97%; left: 1.5%; background-color: white">
@@ -507,9 +507,11 @@
             _this.myData.finished += fin
             _this.myData.unfinished += unfin
 
+            console.log('this is auto projects.');
             for(var i=0;i<_this.autoProjects.length;i++){
-              if(_this.autoProjects[i].avatar='')
-                _this.getCoverImg(_this.autoProjects[i].id, i);
+              if(_this.autoProjects[i].cover='')
+                console.log('here')
+                _this.getAutoFirstImage(_this.autoProjects[i].id, i);
             }
             _this.drawPieCharts()
             _this.drawRadarCharts()
@@ -547,7 +549,25 @@
           }
         }
       },
+      getAutoFirstImage(missionid,i){
+        var cover = ''
+        var _this = this
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            cover = xmlhttp.responseText
+            _this.autoProjects[i].cover = cover
+          }
+        }
 
+        let formData = new FormData()
+        var str = '' + missionid
+        formData.append('missionid', str)
+        formData.append('username',localStorage.getItem('username'))
+        var path = localStorage.getItem('server')+'/counts/image/get/firstautoimage'
+        xmlhttp.open('POST',path, true)
+        xmlhttp.send(formData)
+      },
       goProjectDetails(id) {
         for(var i=0;i<this.projectInfo.length;i++){
           if(this.projectInfo[i].id == id){
