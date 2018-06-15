@@ -992,6 +992,11 @@ export default {
     openProject (item) {
       localStorage.setItem('missionType', item.type)
       localStorage.setItem('missionID', item.id)
+      if(item.annotationType==1){
+        localStorage.setItem('isAutoLabel', '1')
+      }else{
+        localStorage.setItem('isAutoLabel', '0')
+      }
       var path = '/' + localStorage.getItem('username')
       this.$router.push({path: path + '/worker'})
       window.location.reload()
