@@ -288,9 +288,8 @@ public class MissionServiceImpl implements MissionService {
             mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
             mid.setTestEnd((numOfpicture*(numOfUser+i+1))/(2*numOfUser)-1);
 
-            System.out.println(numOfpicture);
-            System.out.println(mid.getTestEnd());
-            System.out.println(mid.getTrainEnd());
+            //System.out.println(numOfpicture);
+
             /**
              * 还空缺一个添加autousermission的方法
              */
