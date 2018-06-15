@@ -280,74 +280,7 @@ public class LabelServiceImpl implements LabelService{
     }
     
     public ResultMessage addOne(int missionID,String userName,String FileName){
-        
-        UserRepository userRepository = new UserRepositoryImpl();
-        
-        User user = userRepository.findUserByUsername(userName);
-    Mission mission =    missionRepository.findMissionByID(missionID);
-    switch (mission.getType()){
-        case "Detection":
-           List<DetectionLabel> detectionLabels =  detectionLabelRepository.findDetectionLabelByMissionIDAndUsername(missionID,userName);
-           for(int i=0;i<=detectionLabels.size()-1;i++){
-               if(detectionLabels.get(i).getFileName().equals(FileName)){
-                   if(detectionLabels.get(i).getRectangles()==null){
-                       user.addAcceptedMission(missionID);
-                   }
-               }
-           }
-        case "Attribute":
-            List<AttributeLabel> attributeLabels =  attributeLabelRepository.findAttributeLabelByMissionIDAndUsername(missionID,userName);
-            for(int i=0;i<=attributeLabels.size()-1;i++){
-                if(attributeLabels.get(i).getFileName().equals(FileName)){
-                    if(attributeLabels.get(i).getAttributes()==null){
-                        user.addAcceptedMission(missionID);
-                    }else {
-                        if (attributeLabels.get(i).getAttributes().get(0).equals(""))
-                            user.addAcceptedMission(missionID);
-                    }
-                }
-            }
-        case "Classification":
-            List<ClassificationLabel> classificationLabels =  classificationLabelRepository.findClassificationLabelByMissionIDAndUsername(missionID,userName);
-            for(int i=0;i<=classificationLabels.size()-1;i++){
-                if(classificationLabels.get(i).getFileName().equals(FileName)){
-                    if(classificationLabels.get(i).getSelect()==0){
-                        user.addAcceptedMission(missionID);
-                    }
-                }
-            }
-
-        case "Caption":
-            List<CaptionLabel> captionLabels =  captionLabelRepository.findCaptionLabelByMissionIDAndUsername(missionID,userName);
-            for(int i=0;i<=captionLabels.size()-1;i++){
-                if(captionLabels.get(i).getFileName().equals(FileName)){
-                    if(captionLabels.get(i).getCaption()==null){
-                        user.addAcceptedMission(missionID);
-                    }else {
-                        if (captionLabels.get(i).getCaption().equals(""))
-                            user.addAcceptedMission(missionID);
-                    }
-                }
-            }
-        case "Segmentation":
-            List<SegmentationLabel> segmentationLabels =  segmentationLabelRepository.findSegmentationLabelByMissionIDAndUsername(missionID,userName);
-            for(int i=0;i<=segmentationLabels.size()-1;i++){
-                if(segmentationLabels.get(i).getFileName().equals(FileName)){
-                    if(segmentationLabels.get(i).getDots()==null){
-
-                        user.addAcceptedMission(missionID);
-                    }else {
-                        if (segmentationLabels.get(i).getDots().get(0).equals(""))
-                            user.addAcceptedMission(missionID);
-                    }
-                }
-            }
-
-    }
-
-
-    
-    return userRepository.updateUser(user);
+        return ResultMessage.SUCCESS;
     }
 
     public ResultMessage addAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean){
