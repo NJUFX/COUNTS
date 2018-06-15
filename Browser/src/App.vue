@@ -4,9 +4,10 @@
       <img class="logoIcon" @click="goHome" src="./assets/logo.png">
       <el-button class="zhongbaosc" @click="goMarket" type="text" >众包市场</el-button>
       <el-button class="wodexm" @click="goMyProject" type="text">个人中心</el-button>
-      <el-badge v-bind:value="unreadInfoNumber" class="item">
+      <el-badge v-show="show" v-bind:value="unreadInfoNumber" class="item">
         <el-button @click="readMessage" class="message" type="text"><i class="el-icon-ali-xinxi-copy" style="font-size: 22px"></i></el-button>
       </el-badge>
+      <el-button @click="readMessage" class="message2" type="text"><i class="el-icon-ali-xinxi-copy" style="font-size: 22px"></i></el-button>
       <el-button class="login_button" type="text" @click="login_button_action()">登陆</el-button>
       <el-dropdown @command="handleCommand" class="headDropDown">
         <img id="userImg" class="el-dropdown-link" v-bind:src="headImg">
@@ -36,6 +37,7 @@
     name: 'App',
     data: function () {
       return {
+        show:false,
         sakura_show:true,
         headImg: HeadImg,
         unreadInfoNumber:0
@@ -104,6 +106,10 @@
                   _this.unreadInfoNumber++;
                 }
               }
+              if(_this.unreadInfoNumber!=0)
+                _this.show=true
+              else
+                _this.show=false
               localStorage.setItem('unreadInfoNumber',''+_this.unreadInfoNumber)
             }
           }
@@ -258,6 +264,14 @@
     color: white;
   }
   .message{
+    margin-left: 100px;
+    color: white;
+    margin-top: -10px;
+  }
+  .message2{
+    position: absolute;
+    top:17px;
+    right: 13%;
     margin-left: 100px;
     color: white;
     margin-top: -10px;

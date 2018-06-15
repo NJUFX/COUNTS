@@ -336,7 +336,6 @@
       selectAutoLabel(){
         this.isAutoLabel=true;
         this.options[1].disabled=true;
-        this.options[2].disabled=true;
         this.options[4].disabled=true;
         document.getElementById('autoLabel').style.backgroundColor = '#1d86ff'
         document.getElementById('autoLabel').style.color = 'white'
