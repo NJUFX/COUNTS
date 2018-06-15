@@ -374,6 +374,7 @@ public class MissionController {
     )
     @ResponseBody
     public ResultMessage updateAcceptMission(@RequestBody AcceptedMission acceptedMission) {
+        System.out.println("controller" + acceptedMission.getFinished());
         return missionService.updateAcceptedMission(acceptedMission);
     }
 

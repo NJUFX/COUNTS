@@ -173,7 +173,7 @@ public class LabelController {
         //System.out.println(missionid + " ))"+userName);
         File f = new File(LabelServiceImpl.canvasdir+userName+"/"+missionid);
 
-        File imgpar = new File("data/image/"+missionid);
+        File imgpar = new File("../data/image/"+missionid);
         File[] imglist = imgpar.listFiles();
 
         //将未保存在canvas的imgae保存在canvas
@@ -252,7 +252,7 @@ public class LabelController {
                 String gp = pic.getParentFile().getParentFile().getName();
                 //没设置表头
 
-            File ori = new File("data/image/"+missionid);
+            File ori = new File("../data/image/"+missionid);
             File[] orilist = ori.listFiles();
             String type="";
             for(int j=0;j<=orilist.length-1;j++){
