@@ -43,7 +43,7 @@ public class MessageController {
 
     )
     @ResponseBody
-    public ResultMessage updateMessage(int id){
-        return messageService.updateMessage(, id);
+    public ResultMessage updateMessage(String username,int id){
+        return messageService.updateMessage(username, id);
     }
 }
