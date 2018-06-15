@@ -689,7 +689,6 @@ export default {
       if(val[0]=='man'){
         this.selectManLabel()
       }else if(val[0]=='auto'){
-        console.log(val[1])
         if(val[1]=='label'){
           this.selectAutoLabel()
         }else if(val[1]=='test'){
@@ -755,7 +754,6 @@ export default {
       var path = localStorage.getItem('server')+'/counts/user/getuserrank'
       xmlhttp.open('POST',path, true)
       xmlhttp.send(formData)
-      console.log('send')
     },
     getMyRankInfo(){
       var _this = this
@@ -781,10 +779,8 @@ export default {
       xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           var res = xmlhttp.responseText;
-          console.log('res'+res)
-          console.log('my'+_this.myRanking)
           _this.myRankingPercent = ((res-_this.myRanking)/res*100).toFixed(2)
-          console.log('res' + res)
+
         }
       }
       var path = localStorage.getItem('server')+'/counts/analysis/getnumber/worker'
@@ -807,7 +803,6 @@ export default {
       var xmlhttp = new XMLHttpRequest()
       xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          console.log('rank')
           cover = xmlhttp.responseText
           _this.projectInfo[i].cover = cover
         }
