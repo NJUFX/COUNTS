@@ -23,7 +23,7 @@ public class MessageRepositoryImpl implements MessageRepository {
     public MessageRepositoryImpl() {
         File file = new File(dirname);
         try {
-            if (file.exists())
+            if (!file.exists())
                 file.mkdir();
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,6 +89,7 @@ public class MessageRepositoryImpl implements MessageRepository {
                 Message message = gson.fromJson(s, Message.class);
                 messages.add(message);
             }
+            scanner.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
