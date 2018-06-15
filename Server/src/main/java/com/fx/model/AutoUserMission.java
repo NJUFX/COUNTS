@@ -11,6 +11,8 @@ public class AutoUserMission {
     private int testEnd;
     private boolean finishTrain = true;
     private boolean finishTest = false;
+    private int trainNum;
+    private int testNum;
 
     public int getMissionId() {
         return missionId;
@@ -67,5 +69,21 @@ public class AutoUserMission {
 
     public void setFinishTest(boolean finishTest) {
         this.finishTest = finishTest;
+    }
+
+    public int getTrainNum() {
+        return trainNum;
+    }
+
+    public void setTrainNum(int trainNum) {
+        this.trainNum = trainNum;
+    }
+
+    public int getTestNum() {
+        return testNum;
+    }
+
+    public void setTestNum(int testNum) {
+        this.testNum = testNum;
     }
 }

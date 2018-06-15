@@ -7,6 +7,8 @@ import com.fx.model.AutoClassificationLabel;
  */
 public class AutoClassificationLabelBean {
     private int missionid;
+    private String kind;
+    private String username;
     private AutoClassificationLabel autoClassificationLabel;
 
     public AutoClassificationLabel getAutoClassificationLabel() {
@@ -23,5 +25,21 @@ public class AutoClassificationLabelBean {
 
     public void setMissionid(int missionid) {
         this.missionid = missionid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 }
