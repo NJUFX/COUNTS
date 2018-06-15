@@ -18,6 +18,7 @@ public class AutoMissionPresentation {
     //三种类型
     private String type;
 
+
     private String content;
 
     public int getId() {

@@ -54,4 +54,6 @@ public interface ImageService {
 
     public List<Image> getTargetUserCheckImages(int missionid, String username);
 
+    public String getFirstAutoImages(int missionid, String username);
+
 }

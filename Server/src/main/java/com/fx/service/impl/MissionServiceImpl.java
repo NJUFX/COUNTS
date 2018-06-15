@@ -28,6 +28,7 @@ public class MissionServiceImpl implements MissionService {
     AcceptMissionRepository acceptMissionRepository;
     UserRepository userRepository;
     AutoUserMissionRepository autoUserMissionRepository;
+    MessageRepository messageRepository;
     @Override
     public ResultMessage addAcceptedMission(String username, int id, int recommendType) {
         Mission mission = findMissionByID(id);
@@ -62,6 +63,7 @@ public class MissionServiceImpl implements MissionService {
         userRepository = new UserRepositoryImpl();
         autoMissionRepository = new AutoMissionRepositoryImpl();
         autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
+        missionRepository = new MissionRepositoryImpl();
     }
 
     /**
@@ -259,6 +261,8 @@ public class MissionServiceImpl implements MissionService {
 
     @Override
     public ResultMessage addAutoMission(AutoMission autoMission) {
+
+
         ResultMessage message = autoMissionRepository.addAutoMission(autoMission);
         int id = autoMission.getId();
 
@@ -288,6 +292,10 @@ public class MissionServiceImpl implements MissionService {
             mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
             mid.setTestEnd((numOfpicture*(numOfUser+i+1))/(2*numOfUser)-1);
 
+
+            //首先添加Message,但目前没有通知第二阶段
+            Message message1 = new Message(users.get(i).getUsername(),autoMission.getId(),autoMission.getType());
+            messageRepository.addMessage(users.get(i).getUsername(),message1);
             //System.out.println(numOfpicture);
 
             /**
@@ -442,6 +450,7 @@ public class MissionServiceImpl implements MissionService {
            mid.setId(autoMission.getId());
            mid.setType(autoMission.getType());
 
+            System.out.println(mid.getType());
            mid.setMissinName(autoMission.getMissionName());
            if(!autoUserMissions.get(i).isFinishTrain()){
                mid.setStatus("Train");
