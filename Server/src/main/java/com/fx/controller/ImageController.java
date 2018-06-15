@@ -84,6 +84,7 @@ public class ImageController {
 
 
             String imgName = f.getOriginalFilename();//这里图片还是以原名命名
+            System.out.println(imgName);
             imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/allimage/", imgName);
         }
     }

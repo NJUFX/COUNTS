@@ -5,10 +5,7 @@ import com.fx.bean.MissionPresentation;
 import com.fx.controller.ImageController;
 import com.fx.model.*;
 import com.fx.repository.*;
-import com.fx.repository.impl.AcceptMissionRepositoryImpl;
-import com.fx.repository.impl.AutoMissionRepositoryImpl;
-import com.fx.repository.impl.MissionRepositoryImpl;
-import com.fx.repository.impl.UserRepositoryImpl;
+import com.fx.repository.impl.*;
 import com.fx.service.MissionService;
 import com.fx.util.ResultMessage;
 import org.springframework.stereotype.Service;
@@ -64,6 +61,7 @@ public class MissionServiceImpl implements MissionService {
         acceptMissionRepository = new AcceptMissionRepositoryImpl();
         userRepository = new UserRepositoryImpl();
         autoMissionRepository = new AutoMissionRepositoryImpl();
+        autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
     }
 
     /**
@@ -272,30 +270,30 @@ public class MissionServiceImpl implements MissionService {
         List<User> users =  userRepository.findUserByType("Worker");
 
 
-//
-//        users = quickSort(users,0,users.size());
-//
-//        if(users.size()<numOfUser){
-//            System.out.println("系统中已有用户无法满足分配需求，已经为你指派最多用户");
-//            numOfUser= users.size();
-//        }
-//        //添加该任务指派的User
-//        for(int i=0;i<=numOfUser-1;i++){
-//            AutoUserMission mid = new AutoUserMission();
-//            mid.setFinishTest(false);
-//            mid.setFinishTrain(false);
-//            mid.setMissionId(autoMission.getId());
-//            mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
-//            mid.setTrainEnd((numOfpicture*(i+1))/(2*numOfUser)  -1);
-//            mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
-//            mid.setTestEnd((numOfpicture*(numOfUser+i+1))/(2*numOfUser)-1);
-//
-//            /**
-//             * 还空缺一个添加autousermission的方法
-//             */
-//            autoUserMissionRepository.addAutoUserMission(users.get(i).getUsername(),mid);
-//
-//        }
+
+        users = quickSort(users,0,users.size()-1);
+
+        if(users.size()<numOfUser){
+            System.out.println("系统中已有用户无法满足分配需求，已经为你指派最多用户");
+            numOfUser= users.size();
+        }
+        //添加该任务指派的User
+        for(int i=0;i<=numOfUser-1;i++){
+            AutoUserMission mid = new AutoUserMission();
+            mid.setFinishTest(false);
+            mid.setFinishTrain(false);
+            mid.setMissionId(autoMission.getId());
+            mid.setTrainStart((numOfpicture*i)/(2*numOfUser) );
+            mid.setTrainEnd((numOfpicture*(i+1))/(2*numOfUser)  -1);
+            mid.setTestStart((numOfpicture*(numOfUser+i))/(2*numOfUser));
+            mid.setTestEnd((numOfpicture*(numOfUser+i+1))/(2*numOfUser)-1);
+
+            /**
+             * 还空缺一个添加autousermission的方法
+             */
+            autoUserMissionRepository.addAutoUserMission(users.get(i).getUsername(),mid);
+
+        }
 
 
 
@@ -442,6 +440,7 @@ public class MissionServiceImpl implements MissionService {
            mid.setId(autoMission.getId());
            mid.setType(autoMission.getType());
 
+           mid.setMissinName(autoMission.getMissionName());
            if(!autoUserMissions.get(i).isFinishTrain()){
                mid.setStatus("Train");
                mid.setSize(autoUserMissions.get(i).getTrainEnd()-autoUserMissions.get(i).getTrainStart()+1);
