@@ -16,7 +16,7 @@ import Result from '@/components/Result'
 import Register from '@/components/Register'
 import Message from '@/components/Message'
 import AutoLabel from '@/components/AutoLabel'
-import AutoJudge from '@/components/AUtoJudge'
+import AutoJudge from '@/components/AutoJudge'
 Vue.use(Router)
 
 export default new Router({
