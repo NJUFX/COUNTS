@@ -64,6 +64,7 @@ public class MissionServiceImpl implements MissionService {
         autoMissionRepository = new AutoMissionRepositoryImpl();
         autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
         missionRepository = new MissionRepositoryImpl();
+        messageRepository = new MessageRepositoryImpl();
     }
 
     /**
@@ -451,7 +452,7 @@ public class MissionServiceImpl implements MissionService {
            mid.setType(autoMission.getType());
 
             System.out.println(mid.getType());
-           mid.setMissinName(autoMission.getMissionName());
+           mid.setMissionName(autoMission.getMissionName());
            if(!autoUserMissions.get(i).isFinishTrain()){
                mid.setStatus("Train");
                mid.setSize(autoUserMissions.get(i).getTrainEnd()-autoUserMissions.get(i).getTrainStart()+1);

@@ -39,14 +39,16 @@
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             if (JSON.parse(xmlhttp.responseText) != null) {
               var arrays = JSON.parse(xmlhttp.responseText)
+              _this.messageList=[]
               for(var i=0;i<arrays.length;i++){
                 _this.messageList.push({
                   index: arrays[i].id,
                   topic: arrays[i].title,
                   content: arrays[i].content,
-                  unread:!arrays[i].isRead,
+                  unread:!arrays[i].read,
                 })
               }
+              console.log('red '+arrays[0].read)
             }
           }
         }

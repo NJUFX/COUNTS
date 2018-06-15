@@ -21,7 +21,7 @@ public class Message {
     /**
      * 已读 未读
      */
-    private boolean isRead;
+    private boolean read;
     /**
      * 消息的标题
      */
@@ -42,7 +42,7 @@ public class Message {
     public Message(String username, int missionID, String type) {
         setContent(username, missionID, type);
         this.title = "您有新的任务！";
-        this.isRead = false;
+        this.read = false;
     }
 
     private void setContent(String username, int missionID, String type) {
@@ -84,11 +84,11 @@ public class Message {
     }
 
     public boolean isRead() {
-        return isRead;
+        return read;
     }
 
     public void setRead(boolean read) {
-        isRead = read;
+        this.read = read;
     }
 
 
