@@ -31,6 +31,7 @@ public class LabelServiceImpl implements LabelService{
     AutoCaptionLabelRepository autoCaptionLabelRepository = new AutoCaptionLabelRepositoryImpl();
     AutoClassificationLabelRepository autoClassificationLabelRepository = new AutoClassificationLabelRepositoryImpl();
     AutoDetectionLabelReposity autoDetectionLabelReposity = new AutoDetectionLabelRepositoryImpl();
+    AutoUserMissionRepository autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
     public static final String canvasdir = "data/canvas/";
 
     /**
@@ -400,16 +401,92 @@ bytes[i] += 256;
     }
 
     public ResultMessage addAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean){
+        String username = autoClassificationLabelBean.getUsername();
+
+        List<AutoUserMission> lists = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+        AutoUserMission mid =null;
+        for(int i=0;i<=lists.size()-1;i++){
+            if(lists.get(i).getMissionId()==autoClassificationLabelBean.getMissionid()){
+                mid = lists.get(i);
+                break;
+            }
+        }
+        if(autoClassificationLabelBean.getKind().equals("train")){
+            mid.setTrainNum(mid.getTrainNum()+1);
+            if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
+                mid.setFinishTrain(true);
+                mid.setFinishTest(false);
+            }
+        }
+        else{
+            mid.setTestNum(mid.getTestNum()+1);
+            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
+                mid.setFinishTest(true);
+                mid.setFinishTrain(true);
+            }
+        }
+        autoUserMissionRepository.updateAutoUserMission(username,mid);
         return autoClassificationLabelRepository.addAutoClassificationLabel(autoClassificationLabelBean.getMissionid(),autoClassificationLabelBean.getAutoClassificationLabel());
     }
 
 
     public ResultMessage addAutoCaptionLabel( AutoCaptionLabelBean autoCaptionLabelBean){
-        return autoCaptionLabelRepository.addAutoCaptionLabel(autoCaptionLabelBean.getMissionID(),autoCaptionLabelBean.getAutoCaptionLabel());
+        String username = autoCaptionLabelBean.getUsername();
+
+        List<AutoUserMission> lists = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+        AutoUserMission mid =null;
+        for(int i=0;i<=lists.size()-1;i++){
+            if(lists.get(i).getMissionId()==autoCaptionLabelBean.getMissionid()){
+                mid = lists.get(i);
+                break;
+            }
+        }
+        if(autoCaptionLabelBean.getKind().equals("train")){
+            mid.setTrainNum(mid.getTrainNum()+1);
+            if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
+                mid.setFinishTrain(true);
+                mid.setFinishTest(false);
+            }
+        }
+        else{
+            mid.setTestNum(mid.getTestNum()+1);
+            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
+                mid.setFinishTest(true);
+                mid.setFinishTrain(true);
+            }
+        }
+        autoUserMissionRepository.updateAutoUserMission(username,mid);
+        return autoCaptionLabelRepository.addAutoCaptionLabel(autoCaptionLabelBean.getMissionid(),autoCaptionLabelBean.getAutoCaptionLabel());
     }
 
 
     public ResultMessage addAutoDetectionLabel( AutoDetectionLabelBean autoDetectionLabelBean){
+
+        String username = autoDetectionLabelBean.getUsername();
+
+        List<AutoUserMission> lists = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+        AutoUserMission mid =null;
+        for(int i=0;i<=lists.size()-1;i++){
+            if(lists.get(i).getMissionId()==autoDetectionLabelBean.getMissionid()){
+                mid = lists.get(i);
+                break;
+            }
+        }
+        if(autoDetectionLabelBean.getKind().equals("train")){
+            mid.setTrainNum(mid.getTrainNum()+1);
+            if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
+                mid.setFinishTrain(true);
+                mid.setFinishTest(false);
+            }
+        }
+        else{
+            mid.setTestNum(mid.getTestNum()+1);
+            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
+                mid.setFinishTest(true);
+                mid.setFinishTrain(true);
+            }
+        }
+        autoUserMissionRepository.updateAutoUserMission(username,mid);
         return  autoDetectionLabelReposity.addAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
     }
 
@@ -419,7 +496,7 @@ bytes[i] += 256;
 
 
     public ResultMessage updateAutoCaptionLabel( AutoCaptionLabelBean autoCaptionLabelBean){
-        return autoCaptionLabelRepository.updateAutoCaptionLabel(autoCaptionLabelBean.getMissionID(),autoCaptionLabelBean.getAutoCaptionLabel());
+        return autoCaptionLabelRepository.updateAutoCaptionLabel(autoCaptionLabelBean.getMissionid(),autoCaptionLabelBean.getAutoCaptionLabel());
     }
 
 

@@ -266,10 +266,24 @@ public class ImageController {
     }
 
 
+    @RequestMapping(
+            value = "/get/trainimages",
+
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
     public List<Image> getTargetUserTrainImages(int missionid, String username) {
         return imageService.getTargetUserTrainImages(missionid, username);
     }
 
+    @RequestMapping(
+            value = "/get/testimages",
+
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
     public List<Image> getTargetUserCheckImages(int missionid, String username) {
         return imageService.getTargetUserCheckImages(missionid, username);
     }
