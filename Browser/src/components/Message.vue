@@ -74,6 +74,7 @@
           }
         }
         let formData = new FormData()
+        formData.append('username', localStorage.getItem('username'))
         formData.append('id', i)
         xmlhttp.open('POST', 'http://localhost:8080/counts/message/updateMessage', true)
         xmlhttp.send(formData)

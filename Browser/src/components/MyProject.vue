@@ -259,7 +259,6 @@
         <div style="height: 140px"></div>
       </el-dialog>
     </div>
-
   </div>
 </template>
 
@@ -579,7 +578,7 @@ export default {
 
             for (var i = 0; i < _this.autoProjects.length; i++) {
               _this.autoProjects[i].percent = (_this.autoProjects[i].imgFinished / (_this.autoProjects[i].imgToDo + _this.autoProjects[i].imgFinished) * 100).toFixed(2)
-         //     _this.getCoverImg(_this.autoProjects[i].id, i);
+              _this.getAutoFirstImage(_this.autoProjects[i].id, i);
             }
 
             _this.drawPieCharts()
@@ -702,29 +701,26 @@ export default {
     },
     selectManLabel(){
       for(var i=0;i<this.projectInfo.length;i++){
-        if(this.projectInfo[i].annotationType==0){
           this.projectInfo[i].show=true;
-        }else{
-          this.projectInfo[i].show=false;
-        }
+      }
+      for(var i=0;i<this.autoProjects.length;i++){
+        this.autoProjects[i].show=false;
       }
     },
     selectAutoTest(){
       for(var i=0;i<this.projectInfo.length;i++){
-        if(this.projectInfo[i].annotationType==2){
-          this.projectInfo[i].show=true;
-        }else{
-          this.projectInfo[i].show=false;
-        }
+        this.projectInfo[i].show=false;
+      }
+      for(var i=0;i<this.autoProjects.length;i++){
+        this.autoProjects[i].show=true;
       }
     },
     selectAutoLabel(){
       for(var i=0;i<this.projectInfo.length;i++){
-        if(this.projectInfo[i].annotationType==1){
-          this.projectInfo[i].show=true;
-        }else{
-          this.projectInfo[i].show=false;
-        }
+        this.projectInfo[i].show=false;
+      }
+      for(var i=0;i<this.autoProjects.length;i++){
+        this.autoProjects[i].show=true;
       }
     },
 
@@ -796,6 +792,24 @@ export default {
         }
       }
       return m;
+    },
+    getAutoFirstImage(missionid,i){
+      var cover = ''
+      var _this = this
+      var xmlhttp = new XMLHttpRequest()
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          cover = xmlhttp.responseText
+          _this.autoProjects[i].cover = cover
+        }
+      }
+      let formData = new FormData()
+      var str = '' + missionid
+      formData.append('missionid', str)
+      formData.append('username',localStorage.getItem('username'))
+      var path = localStorage.getItem('server')+'/counts/mission/get/firstautoimage'
+      xmlhttp.open('POST',path, true)
+      xmlhttp.send(formData)
     },
     getCoverImg (missionid, i) {
       var cover = ''
