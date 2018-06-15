@@ -6,10 +6,13 @@ import com.fx.controller.ImageController;
 import com.fx.model.AutoMission;
 import com.fx.model.AutoUserMission;
 import com.fx.model.LocalLabel;
+import com.fx.model.User;
 import com.fx.repository.AutoMissionRepository;
 import com.fx.repository.AutoUserMissionRepository;
+import com.fx.repository.UserRepository;
 import com.fx.repository.impl.AutoMissionRepositoryImpl;
 import com.fx.repository.impl.AutoUserMissionRepositoryImpl;
+import com.fx.repository.impl.UserRepositoryImpl;
 import com.fx.service.ImageService;
 import com.fx.util.DataConst;
 import org.springframework.mock.web.MockMultipartFile;
@@ -29,6 +32,7 @@ public class ImageServiceImpl implements ImageService{
 
     AutoUserMissionRepository autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
     AutoMissionRepository autoMissionRepository = new AutoMissionRepositoryImpl();
+    UserRepository userRepository = new UserRepositoryImpl();
     /**
      * 根据任务名称返回对应图片集
      * @param mission
@@ -218,14 +222,21 @@ public class ImageServiceImpl implements ImageService{
     public String getFirstAutoImages(int missionid, String username){
         List<AutoUserMission> missions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
 
+        User user = userRepository.findUserByUsername(username);
+
+
         for(int i=0;i<=missions.size()-1;i++){
             if(missions.get(i).getMissionId()==(missionid)){
                 AutoUserMission mid = missions.get(i);
-                if(missions.get(i).isFinishTrain()) {
-                    return getAutoImage(mid.getMissionId(), username, mid.getTestStart(), mid.getTestEnd()).get(0).getBase64();
+                if(user.getRole().equals("Requestor")){
+                    return getAutoImage(mid.getMissionId(), username,0,0).get(0).getBase64();
                 }
-                else{
-                    return getAutoImage(mid.getMissionId(), username, mid.getTrainStart(), mid.getTrainEnd()).get(0).getBase64();
+                else {
+                    if (missions.get(i).isFinishTrain()) {
+                        return getAutoImage(mid.getMissionId(), username, mid.getTestStart(), mid.getTestEnd()).get(0).getBase64();
+                    } else {
+                        return getAutoImage(mid.getMissionId(), username, mid.getTrainStart(), mid.getTrainEnd()).get(0).getBase64();
+                    }
                 }
             }
 
