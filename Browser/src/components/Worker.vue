@@ -300,8 +300,8 @@ export default {
       this.getAutoMission()
     }else{
       this.getAcceptMission()
-      this.correctJudge = true; //控制一部分组件不可用
-      this.ratingAccess = false;
+      this.correctJudge = true; //控制正确判断不可用
+      this.ratingAccess = false; //控制评分可用
     }
     this.downloadSource()
   },
