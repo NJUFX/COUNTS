@@ -229,8 +229,8 @@ public class UserController {
     )
     @ResponseBody
     public User getUser(@RequestParam(value = "username") String username){
-        System.out.println(username);
-        System.out.println(userService.getUser(username).getUsername());
+       // System.out.println(username);
+       // System.out.println(userService.getUser(username).getUsername());
        return userService.getUser(username);
     }
 
