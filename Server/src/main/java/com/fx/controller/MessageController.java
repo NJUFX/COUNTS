@@ -5,7 +5,10 @@ import com.fx.service.MessageService;
 import com.fx.util.ResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -19,6 +22,7 @@ import java.util.List;
 public class MessageController {
     @Autowired
     MessageService messageService;
+
     @RequestMapping(
             value = "getMessage",
             method = RequestMethod.POST,
@@ -26,13 +30,14 @@ public class MessageController {
 
     )
     @ResponseBody
-    public List<Message> getMessageByUsername(String username){
+    public List<Message> getMessageByUsername(String username) {
 
         return messageService.findMessageByUsername(username);
     }
 
     /**
      * 更新消息的状态 把未读改为已读
+     *
      * @param id 消息的id
      * @return
      */
@@ -43,7 +48,7 @@ public class MessageController {
 
     )
     @ResponseBody
-    public ResultMessage updateMessage(String username,int id){
+    public ResultMessage updateMessage(String username, int id) {
         return messageService.updateMessage(username, id);
     }
 }
