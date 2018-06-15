@@ -296,12 +296,12 @@ export default {
     this.missionType = localStorage.getItem('missionType')
     this.missionID = localStorage.getItem('missionID')
     this.isAutoLabel = localStorage.getItem('isAutoLabel')
-    if(this.isAutoLabel){
+    if(this.isAutoLabel==1){
       this.getAutoMission()
     }else{
       this.getAcceptMission()
-      this.correctJudge = true; //控制一部分组件不可用
-      this.ratingAccess = false;
+      this.correctJudge = true; //控制正确判断不可用
+      this.ratingAccess = false; //控制评分可用
     }
     this.downloadSource()
   },
@@ -1102,7 +1102,7 @@ export default {
         }
         let formData = new FormData()
         formData.append('username', localStorage.getItem('username'))
-        formData.append('missionID', localStorage.getItem('missionID'))
+        formData.append('missionid', localStorage.getItem('missionID'))
         console.log(localStorage.getItem('missionID'))
         xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', true)
         xmlhttp.send(formData)

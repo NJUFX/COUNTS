@@ -62,6 +62,8 @@ public class AcceptMissionRepositoryImpl implements AcceptMissionRepository {
         ArrayList<AcceptedMission> missions = new ArrayList<>();
         File file = new File(filename);
         try {
+            if(!file.exists())
+                file.createNewFile();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String s = scanner.nextLine();

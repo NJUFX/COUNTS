@@ -31,6 +31,7 @@ public class LabelServiceImpl implements LabelService{
     AutoCaptionLabelRepository autoCaptionLabelRepository = new AutoCaptionLabelRepositoryImpl();
     AutoClassificationLabelRepository autoClassificationLabelRepository = new AutoClassificationLabelRepositoryImpl();
     AutoDetectionLabelReposity autoDetectionLabelReposity = new AutoDetectionLabelRepositoryImpl();
+    AutoUserMissionRepository autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
     public static final String canvasdir = "data/canvas/";
 
     /**
@@ -157,57 +158,7 @@ public class LabelServiceImpl implements LabelService{
 
 
 
-        /*
-        将String写入文件的方法 Code:
-         */
 
-        /*
-        String overallFileName = t + "/overall.txt";
-        String otherFileName = t + "/other.txt";
-        try {
-        */
-         /*   File overallFile = new File(overallFileName);
-            File otherFile = new File(otherFileName);
-            overallFile.createNewFile();
-            otherFile.createNewFile();
-          */
-         /*
-            PrintWriter pw1 = new PrintWriter(overallFileName);
-            pw1.println(overallLabel);
-            pw1.close();
-
-          PrintWriter  pw2 = new PrintWriter(otherFileName);
-            for (int i = 0; i < otherLabel.size(); i++) {
-                pw2.println(otherLabel.get(i));
-            }
-            pw2.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        */
-
-
-
-
-
-/*
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] bytes = null;
-        try{
-            bytes = decoder.decodeBuffer(imgStr.substring(22));
-        }catch (IOException e){
-            e.printStackTrace();
-            return ResultMessage.FAILED;
-        }
-        */
-/*
-        // 处理数据
-for (int i = 0; i < bytes.length; ++i) {
-if (bytes[i] < 0) {
-bytes[i] += 256;
-}
-}
-*/
         //没有判断文件夹是否存在，不知道可以不可以
        try {
            PrintWriter pw = new PrintWriter(p + "/img.txt");
@@ -400,16 +351,100 @@ bytes[i] += 256;
     }
 
     public ResultMessage addAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean){
+        String username = autoClassificationLabelBean.getUsername();
+
+        List<AutoUserMission> lists = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+        AutoUserMission mid =null;
+        for(int i=0;i<=lists.size()-1;i++){
+            if(lists.get(i).getMissionId()==autoClassificationLabelBean.getMissionid()){
+                mid = lists.get(i);
+                break;
+            }
+        }
+        if(autoClassificationLabelBean.getKind().equals("train")){
+            mid.setTrainNum(mid.getTrainNum()+1);
+            if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
+                mid.setFinishTrain(true);
+                mid.setFinishTest(false);
+
+                /**
+                 * 在这里调用训练集
+                 */
+            }
+        }
+        else{
+//            /**
+//             * 讲道理其实check的时候不需要调用add方法
+//             */
+//            mid.setTestNum(mid.getTestNum()+1);
+//            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
+//                mid.setFinishTest(true);
+//                mid.setFinishTrain(true);
+//
+//            }
+        }
+        autoUserMissionRepository.updateAutoUserMission(username,mid);
         return autoClassificationLabelRepository.addAutoClassificationLabel(autoClassificationLabelBean.getMissionid(),autoClassificationLabelBean.getAutoClassificationLabel());
     }
 
 
     public ResultMessage addAutoCaptionLabel( AutoCaptionLabelBean autoCaptionLabelBean){
-        return autoCaptionLabelRepository.addAutoCaptionLabel(autoCaptionLabelBean.getMissionID(),autoCaptionLabelBean.getAutoCaptionLabel());
+        String username = autoCaptionLabelBean.getUsername();
+
+        List<AutoUserMission> lists = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+        AutoUserMission mid =null;
+        for(int i=0;i<=lists.size()-1;i++){
+            if(lists.get(i).getMissionId()==autoCaptionLabelBean.getMissionid()){
+                mid = lists.get(i);
+                break;
+            }
+        }
+        if(autoCaptionLabelBean.getKind().equals("train")){
+            mid.setTrainNum(mid.getTrainNum()+1);
+            if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
+                mid.setFinishTrain(true);
+                mid.setFinishTest(false);
+            }
+        }
+        else{
+//            mid.setTestNum(mid.getTestNum()+1);
+//            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
+//                mid.setFinishTest(true);
+//                mid.setFinishTrain(true);
+//            }
+        }
+        autoUserMissionRepository.updateAutoUserMission(username,mid);
+        return autoCaptionLabelRepository.addAutoCaptionLabel(autoCaptionLabelBean.getMissionid(),autoCaptionLabelBean.getAutoCaptionLabel());
     }
 
 
     public ResultMessage addAutoDetectionLabel( AutoDetectionLabelBean autoDetectionLabelBean){
+
+        String username = autoDetectionLabelBean.getUsername();
+
+        List<AutoUserMission> lists = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+        AutoUserMission mid =null;
+        for(int i=0;i<=lists.size()-1;i++){
+            if(lists.get(i).getMissionId()==autoDetectionLabelBean.getMissionid()){
+                mid = lists.get(i);
+                break;
+            }
+        }
+        if(autoDetectionLabelBean.getKind().equals("train")){
+            mid.setTrainNum(mid.getTrainNum()+1);
+            if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
+                mid.setFinishTrain(true);
+                mid.setFinishTest(false);
+            }
+        }
+        else{
+//            mid.setTestNum(mid.getTestNum()+1);
+//            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
+//                mid.setFinishTest(true);
+//                mid.setFinishTrain(true);
+//            }
+        }
+        autoUserMissionRepository.updateAutoUserMission(username,mid);
         return  autoDetectionLabelReposity.addAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
     }
 
@@ -419,7 +454,7 @@ bytes[i] += 256;
 
 
     public ResultMessage updateAutoCaptionLabel( AutoCaptionLabelBean autoCaptionLabelBean){
-        return autoCaptionLabelRepository.updateAutoCaptionLabel(autoCaptionLabelBean.getMissionID(),autoCaptionLabelBean.getAutoCaptionLabel());
+        return autoCaptionLabelRepository.updateAutoCaptionLabel(autoCaptionLabelBean.getMissionid(),autoCaptionLabelBean.getAutoCaptionLabel());
     }
 
 
@@ -429,16 +464,30 @@ bytes[i] += 256;
 
     public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username){
 
+        String path = "";
+
+        File file = new File(path);
+        System.out.println(file.getAbsolutePath());
+        if (!file.exists()) {
+            System.out.println("文件夹不存在!");
+            return null;
+        }
+
+        File [] files = file.listFiles();
+
+        List<AutoUserMission> autoUserMissionRepository;
         return null;
     }
 
     public List<AutoClassificationLabel> getAutoClassificationLabel(String missionid,String username){
 
+        String path = "";
         return null;
     }
 
     public List<AutoDetectionLabel> getAutoDetectionLabel(String missionid,String username){
 
+        String path ="";
         return null;
     }
 

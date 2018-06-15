@@ -519,7 +519,8 @@
           description: _this.autoForm.contents,
           type: _this.autoForm.type,
           points: _this.autoForm.points,
-          types: []
+          types: [],
+          size: _this.imgFileList.length
         }
         if (autoMission.type == 'Classification') {
           autoMission.types =  _this.selectsArray

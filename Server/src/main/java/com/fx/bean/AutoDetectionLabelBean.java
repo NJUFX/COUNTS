@@ -7,6 +7,8 @@ import com.fx.model.AutoDetectionLabel;
  */
 public class AutoDetectionLabelBean {
     private int missionid;
+    private String kind;
+    private String username;
     private AutoDetectionLabel autoDetectionLabel;
 
     public int getMissionid() {
@@ -23,5 +25,21 @@ public class AutoDetectionLabelBean {
 
     public void setAutoDetectionLabel(AutoDetectionLabel autoDetectionLabel) {
         this.autoDetectionLabel = autoDetectionLabel;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 }

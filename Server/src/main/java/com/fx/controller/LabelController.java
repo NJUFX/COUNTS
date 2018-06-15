@@ -591,15 +591,33 @@ public class LabelController {
         return result;
     }
 
+    @RequestMapping(
+            value = "/get/autocaptionlabel",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
     public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username){
         return labelService.getAutoCaptionLabel(missionid, username);
     }
 
+    @RequestMapping(
+            value = "/get/autoclassificationlabel",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
     public List<AutoClassificationLabel> getAutoClassificationLabel(String missionid,String username){
 
         return labelService.getAutoClassificationLabel(missionid, username);
     }
 
+    @RequestMapping(
+            value = "/get/autodetectionlabel",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
     public List<AutoDetectionLabel> getAutoDetectionLabel(String missionid,String username){
 
         return labelService.getAutoDetectionLabel(missionid,username);
