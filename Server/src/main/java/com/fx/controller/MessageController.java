@@ -5,7 +5,6 @@ import com.fx.service.MessageService;
 import com.fx.util.ResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +44,6 @@ public class MessageController {
     )
     @ResponseBody
     public ResultMessage updateMessage(int id){
-        return messageService.updateMessage(id);
+        return messageService.updateMessage(, id);
     }
 }

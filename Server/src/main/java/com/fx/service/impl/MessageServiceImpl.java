@@ -19,22 +19,25 @@ public class MessageServiceImpl implements MessageService {
     /**
      * 添加单条信息
      *
+     * @param username
      * @param message
      */
     @Override
-    public ResultMessage addMessage(Message message) {
-        return messageRepository.addMessage(message);
+    public ResultMessage addMessage(String username, Message message) {
+        return messageRepository.addMessage(username, message);
     }
 
     /**
      * 添加多条信息
      *
+     *
+     * @param username
      * @param messages
      * @return
      */
     @Override
-    public ResultMessage addMessages(List<Message> messages) {
-        return messageRepository.addMessages(messages);
+    public ResultMessage addMessages(String username, List<Message> messages) {
+        return messageRepository.addMessages(username, messages);
     }
 
     /**
@@ -51,11 +54,13 @@ public class MessageServiceImpl implements MessageService {
     /**
      * 更新已读未读
      *
+     *
+     * @param username
      * @param id
      * @return
      */
     @Override
-    public ResultMessage updateMessage(int id) {
-        return messageRepository.updateMessage(id);
+    public ResultMessage updateMessage(String username, int id) {
+        return messageRepository.updateMessage(username,id);
     }
 }

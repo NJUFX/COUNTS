@@ -16,20 +16,20 @@ import java.util.Scanner;
  * Created by Hanxinhu at 15:11 2018/6/10/010
  */
 public class MessageRepositoryImpl implements MessageRepository {
-    private static final  String filename = "../data/message.txt";
+    private static final  String dirname = "../data/message";
 
     Gson gson = new Gson();
     public MessageRepositoryImpl(){
-        File file = new File(filename);
+        File file = new File(dirname);
       try {
           if (file.exists())
-              file.createNewFile();
+              file.mkdir();
       }catch (Exception e){
           e.printStackTrace();
       }
     }
     @Override
-    public ResultMessage addMessage(Message message){
+    public ResultMessage addMessage( String username, Message message){
         int maxID = 0;
         List<Message> messages = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
@@ -38,12 +38,12 @@ public class MessageRepositoryImpl implements MessageRepository {
         }
         message.setId(maxID);
         messages.add(message);
-        writeAll(messages);
+        writeAll(username,messages);
         return ResultMessage.SUCCESS;
     }
 
     @Override
-    public ResultMessage addMessages(List<Message> messages) {
+    public ResultMessage addMessages(String username, List<Message> messages) {
         int maxID = 0;
         List<Message> oldMessages = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
@@ -55,38 +55,46 @@ public class MessageRepositoryImpl implements MessageRepository {
             messages.get(i).setId(maxID++);
         }
         oldMessages.addAll(messages);
-        writeAll(oldMessages);
+        writeAll(username,oldMessages);
         return ResultMessage.SUCCESS;
     }
 
     @Override
-    public ResultMessage updateMessage(int messageID) {
-
-        return null;
+    public ResultMessage updateMessage(String username,int messageID) {
+        List<Message> messages = findMessageByUsername(username);
+        for (int i = 0; i < messages.size(); i++) {
+            Message message = messages.get(i);
+            if (message.getId() == messageID)
+            {
+                message.setRead(true);
+                writeAll(username,messages);
+                return ResultMessage.SUCCESS;
+            }
+        }
+        return ResultMessage.NOT_EXIST;
     }
 
     @Override
     public List<Message> findMessageByUsername(String username) {
-
-        return null;
-
-    }
-    public List<Message> readAll(){
+        String filename = getFilename(username);
         File file = new File(filename);
         List<Message> messages = new ArrayList<>();
-        try{
+        try {
+            if (!file.exists())
+                file.createNewFile();
             Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()){
+            while (scanner.hasNextLine()) {
                 String s = scanner.nextLine();
-                Message message = gson.fromJson(s,Message.class);
+                Message message = gson.fromJson(s, Message.class);
                 messages.add(message);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return messages;
     }
-    public void writeAll(List<Message> messages){
+    public void writeAll(String username,List<Message> messages){
+        String  filename = getFilename(username);
         File file = new File(filename);
         try{
             PrintWriter pw = new PrintWriter(file);
@@ -98,5 +106,7 @@ public class MessageRepositoryImpl implements MessageRepository {
             e.printStackTrace();
         }
     }
-
+    public String getFilename(String username){
+        return dirname + "/" + username + ".txt";
+    }
 }

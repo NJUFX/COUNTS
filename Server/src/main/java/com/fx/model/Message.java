@@ -6,21 +6,22 @@ package com.fx.model;
  */
 public class Message {
     /**
-     *    唯一识别标注
+     * 唯一识别标注
      */
     private int id;
     /**
-     *     信息的用户名
+     * 信息的用户名
      */
     private String username;
     /**
-     *     自动标注的任务
+     * 自动标注的任务 默认是0 0以外的值代表
      */
     private int missionID;
 
-    //已读未读
+    /**
+     * 已读 未读
+     */
     private boolean isRead;
-    // 类型
     /**
      * 消息的标题
      */
@@ -31,6 +32,23 @@ public class Message {
     private String content;
 
     public Message() {
+    }
+
+    /**
+     * @param username  用户名
+     * @param missionID 任务id
+     * @param type      标注类型
+     */
+    public Message(String username, int missionID, String type) {
+        setContent(username,missionID,type);
+        this.title = "您有新的任务！";
+        this.isRead  = false;
+    }
+
+    private void setContent(String username, int missionID, String type) {
+        this.content = username + " : \n" + "    您有新的任务，请您接单！\n" +
+                "   任务号： " + missionID + "\n" +
+                "   标注类型" + type + "\n";
     }
 
     public String getTitle() {
