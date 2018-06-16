@@ -473,7 +473,7 @@
       goMyProject () {
         var path = '/' + localStorage.getItem('username')
         this.$router.push({path: path + '/requester'})
-
+        window.location.reload()
       },
       submitForm(){
         if(this.isAutoLabel){
