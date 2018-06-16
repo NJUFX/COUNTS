@@ -298,7 +298,7 @@ public class LabelServiceImpl implements LabelService{
                 break;
             }
         }
-        if(autoClassificationLabelBean.getKind().equals("train")){
+        if(autoClassificationLabelBean.getKind().equals("Train")){
             mid.setTrainNum(mid.getTrainNum()+1);
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);
@@ -337,7 +337,7 @@ public class LabelServiceImpl implements LabelService{
                 break;
             }
         }
-        if(autoCaptionLabelBean.getKind().equals("train")){
+        if(autoCaptionLabelBean.getKind().equals("Train")){
             mid.setTrainNum(mid.getTrainNum()+1);
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);
@@ -370,7 +370,7 @@ public class LabelServiceImpl implements LabelService{
                 break;
             }
         }
-        if(autoDetectionLabelBean.getKind().equals("train")){
+        if(autoDetectionLabelBean.getKind().equals("Train")){
             mid.setTrainNum(mid.getTrainNum()+1);
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);

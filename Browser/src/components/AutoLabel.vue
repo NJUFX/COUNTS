@@ -458,6 +458,7 @@
         var xmlhttp = new XMLHttpRequest()
         var xmlhttp0 = new XMLHttpRequest()
         var _this = this
+        console.log(_this.status)
         if (this.status=='Train') {
           xmlhttp1.onreadystatechange = function () {
             if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
@@ -465,11 +466,13 @@
               _this.imgPos = 0
               _this.imgList = []
               var dataSet = JSON.parse(xmlhttp1.responseText)
+              //console.log(dataSet)
               for (var i = 0; i < dataSet.length; i++) {
-                var dataurl = dataSet[i].url
+                var dataurl = dataSet[i].base64
                 var name = dataSet[i].fileName
                 _this.imgList.push({url: dataurl, filename: name})
               }
+              //console.log(_this.imgList)
               //console.log("0000")
             }
           }
@@ -496,7 +499,7 @@
           let formData3 = new FormData()
           formData3.append('username', localStorage.getItem('username'))
           formData3.append('missionid', localStorage.getItem('missionID'))
-          console.log(localStorage.getItem('missionID'))
+          //console.log(localStorage.getItem('missionID'))
           xmlhttp1.open('POST', 'http://localhost:8080/counts/image/get/testimages', false)
           xmlhttp1.send(formData3)
         }
@@ -507,6 +510,8 @@
             // 下载整体标注结果集
             xmlhttp.onreadystatechange = function () {
               if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                //console.log(JSON.parse(xmlhttp.responseText))
+                //console.log(_this.missionID)
                 // 下载所有的整体标注结果
                var captionResult = JSON.parse(xmlhttp.responseText)
                 for(var i=0;i<_this.imgList.length;i++){
@@ -515,6 +520,7 @@
                    caption: "",
                  })
                   for(var j=0;j<captionResult.length;j++){
+                    //console.log(_this.captionInfoList[i].fileName+ " "+captionResult[j].fileName)
                    if(_this.captionInfoList[i].fileName==captionResult[j].fileName){
                      _this.captionInfoList[i].caption = captionResult[j].caption
                    }
@@ -526,12 +532,13 @@
             let formDataCap = new FormData()
             formDataCap.append('userid', localStorage.getItem('username'))
             formDataCap.append('missionid', localStorage.getItem('missionID'))
-            xmlhttp.open('POST', 'http://localhost:8080/counts/label/get/autocaptionlabel', true)
+            xmlhttp.open('POST', 'http://localhost:8080/counts/label/get/autocaptionlabel', false)
             xmlhttp.send(formDataCap)
             break
           }
           case 'Classification': {
             //准备分类标注选项
+            console.log(_this.autoMission.types)
                 var selects = _this.autoMission.types
                 for (var i = 0; i < selects.length; i++) {
                   _this.classificationOptions.push({
@@ -667,7 +674,7 @@
       // 提交图片
       commitImg () {
         this.commitAndStay()
-        this.updateLabeled(this.labeled);
+        //this.updateLabeled(this.labeled);
         this.nextImg()
 
       },
@@ -684,7 +691,7 @@
           var c = document.getElementById('myCanvas')
           var dataURL = c.toDataURL()
           var _this = this
-          var filename = _this.imgList[_this.imgPos].filename
+          //var filename = _this.imgList[_this.imgPos].filename
           var autoDetectionLabel = {
             fileName: _this.imgList[_this.imgPos].filename,
             dots: _this.pointList
@@ -926,11 +933,11 @@
           canvas.onmousedown = function (ev) {
             var x1 = ev.offsetX
             var y1 = ev.offsetY
-            console.log(x1)
+            //console.log(x1)
             ctx.beginPath()
             ctx.moveTo(x1, y1)
             _this.pointList.push({x: x1/900, y: y1/_this.currentImgHeight})
-            console.log(_this.pointList)
+            //console.log(_this.pointList)
             // pointList[pos] = '(' + x1 + ',' + y1 + '),'
             pos = pos + 1
 
@@ -950,7 +957,7 @@
               ctx.fillStyle = 'rgba(52, 136, 255, 0.5)'
               ctx.fill()
               _this.pointList.push({x: x2/900, y: y2/_this.currentImgHeight})
-              console.log(_this.pointList)
+              //console.log(_this.pointList)
 
               ctx.strokeRect(x1, y1, x2 - x1, y2 - y1)
               c.onmousemove = null
@@ -974,6 +981,15 @@
           this.imgPos--
           this.draw()
         }
+        else{
+          this.$notify({
+            title: '第一张',
+            message: '已经是第一张了',
+            type: 'warning',
+            duration: 2000,
+            position: 'bottom-left'
+          })
+        }
         this.imgDataClear()
       },
       nextImg () {
@@ -981,6 +997,15 @@
         if (this.imgPos < this.imgList.length - 1) {
           this.imgPos++
           this.draw()
+        }
+        else{
+          this.$notify({
+            title: '最后一张',
+            message: '已经是最后一张了',
+            type: 'warning',
+            duration: 2000,
+            position: 'bottom-left'
+          })
         }
         this.imgDataClear()
       },
@@ -1053,7 +1078,7 @@
           formData.append('username', localStorage.getItem('username'))
           formData.append('missionid', localStorage.getItem('missionID'))
           //console.log(localStorage.getItem('missionID'))
-          xmlhttp3.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', true)
+          xmlhttp3.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', false)
           xmlhttp3.send(formData)
         }
       },

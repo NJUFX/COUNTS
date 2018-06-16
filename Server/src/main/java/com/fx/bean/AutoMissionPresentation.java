@@ -1,5 +1,7 @@
 package com.fx.bean;
 
+import java.util.List;
+
 /**
  * Created by thinkpad on 2018/6/14.
  */
@@ -20,6 +22,8 @@ public class AutoMissionPresentation {
 
 
     private String content;
+
+    private List<String> types;
 
     public int getId() {
         return id;
@@ -75,5 +79,13 @@ public class AutoMissionPresentation {
 
     public void setMissionName(String missionName) {
         this.missionName = missionName;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
     }
 }
