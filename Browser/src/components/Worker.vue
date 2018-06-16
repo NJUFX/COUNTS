@@ -696,7 +696,6 @@ export default {
     // 提交图片
     commitImg () {
       this.commitAndStay()
-      console.log(this.labeled)
       this.updateLabeled(this.labeled);
       this.nextImg()
 
