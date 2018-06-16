@@ -47,7 +47,7 @@ public class ResultController {
     produces = {"application/json; charset=UTF-8"})
     @ResponseBody
     public String getResult(int missionID,int type){
-        return null;
+        return resultService.getResult(missionID,type);
     }
 
 }

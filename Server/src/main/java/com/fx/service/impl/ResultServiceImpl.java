@@ -4,6 +4,7 @@ import com.fx.model.CaptionClassificationResult;
 import com.fx.service.ResultService;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -14,6 +15,10 @@ import java.util.List;
 public class ResultServiceImpl  implements ResultService {
     public ResultServiceImpl() {
     }
+   private OSSHelper ossHelper = new OSSHelper();
+   private static final String autoDir = "../data/autoImage/";
+   private static final String autoFilename = "/label.txt";
+
 
     /**
      * 得到整体描述的结果
@@ -35,6 +40,24 @@ public class ResultServiceImpl  implements ResultService {
      */
     @Override
     public String getResult(int missionID, int type) {
+        if (type==0)
+            return getAutoResult(missionID);
+        if (type==1)
+            return null;
+        return null;
+    }
+
+    private String getAutoResult(int missionID){
+        String filename = autoDir + missionID + autoFilename;
+        File file = new File(filename);
+        if (!file.exists())
+        return null;
+        String key = "auto_"+missionID;
+        ossHelper.upload(file,key);
+
+        return ossHelper.getUrl(key);
+    }
+    private String getOrdinaryResult(int missionID){
         return null;
     }
 }
