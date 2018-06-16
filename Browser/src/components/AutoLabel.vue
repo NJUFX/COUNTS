@@ -510,6 +510,8 @@
             // 下载整体标注结果集
             xmlhttp.onreadystatechange = function () {
               if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                //console.log(JSON.parse(xmlhttp.responseText))
+                //console.log(_this.missionID)
                 // 下载所有的整体标注结果
                var captionResult = JSON.parse(xmlhttp.responseText)
                 for(var i=0;i<_this.imgList.length;i++){
@@ -518,6 +520,7 @@
                    caption: "",
                  })
                   for(var j=0;j<captionResult.length;j++){
+                    //console.log(_this.captionInfoList[i].fileName+ " "+captionResult[j].fileName)
                    if(_this.captionInfoList[i].fileName==captionResult[j].fileName){
                      _this.captionInfoList[i].caption = captionResult[j].caption
                    }
@@ -529,7 +532,7 @@
             let formDataCap = new FormData()
             formDataCap.append('userid', localStorage.getItem('username'))
             formDataCap.append('missionid', localStorage.getItem('missionID'))
-            xmlhttp.open('POST', 'http://localhost:8080/counts/label/get/autocaptionlabel', true)
+            xmlhttp.open('POST', 'http://localhost:8080/counts/label/get/autocaptionlabel', false)
             xmlhttp.send(formDataCap)
             break
           }
@@ -978,6 +981,15 @@
           this.imgPos--
           this.draw()
         }
+        else{
+          this.$notify({
+            title: '第一张',
+            message: '已经是第一张了',
+            type: 'warning',
+            duration: 2000,
+            position: 'bottom-left'
+          })
+        }
         this.imgDataClear()
       },
       nextImg () {
@@ -985,6 +997,15 @@
         if (this.imgPos < this.imgList.length - 1) {
           this.imgPos++
           this.draw()
+        }
+        else{
+          this.$notify({
+            title: '最后一张',
+            message: '已经是最后一张了',
+            type: 'warning',
+            duration: 2000,
+            position: 'bottom-left'
+          })
         }
         this.imgDataClear()
       },
