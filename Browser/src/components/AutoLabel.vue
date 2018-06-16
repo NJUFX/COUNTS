@@ -458,7 +458,7 @@
         var xmlhttp = new XMLHttpRequest()
         var xmlhttp0 = new XMLHttpRequest()
         var _this = this
-        if (this.status=='train') {
+        if (this.status=='Train') {
           xmlhttp1.onreadystatechange = function () {
             if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
               // 加入imgList
@@ -470,13 +470,14 @@
                 var name = dataSet[i].fileName
                 _this.imgList.push({url: dataurl, filename: name})
               }
+              //console.log("0000")
             }
           }
           let formData = new FormData()
           formData.append('missionid', localStorage.getItem('missionID'))
           formData.append('username', localStorage.getItem('username'))
           console.log(localStorage.getItem('missionID'))
-          xmlhttp1.open('POST', 'http://localhost:8080/counts/image/get/trainimages', true)
+          xmlhttp1.open('POST', 'http://localhost:8080/counts/image/get/trainimages', false)
           xmlhttp1.send(formData)
         } else {
           xmlhttp1.onreadystatechange = function () {
@@ -626,7 +627,7 @@
         // console.log(localStorage.getItem("missionType"))
         switch (localStorage.getItem('missionType')) {
           case 'Caption': {
-            console.log('uuuuu')
+            //console.log('uuuuu')
             this.setCurrentImgCaptionInfo()
             break
           }
@@ -736,19 +737,20 @@
           xmlhttp1.send(JSON.stringify(data))
         }
         if (this.missionType == 'Caption') {
+          console.log("caption")
           var autoCaptionLabel = {
             fileName: _this.imgList[_this.imgPos].filename,
             caption: _this.captionDialogInfo
           }
-          var data = {
+          var autoCaptionLabelBean = {
             username: userName,
             missionid: missionID,
             kind: _this.status,
             autoCaptionLabel: autoCaptionLabel
           }
-          console.log(data)
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+              console.log(JSON.parse(xmlhttp.responseText))
               if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
                 _this.$notify({
                   title: '提交成功',
@@ -781,7 +783,7 @@
           }
           xmlhttp.open('POST', 'http://localhost:8080/counts/label/auto/add/captionlabel', false)
           xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-          xmlhttp.send(JSON.stringify(data))
+          xmlhttp.send(JSON.stringify(autoCaptionLabelBean))
         }
         if (this.missionType == 'Classification') {
           var autoClassificationLabel = {
@@ -1029,17 +1031,19 @@
       getAutoMission(){
         if(localStorage.getItem('uesrname')!='visitor'){
           var _this = this;
-          var xmlhttp = new XMLHttpRequest()
-          xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-              var autoMission = JSON.parse(xmlhttp.responseText)
-              _this.AutoMission = autoMission;
+          var xmlhttp3 = new XMLHttpRequest()
+          xmlhttp3.onreadystatechange = function () {
+            if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
+              var autoMission = JSON.parse(xmlhttp3.responseText)
+              _this.autoMission = autoMission;
+              //console.log(autoMission)
               _this.missionType = _this.autoMission.type;
               _this.labeled = _this.autoMission.finished;
               _this.missionID = _this.autoMission.id;
               _this.status  = _this.autoMission.status
-              console.log(_this.status)
-              if(_this.status=='train'){
+              //console.log(_this.status)
+              //console.log("123456")
+              if(_this.status=='Train'){
                 _this.correctJudge = true;
               }
 
@@ -1048,9 +1052,9 @@
           let formData = new FormData()
           formData.append('username', localStorage.getItem('username'))
           formData.append('missionid', localStorage.getItem('missionID'))
-          console.log(localStorage.getItem('missionID'))
-          xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', true)
-          xmlhttp.send(formData)
+          //console.log(localStorage.getItem('missionID'))
+          xmlhttp3.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', true)
+          xmlhttp3.send(formData)
         }
       },
 

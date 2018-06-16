@@ -287,12 +287,15 @@ public class MissionController {
     @ResponseBody
     public AutoMissionPresentation getAutoMissionBySignalWorkerID(String username,String missionid){
 
+        //System.out.println("123");
         List<AutoMissionPresentation> lists = missionService.getAutoMissionByWorkerID(username);
         for(int i=0;i<=lists.size()-1;i++){
             if(lists.get(i).getId()==Integer.parseInt(missionid)){
+                System.out.println(lists.get(i).getStatus());
                 return lists.get(i);
             }
         }
+        System.out.println("456");
         return null;
     }
 
