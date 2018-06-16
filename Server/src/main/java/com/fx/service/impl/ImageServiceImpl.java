@@ -199,6 +199,7 @@ public class ImageServiceImpl implements ImageService{
         for(int i=0;i<=missions.size()-1;i++){
             if(missions.get(i).getMissionId() == missionid){
                 AutoUserMission mid = missions.get(i);
+                System.out.println(mid.getTrainStart()+" "+mid.getTrainEnd());
                         return getAutoImage(mid.getMissionId(),username,mid.getTrainStart(),mid.getTrainEnd());
             }
 
@@ -283,7 +284,7 @@ public class ImageServiceImpl implements ImageService{
             path = path + "allimage";
         }
 
-        System.out.println(path);
+        //System.out.println(path);
 
         /**
          * 根据不同类型为path赋值
@@ -318,6 +319,7 @@ public class ImageServiceImpl implements ImageService{
                 String head = "data:image/" + files[i].getName().split("[.]")[1] + ";base64,";
 
                 // System.out.println(head+url);
+                //System.out.println(files[i].getName()+" "+url);
                 result.add(new Image(files[i].getName(),head+url));
                 /*
                 localLabel.setUrl(head + url);
