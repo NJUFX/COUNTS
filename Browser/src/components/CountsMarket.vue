@@ -396,7 +396,6 @@
         }
         window.location.reload()
       },
-
       joinProject (id) {
         if (localStorage.getItem('identify') == 'requester') {
           this.openInfo("Sorry, you can't join this project as a requester.")

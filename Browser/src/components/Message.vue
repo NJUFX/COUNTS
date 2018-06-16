@@ -14,7 +14,7 @@
       <div style="color:#4CAF50;font-size: 30px;position: absolute; top: 60px;left: 310px">系统消息丨Message</div>
       <div style="position: absolute; width: 800px;top: 130px; left: 330px; height: 350px;">
         <span style="font-size: 24px">{{topic}}</span>
-        <p style="top: 150px; text-align: justify;font-size: 16px;">{{mainInfo}}</p>
+        <p style="position: absolute;top: 50px; text-align: justify;font-size: 16px; left: 100px">{{mainInfo}}</p>
        <!-- <el-button v-show="goProject" type="text" style="font-size: 16px">点此进入项目</el-button>-->
       </div>
     </div>
@@ -25,10 +25,25 @@
     name: "message",
     data(){
       return{
-        topic: '',
+        topic: '自动化审查',
         goProject:false,
-        mainInfo: '',
-        messageList:[]
+        mainInfo: 'xxx客官：\n' +
+        '   您有新的任务，请您接单！\n' +
+        '   任务名： xxx\n' +
+        '   标注类型：xxx\n' +
+        '祝您标注愉快~',
+        messageList:[
+          {
+            content:'xxx客官：\n' +
+            '   您有新的任务，请您接单！\n' +
+            '   任务名： xxx\n' +
+            '   标注类型：xxx\n' +
+            '祝您标注愉快~',
+            index:1,
+            topic:'a test',
+            unread:true
+          }
+        ]
       }
     },
     created(){

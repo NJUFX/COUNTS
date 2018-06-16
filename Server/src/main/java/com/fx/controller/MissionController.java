@@ -330,7 +330,6 @@ public class MissionController {
      * 工人接受任务
      *
      * @param username      用户名
-     * @param missionID     任务的id
      * @param recommendType 推荐的类型
      * @return
      */
