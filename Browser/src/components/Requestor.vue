@@ -38,7 +38,7 @@
     </div>
     <div v-show="project_show" style="position: absolute; top: 400px;width: 100%; left: 0; top: 418px;background-color:white">
       <div style="position: absolute; top: 0px;width: 1100px; left: 50%; margin-left: -550px; background-color: white;">
-        <div style="position: absolute;top: 0;left: 0; width: 100%; height: 250px; background-color: white"></div>
+        <div style="position: absolute;top: 0;left: 0; width: 100%; height:370px; background-color: white"></div>
         <div>
           <el-cascader style="position: absolute; left: 30px; top: 10px;"
                        expand-trigger="hover"
@@ -71,9 +71,11 @@
               <img v-bind:src="item.cover" class="image" v-bind:id="item.missionname">
               <div style="height: 130px;position:absolute; top: 150px; width: 97%; left: 1.5%; background-color: white">
                 <span style="font-size: 20px; color: #4CAF50">{{item.missionname}}</span>
+                <span style="position: absolute;left:90px; top: 28px;font-size: 15px;color:green">自动化标注</span>
                 <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
                 <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
-                <el-button style="position: absolute; left: 190px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="downloadData(item.id)">标注数据</el-button>
+                <el-button style="position: absolute; left: 50px;top: 75px;font-size: 14px;" type="text" @click="handleProjectDetails(item.id)">项目详情</el-button>
+                <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="downloadData(item.id)">数据下载</el-button>
               </div>
               <div class="imgOnClick" >
                 <img  src="../assets/img_1.png" style="width: 96%; position: absolute; left: 1.5%;top: 0px; height: 145px">
@@ -335,7 +337,19 @@
         default_index: '1',
         project_info: {},
         projectInfo: [],
-        autoProjects:[],
+        autoProjects:[
+          {
+            id: '1',
+            missionname: 'auto mission',
+            type: 'Caption',
+            cover: '',
+            counts: 10,
+            percent:0,
+            details: 'some information maybe useful',
+            isAuto:1,
+            show:true,
+          }
+        ],
         project_total: 0,
         info: {
           id: '',
@@ -474,7 +488,6 @@
                 type: arrays[i].type,
                 cover: '',
                 counts: arrays[i].points,
-                type: arrays[i].type,
                 percent:0,
                 details: arrays[i].description,
                 isAuto:1,
@@ -529,23 +542,24 @@
       handleLabelTypeChange(val){
         if(val[0]=='man'){
           for(var i=0;i<this.projectInfo.length;i++){
-            if(this.projectInfo[i].isAuto==0){
               this.projectInfo[i].show=true;
-            }else{
-              this.projectInfo[i].show=false;
-            }
+          }
+          for(var i=0;i<this.autoProjects.length;i++){
+            this.autoProjects[i].show=false;
           }
         }else if(val[0]=='auto'){
-          for(var i=0;i<this.projectInfo.length;i++){
-            if(this.projectInfo[i].isAuto==1){
-              this.projectInfo[i].show=true;
-            }else{
-              this.projectInfo[i].show=false;
-            }
+          for(var i=0;i<this.projectInfo.length;i++) {
+            this.projectInfo[i].show = false;
+          }
+          for(var i=0;i<this.autoProjects.length;i++){
+            this.autoProjects[i].show=true;
           }
         }else{
           for(var i=0;i<this.projectInfo.length;i++){
             this.projectInfo[i].show=true;
+          }
+          for(var i=0;i<this.autoProjects.length;i++){
+            this.autoProjects[i].show=true;
           }
         }
       },
@@ -986,7 +1000,7 @@
     margin: 10px;
     padding: 5px;
     width: 260px;
-    height:240px;
+    height:245px;
     float: left;
     position: relative;
   }
