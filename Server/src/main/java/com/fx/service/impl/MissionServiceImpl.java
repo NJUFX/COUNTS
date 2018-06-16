@@ -471,4 +471,9 @@ public class MissionServiceImpl implements MissionService {
         return autoMissions;
 
     }
+
+    public AutoMission getAutoMission(int missionid){
+        return autoMissionRepository.findAutoMissionByID(missionid);
+    }
+
 }
