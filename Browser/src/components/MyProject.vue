@@ -47,7 +47,7 @@
             @change="handleLabelTypeChange">
           </el-cascader>
         </div>
-        <div style="position: absolute; top: 50px; left: 20px">
+        <div style="position: absolute; top: 50px; left: 0px; padding-left: 20px;background-color: white;">
           <div v-for="item in projectInfo" style="float: left" :key="item">
             <el-card v-show="item.show" class="el_card" :body-style="{padding:'0px'}">
               <el-tag v-show="item.isContinue" style="position: absolute; left: 20px; top: 10px; color:white; width: 70px " color="#4CAF50">进行中...</el-tag>
@@ -78,6 +78,7 @@
               </div>
               <div style="height: 130px;position:absolute; top: 150px; width: 97%; left: 1.5%; background-color: white">
                 <span style="font-size: 20px; color: #4CAF50">{{item.missionname}}</span>
+                <span style="position: absolute;left:90px; top: 28px;font-size: 15px;color:green">自动化标注</span>
                 <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
                 <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
                 <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="openProject(item)">进入项目</el-button>
@@ -288,7 +289,21 @@ export default {
       }
     }
     return {
-      autoProjects:[],
+      autoProjects:[
+        {
+          id: '1',
+          missionname: 'auto test',
+          charts_id: '' + '1' + '_charts',
+          imgFinished: 4,
+          imgToDo: 7,
+          type: 'Caption',
+          cover: '',
+          percent: 0,
+          annotationType: 1,
+          status:'train',
+          show: true
+        }
+      ],
       selectLabelTypeOption:[],
       labelTypeOptions:[
         {
@@ -302,16 +317,6 @@ export default {
         {
           value:'auto',
           label:'自动化项目',
-          children: [
-            {
-              value: 'label',
-              label:'标注项目'
-            },
-            {
-              value:'test',
-              label:'审查项目'
-            }
-          ]
         }
       ],
       isManLabel:true,
@@ -407,7 +412,7 @@ export default {
           percent:0,
           isEnd:false,
           isContinue:true
-        }
+        },
       ],
       project_total: 0,
       info: {
@@ -688,14 +693,13 @@ export default {
       if(val[0]=='man'){
         this.selectManLabel()
       }else if(val[0]=='auto'){
-        if(val[1]=='label'){
-          this.selectAutoLabel()
-        }else if(val[1]=='test'){
-          this.selectAutoTest()
-        }
+        this.selectAutoLabel()
       }else{
         for(var i=0;i<this.projectInfo.length;i++){
             this.projectInfo[i].show=true;
+        }
+        for(var i=0;i<this.autoProjects.length;i++){
+          this.autoProjects[i].show=true;
         }
       }
     },
@@ -705,14 +709,6 @@ export default {
       }
       for(var i=0;i<this.autoProjects.length;i++){
         this.autoProjects[i].show=false;
-      }
-    },
-    selectAutoTest(){
-      for(var i=0;i<this.projectInfo.length;i++){
-        this.projectInfo[i].show=false;
-      }
-      for(var i=0;i<this.autoProjects.length;i++){
-        this.autoProjects[i].show=true;
       }
     },
     selectAutoLabel(){
@@ -1257,7 +1253,7 @@ export default {
     margin: 10px;
     padding: 5px;
     width: 260px;
-    height:240px;
+    height:245px;
     float: left;
     position: relative;
   }
