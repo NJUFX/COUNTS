@@ -304,6 +304,7 @@ public class LabelServiceImpl implements LabelService{
                 mid.setFinishTrain(true);
                 mid.setFinishTest(false);
 
+               // System.out.println("111111111");
                 /**
                  * 在这里调用训练集
                  */
@@ -389,7 +390,9 @@ public class LabelServiceImpl implements LabelService{
 //            }
         }
         autoUserMissionRepository.updateAutoUserMission(username,mid);
-        return  autoDetectionLabelReposity.addAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
+        ResultMessage message =  autoDetectionLabelReposity.addAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
+
+        return message;
     }
 
     public ResultMessage updateAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean){

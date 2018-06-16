@@ -14,6 +14,7 @@ public class AutoDetectionLabelRepositoryImpl implements AutoDetectionLabelRepos
     AutoLabelRepositoryHelper helper = new AutoLabelRepositoryHelper(AutoDetectionLabel.class);
     @Override
     public ResultMessage addAutoDetectionLabel(int missionID, AutoDetectionLabel autoDetectionLabel) {
+        System.out.println(autoDetectionLabel.getFileName());
         return helper.addAutoLabel(missionID,autoDetectionLabel);
     }
 

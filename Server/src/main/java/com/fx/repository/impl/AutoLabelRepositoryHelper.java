@@ -20,7 +20,7 @@ import java.util.Scanner;
 public class AutoLabelRepositoryHelper<T> {
     Type t;
     Gson gson = new Gson();
-    private static final String dir = "../data/AutoImage/";
+    private static final String dir = "../data/autoImage/";
 
     public AutoLabelRepositoryHelper(Type t) {
         this.t = t;

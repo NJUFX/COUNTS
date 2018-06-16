@@ -213,10 +213,12 @@
     name: 'Worker',
     data () {
       return {
-        imgList: [{
+        imgList: [
+          {
           url: '',
           filename: ''
-        }],
+        }
+        ],
 
         colorList: ['#ff0000', '#FFA500', '#FFEB0D', '#69FF66', '#007FFF', '#BCB4FF'],
         colorPos: 0,
@@ -229,10 +231,12 @@
         }
         */], // 存储当前数据集的全部整体标注内容
         classificationInfoList: [
+          /*
           {
             fileName: '',
             select: ''
           }
+          */
         ], // 存储当前数据集每张图片的分类结果
         detectionInfoList: [
           /* {
@@ -472,7 +476,7 @@
                 var name = dataSet[i].fileName
                 _this.imgList.push({url: dataurl, filename: name})
               }
-              //console.log(_this.imgList)
+              console.log(_this.imgList)
               //console.log("0000")
             }
           }
@@ -551,13 +555,15 @@
               if (xmlhttp0.readyState == 4 && xmlhttp0.status == 200) {
                 // 加入下载结果
                 var classificationResult = JSON.parse(xmlhttp0.responseText)
-                console.log(classificationResult)
-                console.log(_this.imgList.length)
+                //console.log(_this.imgList)
+                //console.log(_this.classificationInfoList)
+                //console.log(_this.imgList.length)
                 for(var i=0;i<_this.imgList.length;i++){
                   _this.classificationInfoList.push({
                     fileName: _this.imgList[i].filename,
                     select: 0
                   })
+                  console.log(_this.classificationInfoList)
                   for(var j=0;j<classificationResult.length;j++){
                     if(_this.classificationInfoList[i].fileName==classificationResult[j].fileName){
                       _this.classificationInfoList[i].select = classificationResult[j].select
@@ -572,7 +578,7 @@
             let formDataClaRes = new FormData()
             formDataClaRes.append('missionid', localStorage.getItem('missionID'))
             formDataClaRes.append('username', localStorage.getItem('username'))
-            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/autoclassificationlabel', true)
+            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/autoclassificationlabel', false)
             xmlhttp0.send(formDataClaRes)
             break
           }
@@ -700,7 +706,7 @@
             username: userName,
             missionid: missionID,
             kind: _this.status,
-            autoDetection: autoDetectionLabel
+            autoDetectionLabel: autoDetectionLabel
           }
           // 替换img图片
           this.imgList[this.imgPos].url = dataURL
