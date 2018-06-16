@@ -12,12 +12,14 @@ import java.nio.charset.Charset;
 import java.nio.file.*;
 
 
-
-
-
+import java.util.ArrayList;
 import java.util.List;
 
 
+import com.fx.model.AutoClassificationLabel;
+import com.fx.model.AutoDetectionLabel;
+import com.fx.model.AutoPercentDot;
+import com.fx.model.ClassificationLabel;
 import org.tensorflow.*;
 
 import org.tensorflow.types.UInt8;
@@ -34,8 +36,11 @@ public class PBServer {
 
 
 
-    public void predictClassificationLabel(String imageFile,String modelDir,String[] labels,String PBName){
+    public AutoClassificationLabel predictClassificationLabel(String filename,String imageFile, String modelDir, String[] labels, String PBName){
 
+
+        //String imageFile =  "E:\\\\GitHub\\\\ObjectDetection\\\\models-master\\\\raccoon_dataset-master\\\\images\\\\mytest\\\\0ShAyPFRqBeO60QkYN7w_Mac Cheese 2.jpg";
+        //String modelDir = "E:\\GitHub\\ObjectDetection\\models-master\\raccoon_dataset-master\\mytrain";
 
         byte[] data = readAllBytesOrExit(Paths.get(imageFile));
         byte[] graphDef = readAllBytesOrExit(Paths.get(modelDir, PBName));
@@ -52,15 +57,26 @@ public class PBServer {
         int batchSize = (int) rshape[0];
 
 
+        float max = 0;
+        int index = 0;
         float[][] logits = result.copyTo(new float[batchSize][nlabels]);
         for(int i=0;i<=logits.length-1;i++){
             for(int j=0;j<=logits[0].length-1;j++){
+                if(logits[i][j]>max){
+                    max = logits[i][j];
+                    index = j+1;
+                }
                 System.out.println(labels[j]+" "+logits[i][j]);
             }
         }
+        AutoClassificationLabel autoClassificationLabel = new AutoClassificationLabel();
+        autoClassificationLabel.setFileName(filename);
+        autoClassificationLabel.setSelect(index);
+
+        return autoClassificationLabel;
     }
 
-    public void predicObjectDetectionLabel(String imageFile,String modelDir,String[] labels,String PBName){
+    public AutoDetectionLabel predicObjectDetectionLabel(String filename,String imageFile, String modelDir, String[] labels, String PBName){
 
         int width=0,height=0;
         try {
@@ -88,11 +104,43 @@ public class PBServer {
         Tensor<UInt8> input =constructAndExecuteGraphToNormalizeImage(data,width,height);
         //Tensor<Float> result = s.runner().feed("DecodeJpeg/contents", input).fetch("final_result").run().get(0).expect(Float.class);
         Tensor<Float> boxes = s.runner().feed("image_tensor",input).fetch(output).run().get(0).expect(Float.class);
-        long[] rshape = boxes.shape();
-        System.out.println(rshape.length);
-        for(int i=0;i<=rshape.length-1;i++){
-            System.out.println(rshape[i]);
+        Tensor<Float> scores = s.runner().feed("image_tensor",input).fetch("detection_scores").run().get(0).expect(Float.class);
+
+        long[] reshape1 = boxes.shape();
+        long[] reshape2 = scores.shape();
+
+        float[][] floatscores = scores.copyTo(new float[(int)reshape2[0]][(int)reshape2[1]]);
+        float[][][] floatboxed = boxes.copyTo(new float[(int)reshape1[0]][(int)reshape1[1]][(int)reshape1[2]]);
+        System.out.println(floatscores.length);
+
+        List<AutoPercentDot> dots = new ArrayList<>();
+
+
+        for(int i=0;i<=floatscores[0].length-1;i++){
+            System.out.println(floatscores[0][i]);
+            if(floatscores[0][i]>=0.5){
+                AutoPercentDot mid1 = new AutoPercentDot();
+                AutoPercentDot mid2 = new AutoPercentDot();
+
+                mid1.setX(floatboxed[0][i][0]);
+                mid1.setY(floatboxed[0][i][1]);
+                mid2.setX(floatboxed[0][i][2]);
+                mid2.setY(floatboxed[0][i][3]);
+                dots.add(mid1);
+                dots.add(mid2);
+            }
         }
+        /*
+        for(int i=0;i<=floatboxed[0].length-1;i++){
+            for(int j=0;j<=floatboxed[0][0].length-1;j++){
+                System.out.println(floatboxed[0][i][j]);
+            }
+        }*/
+
+        AutoDetectionLabel autoDetectionLabel = new AutoDetectionLabel();
+        autoDetectionLabel.setDots(dots);
+        autoDetectionLabel.setFileName(filename);
+        return autoDetectionLabel;
     }
 
 
