@@ -35,4 +35,19 @@ public class ResultController {
 
         return resultService.getCapAndClaResult(missionID);
     }
+
+    /**
+     * 根据 missionID 和 type获取标注结果
+     * @param missionID 任务id
+     * @param type 0代表人工标注 1代表自动化
+     * @return 目标文件的url 一个小时内有效
+     */
+    @RequestMapping(value = "/signup",
+    method = RequestMethod.POST,
+    produces = {"application/json; charset=UTF-8"})
+    @ResponseBody
+    public String getResult(int missionID,int type){
+        return null;
+    }
+
 }
