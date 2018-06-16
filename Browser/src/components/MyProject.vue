@@ -1008,11 +1008,13 @@ export default {
       localStorage.setItem('missionID', item.id)
       if(item.annotationType==1){
         localStorage.setItem('isAutoLabel', '1')
+        var path = '/' + localStorage.getItem('username')
+        this.$router.push({path: path + '/autoLabel'})
       }else{
         localStorage.setItem('isAutoLabel', '0')
+        var path = '/' + localStorage.getItem('username')
+        this.$router.push({path: path + '/worker'})
       }
-      var path = '/' + localStorage.getItem('username')
-      this.$router.push({path: path + '/worker'})
       window.location.reload()
     },
     drawPieCharts () {
