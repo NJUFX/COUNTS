@@ -26,5 +26,15 @@ public class ResultServiceImpl  implements ResultService {
         return null;
     }
 
-
+    /**
+     * 返回url
+     *
+     * @param missionID
+     * @param type
+     * @return
+     */
+    @Override
+    public String getResult(int missionID, int type) {
+        return null;
+    }
 }
