@@ -39,9 +39,6 @@
             <el-tooltip  content="重新标注当前图片" placement="bottom-end">
               <el-button type="danger" icon="el-icon-refresh" circle @click="reLabelImg"></el-button>
             </el-tooltip>
-            <el-tooltip  content="给项目评分" placement="bottom">
-              <el-button type="warning" icon="el-icon-star-on" circle @click="rateProject" :disabled="ratingAccess"></el-button>
-            </el-tooltip>
             <el-tooltip  content="下一张" placement="bottom">
               <el-button icon="el-icon-caret-right" circle @click="nextImg"></el-button>
             </el-tooltip>
@@ -201,7 +198,6 @@
     </el-dialog>
     <!--评分对话框结束-->
   </el-container>
-
 </template>
 
 <script>
@@ -214,7 +210,7 @@
       ElAside,
       ElMain
     },
-    name: 'auto-label',
+    name: 'Worker',
     data () {
       return {
         imgList: [{
@@ -228,7 +224,7 @@
 
         captionInfoList: [
           /* {
-          filename:"",
+          fileName:"",
           caption:""
         }
         */], // 存储当前数据集的全部整体标注内容
@@ -238,11 +234,12 @@
             select: ''
           }
         ], // 存储当前数据集每张图片的分类结果
-        attributeInfoList: [
+        detectionInfoList: [
           /* {
             fileName:"",
-            info:{}
-          } */], // 存储当前数据集每张图片的属性结果，每个元素都是一个List
+            dots:[]
+          } */], // 存储当前数据集每张图片的方框标注，每个元素都是一个List
+
 
         tooltip: '收起',
         btnText: 'el-icon-arrow-right',
@@ -287,23 +284,17 @@
         activeName: '1', //选项卡选择哪一张
         acceptMission: null, //存储项目评分，已完成数量等信息
         autoMission: null, //自动化项目的信息
-        isAutoLabel: '0',
+        status: '',
         correctJudge: false,
-        ratingAccess: true,
+        currentImgHeight: 0,
+        //ratingAccess: true,
 
       }
     },
     created () {
       this.missionType = localStorage.getItem('missionType')
       this.missionID = localStorage.getItem('missionID')
-      this.isAutoLabel = localStorage.getItem('isAutoLabel')
-      if(this.isAutoLabel==1){
-        this.getAutoMission()
-      }else{
-        this.getAcceptMission()
-        this.correctJudge = true; //控制正确判断不可用
-        this.ratingAccess = false; //控制评分可用
-      }
+      this.getAutoMission()
       this.downloadSource()
     },
     watch: {
@@ -441,19 +432,7 @@
           }
           _this.commitAndStay()
         }
-        if (this.missionType == 'Attribute') {
-          for (var i = 0; i < _this.attributeTableData.length; i++) {
-            _this.attributeTableData[i].label = ''
-          }
-          for (var i = 0; i < _this.attributeInfoList.length; i++) {
-            if (_this.attributeInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
-              _this.attributeInfoList[i].info = _this.attributeTableData
-              // console.log("relabel")
-            }
-          }
-          _this.commitAndStay()
-        }
-        if (this.missionType == 'Detection' || this.missionType == 'Segmentation') {
+        if (this.missionType == 'Detection') {
           this.colorPos = 0
           // _this.imgDataClear();
           var xmlhttp = new XMLHttpRequest()
@@ -479,40 +458,35 @@
         var xmlhttp = new XMLHttpRequest()
         var xmlhttp0 = new XMLHttpRequest()
         var _this = this
-        if (this.missionType == 'Segmentation' || this.missionType == 'Detection') {
+        if (this.status=='Train') {
           xmlhttp1.onreadystatechange = function () {
             if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
-              // console.log("123")
               // 加入imgList
               _this.imgPos = 0
               _this.imgList = []
               var dataSet = JSON.parse(xmlhttp1.responseText)
               for (var i = 0; i < dataSet.length; i++) {
-                // var dataurl = dataSet[i].url
-                // var name = dataSet[i].location.split('/')[1]
                 var dataurl = dataSet[i].url
                 var name = dataSet[i].fileName
                 _this.imgList.push({url: dataurl, filename: name})
               }
+              //console.log("0000")
             }
           }
           let formData = new FormData()
           formData.append('missionid', localStorage.getItem('missionID'))
           formData.append('username', localStorage.getItem('username'))
           console.log(localStorage.getItem('missionID'))
-          xmlhttp1.open('POST', 'http://localhost:8080/counts/label/getlocallabel', true)
+          xmlhttp1.open('POST', 'http://localhost:8080/counts/image/get/trainimages', false)
           xmlhttp1.send(formData)
         } else {
           xmlhttp1.onreadystatechange = function () {
             if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
-              // console.log("123")
               // 加入imgList
               _this.imgPos = 0
               _this.imgList = []
               var dataSet = JSON.parse(xmlhttp1.responseText)
               for (var i = 0; i < dataSet.length; i++) {
-                // var dataurl = dataSet[i].url
-                // var name = dataSet[i].location.split('/')[1]
                 var dataurl = dataSet[i].base64
                 var name = dataSet[i].fileName
                 _this.imgList.push({url: dataurl, filename: name})
@@ -520,11 +494,13 @@
             }
           }
           let formData3 = new FormData()
+          formData3.append('username', localStorage.getItem('username'))
           formData3.append('missionid', localStorage.getItem('missionID'))
           console.log(localStorage.getItem('missionID'))
-          xmlhttp1.open('POST', 'http://localhost:8080/counts/image/originmission', true)
+          xmlhttp1.open('POST', 'http://localhost:8080/counts/image/get/testimages', false)
           xmlhttp1.send(formData3)
         }
+
         // 判断任务类型下载任务数据
         switch (this.missionType) {
           case 'Caption': {
@@ -532,116 +508,92 @@
             xmlhttp.onreadystatechange = function () {
               if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 // 下载所有的整体标注结果
-                // console.log("download")
-                _this.captionInfoList = JSON.parse(xmlhttp.responseText)
-                // console.log(JSON.parse(xmlhttp.responseText));
-                // console.log(_this.captionInfoList)
+               var captionResult = JSON.parse(xmlhttp.responseText)
+                for(var i=0;i<_this.imgList.length;i++){
+                 _this.captionInfoList.push({
+                   fileName: _this.imgList[i].filename,
+                   caption: "",
+                 })
+                  for(var j=0;j<captionResult.length;j++){
+                   if(_this.captionInfoList[i].fileName==captionResult[j].fileName){
+                     _this.captionInfoList[i].caption = captionResult[j].caption
+                   }
+                  }
+                }
                 _this.setCurrentImgCaptionInfo()
               }
             }
             let formDataCap = new FormData()
             formDataCap.append('userid', localStorage.getItem('username'))
             formDataCap.append('missionid', localStorage.getItem('missionID'))
-            xmlhttp.open('POST', 'http://localhost:8080/counts/label/get/captionlabel', true)
+            xmlhttp.open('POST', 'http://localhost:8080/counts/label/get/autocaptionlabel', true)
             xmlhttp.send(formDataCap)
             break
           }
           case 'Classification': {
-
-            // 下载分类标注选项
-            xmlhttp.onreadystatechange = function () {
-              if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                //console.log(JSON.parse(xmlhttp.responseText).selects)
-                // 选项列表放入选项数组
-                var selects = JSON.parse(xmlhttp.responseText).selects
+            //准备分类标注选项
+                var selects = _this.autoMission.types
                 for (var i = 0; i < selects.length; i++) {
                   _this.classificationOptions.push({
                     classificationValue: i + 1,
                     label: selects[i]
                   })
                 }
-                //console.log('00' + JSON.stringify(_this.classificationOptions))
-              }
-            }
-            let formDataCla = new FormData()
-            formDataCla.append('id', localStorage.getItem('missionID'))
-            // console.log(localStorage.getItem("missionID")+"mission")
-            xmlhttp.open('POST', 'http://localhost:8080/counts/mission/findmission/id', true)
-            xmlhttp.send(formDataCla)
-
             // 下载分类标注结果
             xmlhttp0.onreadystatechange = function () {
               if (xmlhttp0.readyState == 4 && xmlhttp0.status == 200) {
                 // 加入下载结果
-                _this.classificationInfoList = JSON.parse(xmlhttp0.responseText)
-                //console.log('999' + JSON.stringify(_this.classificationInfoList))
+                var classificationResult = JSON.parse(xmlhttp0.responseText)
+                console.log(classificationResult)
+                console.log(_this.imgList.length)
+                for(var i=0;i<_this.imgList.length;i++){
+                  _this.classificationInfoList.push({
+                    fileName: _this.imgList[i].filename,
+                    select: 0
+                  })
+                  for(var j=0;j<classificationResult.length;j++){
+                    if(_this.classificationInfoList[i].fileName==classificationResult[j].fileName){
+                      _this.classificationInfoList[i].select = classificationResult[j].select
+                    }
+                  }
+                }
+                //_this.classificationInfoList = JSON.parse(xmlhttp0.responseText)
+                //console.log('999' + _this.classificationInfoList)
                 _this.setCurrentImgClassificationValue()
               }
             }
             let formDataClaRes = new FormData()
             formDataClaRes.append('missionid', localStorage.getItem('missionID'))
-            formDataClaRes.append('userid', localStorage.getItem('username'))
-            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/classificationlabel', true)
+            formDataClaRes.append('username', localStorage.getItem('username'))
+            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/autoclassificationlabel', true)
             xmlhttp0.send(formDataClaRes)
             break
           }
-          case 'Attribute': {
-            var selects = []
-            var result = []
-            // 下载属性标注选项
-            xmlhttp.onreadystatechange = function () {
-              if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                // 选项列表放入选项数组
-                selects = JSON.parse(xmlhttp.responseText).selects
-                console.log(selects)
-              }
-            }
-            let formDataAtt = new FormData()
-            formDataAtt.append('id', localStorage.getItem('missionID'))
-            xmlhttp.open('POST', 'http://localhost:8080/counts/mission/findmission/id', true)
-            xmlhttp.send(formDataAtt)
-
-            // 下载属性标注结果并解析
+          case 'Detection': {
+            // 下载方框标注结果并解析
             xmlhttp0.onreadystatechange = function () {
               if (xmlhttp0.readyState == 4 && xmlhttp0.status == 200) {
                 // 加入下载结果
-                result = JSON.parse(xmlhttp0.responseText)
-                console.log(result)
-                // 把结果加入infoList
-                for (var i = 0; i < result.length; i++) {
-                  // console.log("00000")
-                  var filename = result[i].fileName
-                  var info = []
-                  for (var j = 0; j < selects.length; j++) {
-                    if (result[i].attributes != null) {
-                      info.push({
-                        attributeValue: selects[j],
-                        label: result[i].attributes[j]
-                      })
-                    } else {
-                      // console.log("123456")
-                      info.push({
-                        attributeValue: selects[j],
-                        label: ''
-                      })
-                    }
-                    // console.log(info);
-                  }
-
-                  _this.attributeInfoList.push({
-                    fileName: filename,
-                    info: info
+                var detectionResult = JSON.parse(xmlhttp0.responseText)
+                for(var i=0;i<_this.imgList.length;i++){
+                  _this.detectionInfoList.push({
+                    fileName: _this.imgList[i].filename,
+                    dots: [],
                   })
+                  for(var j=0;j<detectionResult.length;j++){
+                    if(_this.detectionInfoList[i].fileName==detectionResult[j].fileName){
+                      _this.detectionInfoList[i].dots = detectionResult[j].dots
+                    }
+                  }
                 }
-                console.log(_this.attributeInfoList)
-                _this.setCurrentImgAttributeTable()
+                _this.setCurrentImgDetectionInfo()
               }
             }
-            let formDataAttRes = new FormData()
-            formDataAttRes.append('missionid', localStorage.getItem('missionID'))
-            formDataAttRes.append('userid', localStorage.getItem('username'))
-            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/attributelabel', true)
-            xmlhttp0.send(formDataAttRes)
+            let formDataDetRes = new FormData()
+            formDataDetRes.append('missionid', localStorage.getItem('missionID'))
+            formDataDetRes.append('username', localStorage.getItem('username'))
+            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/autodetectionlabel', true)
+            xmlhttp0.send(formDataDetRes)
             break
           }
 
@@ -661,6 +613,7 @@
         }
       },
       setCurrentImgClassificationValue () {
+
         var _this = this
         for (var i = 0; i < _this.classificationInfoList.length; i++) {
           if (_this.classificationInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
@@ -670,19 +623,11 @@
 
         // console.log(_this.classificationInfoList)
       },
-      setCurrentImgAttributeTable () {
-        var _this = this
-        for (var i = 0; i < _this.attributeInfoList.length; i++) {
-          if (_this.attributeInfoList[i].fileName == _this.imgList[_this.imgPos].filename) {
-            _this.attributeTableData = _this.attributeInfoList[i].info
-          }
-        }
-      },
       setCurrentImgInfo () {
         // console.log(localStorage.getItem("missionType"))
         switch (localStorage.getItem('missionType')) {
           case 'Caption': {
-            console.log('uuuuu')
+            //console.log('uuuuu')
             this.setCurrentImgCaptionInfo()
             break
           }
@@ -690,9 +635,31 @@
             this.setCurrentImgClassificationValue()
             break
           }
-          case 'Attribute': {
-            this.setCurrentImgAttributeTable()
+          case 'Detection': {
+            this.setCurrentImgDetectionInfo()
             break
+          }
+        }
+      },
+      setCurrentImgDetectionInfo(){
+        var _this = this
+        for (var i = 0; i < _this.detectionInfoList.length; i++) {
+          if (_this.detectionInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
+            //把点画上去
+            var canvas = document.getElementById('myCanvas')
+            var ctx = canvas.getContext('2d')
+            for(var j=0;j<_this.detectionInfoList[i].dots.length-1;j = j+2){
+              var x1 = _this.detectionInfoList[i].dots[j].x*900
+              var y1 = _this.detectionInfoList[i].dots[j].y*_this.currentImgHeight
+              var x2 = _this.detectionInfoList[i].dots[j+1].x*900
+              var y2 = _this.detectionInfoList[i].dots[j+1].y*_this.currentImgHeight
+              ctx.lineWidth = 2
+              ctx.strokeStyle = 'rgba(52, 136, 255, 1)'
+              ctx.fillStyle = 'rgba(52, 136, 255, 0.5)'
+              ctx.fill()
+              ctx.strokeRect(x1, y1, x2 - x1, y2 - y1)
+              ctx.closePath()
+            }
           }
         }
       },
@@ -700,8 +667,9 @@
       // 提交图片
       commitImg () {
         this.commitAndStay()
+        this.updateLabeled(this.labeled);
         this.nextImg()
-        this.updateAcceptMission();
+
       },
       //提交图片但不切换到下一张
       commitAndStay(){
@@ -711,18 +679,21 @@
         var userName = localStorage.getItem('username')
         var missionID = localStorage.getItem('missionID')
 
-        if (this.missionType == 'Segmentation' || this.missionType == 'Detection') {
+        if (this.missionType == 'Detection') {
           // 准备数据
           var c = document.getElementById('myCanvas')
           var dataURL = c.toDataURL()
           var _this = this
           var filename = _this.imgList[_this.imgPos].filename
-          var data = {
-            userName: localStorage.getItem('username'),
-            missionID: localStorage.getItem('missionID'),
-            fileName: filename,
-            url: dataURL,
+          var autoDetectionLabel = {
+            fileName: _this.imgList[_this.imgPos].filename,
             dots: _this.pointList
+          }
+          var data = {
+            username: userName,
+            missionid: missionID,
+            kind: _this.status,
+            autoDetection: autoDetectionLabel
           }
           // 替换img图片
           this.imgList[this.imgPos].url = dataURL
@@ -730,6 +701,7 @@
 
           xmlhttp1.onreadystatechange = function () {
             if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+              console.log(JSON.parse(xmlhttp1.responseText))
               if (JSON.parse(xmlhttp1.responseText) == 'SUCCESS') {
                 _this.$notify({
                   title: '提交成功',
@@ -760,68 +732,21 @@
               }
             }
           }
-          xmlhttp1.open('POST', 'http://localhost:8080/counts/label/savecanvas', true)
+          xmlhttp1.open('POST', 'http://localhost:8080/counts/label/auto/add/detectionlabel', false)
           xmlhttp1.setRequestHeader('Content-type', 'application/json; charset=utf-8')
           xmlhttp1.send(JSON.stringify(data))
         }
         if (this.missionType == 'Caption') {
-          var captionLabel = {
+          console.log("caption")
+          var autoCaptionLabel = {
             fileName: _this.imgList[_this.imgPos].filename,
             caption: _this.captionDialogInfo
           }
-          var data = {
-            userName: userName,
-            missionID: missionID,
-            captionLabel: captionLabel
-          }
-          console.log(data)
-          xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-              if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
-                _this.$notify({
-                  title: '提交成功',
-                  message: '图片已上传！',
-                  type: 'success',
-                  duration: 2000,
-                  position: 'top-left'
-                })
-                _this.labeled++;
-              }
-              else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
-                _this.$notify({
-                  title: '提交成功',
-                  message: '图片已上传！',
-                  type: 'success',
-                  duration: 2000,
-                  position: 'top-left'
-                })
-              }
-              else{
-                _this.$notify({
-                  title: '提交失败',
-                  message: '图片上传失败，请重试！',
-                  type: 'warning',
-                  duration: 2000,
-                  position: 'top-left'
-                })
-              }
-            }
-          }
-          xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/captionlabel', true)
-          xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-          xmlhttp.send(JSON.stringify(data))
-        }
-        if (this.missionType == 'Classification') {
-          var classificationLabel = {
-            fileName: _this.imgList[_this.imgPos].filename,
-            select: _this.classificationValue
-
-          }
-          console.log(',,' + JSON.stringify(classificationLabel))
-          var data = {
-            userName: userName,
-            missionID: missionID,
-            classificationLabel: classificationLabel
+          var autoCaptionLabelBean = {
+            username: userName,
+            missionid: missionID,
+            kind: _this.status,
+            autoCaptionLabel: autoCaptionLabel
           }
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -856,27 +781,25 @@
               }
             }
           }
-          xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/classificationlabel', true)
+          xmlhttp.open('POST', 'http://localhost:8080/counts/label/auto/add/captionlabel', false)
           xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-          xmlhttp.send(JSON.stringify(data))
+          xmlhttp.send(JSON.stringify(autoCaptionLabelBean))
         }
-        if (this.missionType == 'Attribute') {
-          // 获得属性值List
-          var attributes = []
-          for (var i = 0; i < _this.attributeTableData.length; i++) {
-            attributes.push(_this.attributeTableData[i].label)
-          }
-          var attributeLabel = {
+        if (this.missionType == 'Classification') {
+          var autoClassificationLabel = {
             fileName: _this.imgList[_this.imgPos].filename,
-            attributes: attributes
+            select: _this.classificationValue
           }
+          //console.log(',,' + JSON.stringify(classificationLabel))
           var data = {
-            userName: userName,
-            missionID: missionID,
-            attributeLabel: attributeLabel
+            username: userName,
+            missionid: missionID,
+            kind: _this.status,
+            autoClassificationLabel: autoClassificationLabel
           }
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+              console.log(JSON.parse(xmlhttp.responseText))
               if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
                 _this.$notify({
                   title: '提交成功',
@@ -886,6 +809,7 @@
                   position: 'top-left'
                 })
                 _this.labeled++;
+                console.log(_this.labeled)
               }
               else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
                 _this.$notify({
@@ -895,6 +819,7 @@
                   duration: 2000,
                   position: 'top-left'
                 })
+                console.log(_this.labeled)
               }
               else{
                 _this.$notify({
@@ -907,7 +832,7 @@
               }
             }
           }
-          xmlhttp.open('POST', 'http://localhost:8080/counts/label/add/attributelabel', true)
+          xmlhttp.open('POST', 'http://localhost:8080/counts/label/auto/add/classificationlabel', false)
           xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
           xmlhttp.send(JSON.stringify(data))
         }
@@ -942,6 +867,7 @@
           // 压缩图片
           var rate = 900 / imgObj.width
           cvs.height = imgObj.height * rate
+          _this.currentImgHeight = cvs.height
           // ctx.drawImage(this, 0, 0);//this即是imgObj,保持图片的原始大小：470*480
           ctx.drawImage(this, 0, 0, 900, cvs.height)// 改变图片的大小到900*500
           // 设置当前图片标注
@@ -1003,7 +929,7 @@
             console.log(x1)
             ctx.beginPath()
             ctx.moveTo(x1, y1)
-            _this.pointList.push({x: x1, y: y1})
+            _this.pointList.push({x: x1/900, y: y1/_this.currentImgHeight})
             console.log(_this.pointList)
             // pointList[pos] = '(' + x1 + ',' + y1 + '),'
             pos = pos + 1
@@ -1023,7 +949,7 @@
               ctx.strokeStyle = 'rgba(52, 136, 255, 1)'
               ctx.fillStyle = 'rgba(52, 136, 255, 0.5)'
               ctx.fill()
-              _this.pointList.push({x: x2, y: y2})
+              _this.pointList.push({x: x2/900, y: y2/_this.currentImgHeight})
               console.log(_this.pointList)
 
               ctx.strokeRect(x1, y1, x2 - x1, y2 - y1)
@@ -1058,14 +984,6 @@
         }
         this.imgDataClear()
       },
-      rateProject(){
-        //console.log("rating");
-        this.ratingDialogVisible = true;
-      },
-      commitRating(){
-        this.ratingDialogVisible = false;
-        this.updateAcceptMission();
-      },
       getAcceptMission(){
         if(localStorage.getItem('username')!="visitor"){
           var _this = this;
@@ -1076,6 +994,8 @@
               _this.acceptMission = acceptMission;
               _this.missionType = _this.acceptMission.type;
               _this.labeled = _this.acceptMission.finished;
+              //console.log(acceptMission.id)
+              //console.log(_this.labeled)
               _this.projectRate = _this.acceptMission.score;
               _this.missionID = _this.acceptMission.id;
             }
@@ -1088,62 +1008,56 @@
           xmlhttp.send(formData)
         }
       },
-      getAutoMission(){
-        if(localStorage.getItem('uesrname')!='visitor'){
-          var _this = this;
-          var xmlhttp = new XMLHttpRequest()
-          xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-              var autoMission = JSON.parse(xmlhttp.responseText)
-              _this.AutoMission = autoMission;
-              _this.missionType = _this.autoMission.type;
-              _this.labeled = _this.autoMission.finished;
-              _this.missionID = _this.autoMission.id;
-            }
-          }
-          let formData = new FormData()
-          formData.append('username', localStorage.getItem('username'))
-          formData.append('missionid', localStorage.getItem('missionID'))
-          console.log(localStorage.getItem('missionID'))
-          xmlhttp.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', true)
-          xmlhttp.send(formData)
-        }
-      },
-      updateAcceptMission(){
-        this.acceptMission.score = this.projectRate;
-        this.acceptMission.finished = this.labeled;
+      updateLabeled(labeled){
+        console.log("labeled")
+        var _this = this;
+        _this.acceptMission.finished = labeled;
+        //console.log(this.labeled)
+        console.log(_this.acceptMission.finished)
         var _this = this;
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
-              _this.$notify({
-                title: '评分成功',
-                message: '您的评分已上传！',
-                type: 'success',
-                duration: 2000,
-                position: 'top-left'
-              })
-
-            } else {
-              _this.$notify({
-                title: '评分失败',
-                message: '评分上传失败，请重试！',
-                type: 'warning',
-                duration: 2000,
-                position: 'top-left'
-              })
+              console.log("labeled更新成功")
             }
           }
         }
         xmlhttp.open('POST', 'http://localhost:8080/counts/mission//updateAcceptedMission', true)
         xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-        xmlhttp.send(JSON.stringify(this.acceptMission))
+        xmlhttp.send(JSON.stringify(_this.acceptMission))
 
       },
-      handleTabClick(){
-        this.activeName = '3' ;//选项卡打开到标注工具栏
+      getAutoMission(){
+        if(localStorage.getItem('uesrname')!='visitor'){
+          var _this = this;
+          var xmlhttp3 = new XMLHttpRequest()
+          xmlhttp3.onreadystatechange = function () {
+            if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
+              var autoMission = JSON.parse(xmlhttp3.responseText)
+              _this.autoMission = autoMission;
+              //console.log(autoMission)
+              _this.missionType = _this.autoMission.type;
+              _this.labeled = _this.autoMission.finished;
+              _this.missionID = _this.autoMission.id;
+              _this.status  = _this.autoMission.status
+              //console.log(_this.status)
+              //console.log("123456")
+              if(_this.status=='Train'){
+                _this.correctJudge = true;
+              }
+
+            }
+          }
+          let formData = new FormData()
+          formData.append('username', localStorage.getItem('username'))
+          formData.append('missionid', localStorage.getItem('missionID'))
+          //console.log(localStorage.getItem('missionID'))
+          xmlhttp3.open('POST', 'http://localhost:8080/counts/mission/getAutoMission/signalworker', true)
+          xmlhttp3.send(formData)
+        }
       },
+
 
     }
   }

@@ -483,54 +483,37 @@ public class LabelController {
 
     @RequestMapping(
             value = "/auto/add/classificationlabel",
-            params = {"autoClassificationLabelBean"},
+            method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addAutoClassificationLabel(@RequestParam(value = "autoClassificationLabelBean") AutoClassificationLabelBean autoClassificationLabelBean){
-        ResultMessage resultMessage = labelService.addAutoClassificationLabel(autoClassificationLabelBean);
-        OptMessage result = new OptMessage(false);
+    public ResultMessage addAutoClassificationLabel(@RequestBody AutoClassificationLabelBean autoClassificationLabelBean){
+        return labelService.addAutoClassificationLabel(autoClassificationLabelBean);
 
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
     }
 
     @RequestMapping(
             value = "/auto/add/captionlabel",
-            params = {"autoCaptionLabelBean"},
+            method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addAutoCaptionLabel(@RequestParam(value="autoCaptionLabelBean") AutoCaptionLabelBean autoCaptionLabelBean){
-        ResultMessage resultMessage = labelService.addAutoCaptionLabel(autoCaptionLabelBean);
-        OptMessage result = new OptMessage(false);
+    public ResultMessage addAutoCaptionLabel(@RequestBody AutoCaptionLabelBean autoCaptionLabelBean){
+        System.out.println("234");
+        return  labelService.addAutoCaptionLabel(autoCaptionLabelBean);
 
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
     }
 
     @RequestMapping(
             value = "/auto/add/detectionlabel",
-            params = {"autoDetectionLabelBean"},
+            method = RequestMethod.POST,
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public OptMessage addAutoDetectionLabel(@RequestParam(value="autoDetectionLabelBean") AutoDetectionLabelBean autoDetectionLabelBean){
+    public ResultMessage addAutoDetectionLabel(@RequestBody@RequestParam(value="autoDetectionLabelBean") AutoDetectionLabelBean autoDetectionLabelBean){
 
-        ResultMessage resultMessage = labelService.addAutoDetectionLabel(autoDetectionLabelBean);
-        OptMessage result = new OptMessage(false);
+        return labelService.addAutoDetectionLabel(autoDetectionLabelBean);
 
-        if(ResultMessage.SUCCESS == resultMessage){
-            result.setResult(true);
-        }
-        result.setMessage(resultMessage.toString());
-        return result;
     }
 
 
@@ -593,6 +576,7 @@ public class LabelController {
     )
     @ResponseBody
     public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username){
+        System.out.println( labelService.getAutoCaptionLabel(missionid, username));
         return labelService.getAutoCaptionLabel(missionid, username);
     }
 
