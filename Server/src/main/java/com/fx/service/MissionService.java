@@ -140,4 +140,6 @@ public interface MissionService {
     public AcceptedMission findAcceptedMissionByUsernameAndMissionID(String username,int missionID);
 
     public List<AutoMissionPresentation> getAutoMissionByWorkerID(String username);
+
+    public AutoMission getAutoMission(int missionid);
 }

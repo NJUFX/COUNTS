@@ -16,6 +16,12 @@ public interface ResultService {
      */
     public List<CaptionClassificationResult> getCapAndClaResult(int missionID);
 
-
+    /**
+     * 返回url
+     * @param missionID
+     * @param type
+     * @return
+     */
+    public String getResult(int missionID,int type);
 
 }

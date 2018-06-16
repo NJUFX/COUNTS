@@ -313,6 +313,17 @@ public class MissionController {
         return autoMission.getId();
     }
 
+    @RequestMapping(
+            value = "/findAutoMission",
+            method = RequestMethod.POST,
+            produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public AutoMission getAutoMission(int missionid) {
+        return missionService.getAutoMission(missionid);
+
+    }
+
 
 
     /**
