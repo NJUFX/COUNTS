@@ -76,7 +76,7 @@ public class PBServer {
         return autoClassificationLabel;
     }
 
-    public AutoDetectionLabel predicObjectDetectionLabel(String filename,String imageFile, String modelDir, String[] labels, String PBName){
+    public AutoDetectionLabel predicObjectDetectionLabel(String filename,String imageFile, String modelDir){
 
         int width=0,height=0;
         try {
