@@ -99,7 +99,7 @@ public class MLController {
 
         //文件名
 
-        String fileName = "上传下载测试文档.docx";
+        String fileName = "caption 词云.png";
 
         if (fileName != null) {
 

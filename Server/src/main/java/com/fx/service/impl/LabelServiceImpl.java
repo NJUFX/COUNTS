@@ -399,7 +399,8 @@ public class LabelServiceImpl implements LabelService{
 
     public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username){
 
-        String path = "";
+        /*
+        String path = "../data/autoImage/"+missionid+"/allimage";
 
         File file = new File(path);
         System.out.println(file.getAbsolutePath());
@@ -410,20 +411,32 @@ public class LabelServiceImpl implements LabelService{
 
         File [] files = file.listFiles();
 
-        List<AutoUserMission> autoUserMissionRepository;
-        return null;
+        List<AutoUserMission> autoUserMissions = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+        AutoUserMission mid = null;
+        for(int i=0;i<=autoUserMissions.size()-1;i++){
+            if(Integer.parseInt(missionid)==autoUserMissions.get(i).getMissionId()){
+               mid = autoUserMissions.get(i);
+               break;
+            }
+        }*/
+
+
+
+        //List<AutoCaptionLabel> autoCaptionLabels = autoCaptionLabelRepository.findAutoCaptionLabelByMissionIDandFilename()
+       // return null;
+
+        return autoCaptionLabelRepository.findAutoCaptionLabel(Integer.parseInt(missionid));
+
     }
 
     public List<AutoClassificationLabel> getAutoClassificationLabel(String missionid,String username){
 
-        String path = "";
-        return null;
+        return autoClassificationLabelRepository.findAutoClassificationLabel(Integer.parseInt(missionid));
     }
 
     public List<AutoDetectionLabel> getAutoDetectionLabel(String missionid,String username){
 
-        String path ="";
-        return null;
+        return autoDetectionLabelReposity.findAutoDetectionLabel(Integer.parseInt(missionid));
     }
 
 }
