@@ -368,6 +368,8 @@ public class LabelServiceImpl implements LabelService{
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);
                 mid.setFinishTest(false);
+
+
             }
         }
         else{

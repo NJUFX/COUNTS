@@ -2,6 +2,7 @@ package com.fx.HttpRequestor.api;
 
 import com.fx.HttpRequestor.domain.ApiResult;
 import com.fx.bean.MLWholeLabel;
+import com.fx.model.AutoCaptionLabel;
 
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
  * Created by thinkpad on 2018/6/11.
  */
 public class Connecter {
-    public MLWholeLabel mlwholeLabel(String Base64Image) {
+    public AutoCaptionLabel predictCaptionLabel(String filename,String Base64Image) {
 
         String url = "https://api.ai.qq.com/fcgi-bin/vision/vision_imgtotext";
 
@@ -21,7 +22,11 @@ public class Connecter {
         try {
             ApiResult<Map> apiResult = baseApiService.postApi(url, params);
             System.out.println(apiResult);
-            return new MLWholeLabel();
+            AutoCaptionLabel autoCaptionLabel = new AutoCaptionLabel();
+
+            autoCaptionLabel.setCaption((String)apiResult.getData().get("text"));
+            autoCaptionLabel.setFileName(filename);
+            return autoCaptionLabel;
         } catch (Exception e) {
             e.printStackTrace();
         }
