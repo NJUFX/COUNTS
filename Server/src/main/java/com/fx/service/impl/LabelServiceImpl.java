@@ -5,7 +5,9 @@ import com.fx.model.*;
 import com.fx.repository.*;
 import com.fx.repository.impl.*;
 import com.fx.service.LabelService;
+import com.fx.service.MLService;
 import com.fx.util.ResultMessage;
+import org.apache.catalina.connector.Connector;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 
@@ -32,6 +34,8 @@ public class LabelServiceImpl implements LabelService{
     AutoClassificationLabelRepository autoClassificationLabelRepository = new AutoClassificationLabelRepositoryImpl();
     AutoDetectionLabelReposity autoDetectionLabelReposity = new AutoDetectionLabelRepositoryImpl();
     AutoUserMissionRepository autoUserMissionRepository = new AutoUserMissionRepositoryImpl();
+    //Connector connector = new Connector();
+    MLService mlService = new MLServiceImpl();
     public static final String canvasdir = "data/canvas/";
 
     /**
@@ -303,6 +307,7 @@ public class LabelServiceImpl implements LabelService{
                 /**
                  * 在这里调用训练集
                  */
+                mlService.predictCalssificationLabel(autoClassificationLabelBean.getUsername(),autoClassificationLabelBean.getMissionid());
             }
         }
         else{
@@ -337,6 +342,8 @@ public class LabelServiceImpl implements LabelService{
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);
                 mid.setFinishTest(false);
+
+                mlService.predictCaptionLabel(autoCaptionLabelBean.getUsername(),autoCaptionLabelBean.getMissionid());
             }
         }
         else{
@@ -368,6 +375,8 @@ public class LabelServiceImpl implements LabelService{
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);
                 mid.setFinishTest(false);
+
+                mlService.predictDetectionLabel(autoDetectionLabelBean.getUsername(),autoDetectionLabelBean.getMissionid());
 
 
             }
