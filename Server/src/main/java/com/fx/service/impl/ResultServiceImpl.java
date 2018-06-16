@@ -16,9 +16,10 @@ public class ResultServiceImpl  implements ResultService {
     public ResultServiceImpl() {
     }
    private OSSHelper ossHelper = new OSSHelper();
+    private ZipHelper zipHelper = new ZipHelper();
    private static final String autoDir = "../data/autoImage/";
    private static final String autoFilename = "/label.txt";
-
+   private static final String dir = "../data/";
 
     /**
      * 得到整体描述的结果
@@ -43,7 +44,7 @@ public class ResultServiceImpl  implements ResultService {
         if (type==0)
             return getAutoResult(missionID);
         if (type==1)
-            return null;
+            return getOrdinaryResult(missionID);
         return null;
     }
 
@@ -53,11 +54,20 @@ public class ResultServiceImpl  implements ResultService {
         if (!file.exists())
         return null;
         String key = "auto_"+missionID;
-        ossHelper.upload(file,key);
-
-        return ossHelper.getUrl(key);
+        String s =  ossHelper.upload(file,key);
+        return s;
     }
     private String getOrdinaryResult(int missionID){
-        return null;
+        String filename = dir + missionID;
+        String zipName = filename + "/result.zip";
+        zipHelper.compress(filename,filename+"/"+"result.zip");
+        File file = new File(zipName);
+        String key = "result" + missionID;
+
+        if (!file.exists()) {
+            System.out.println("file not exist");
+            return null;
+        }
+        return ossHelper.upload(file,key);
     }
 }

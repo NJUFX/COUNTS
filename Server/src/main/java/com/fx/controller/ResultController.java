@@ -42,12 +42,13 @@ public class ResultController {
      * @param type 0代表人工标注 1代表自动化
      * @return 目标文件的url 一个小时内有效
      */
-    @RequestMapping(value = "/signup",
+    @RequestMapping(value = "/getResult",
     method = RequestMethod.POST,
     produces = {"application/json; charset=UTF-8"})
     @ResponseBody
     public String getResult(int missionID,int type){
-        return resultService.getResult(missionID,type);
+        String url = resultService.getResult(missionID,type);
+        return url;
     }
 
 }

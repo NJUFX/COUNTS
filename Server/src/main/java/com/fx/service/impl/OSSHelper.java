@@ -18,30 +18,25 @@ public class OSSHelper {
     private static final String accessKeySecret = "5h7x9bYHZ8MVXtYjWINOj1fJATwKpk";
     private static final String bucketName = "counts";
 
-    public String getUrl(String objectName){
-        // 创建OSSClient实例。
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 
-        // 设置URL过期时间为1小时
-        Date expiration = new Date(new Date().getTime() + 3600 * 1000);
-        // 生成URL。
-        URL url = ossClient.generatePresignedUrl(bucketName, objectName, expiration);
-// 关闭Client。
-        ossClient.shutdown();
-        return url.toString();
-    }
 
     /**
      *
      * @param file 要上传的文件
      * @param key 标志上传文件的唯一ID
      */
-    public void upload(File file,String key){
+    public String upload(File file,String key){
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 // 上传文件。
 
         ossClient.putObject(bucketName, key, file);
 // 关闭OSSClient。
         ossClient.shutdown();
+        ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        Date expiration = new Date(new Date().getTime() + 3600 * 1000);
+        // 生成URL。
+        URL url = ossClient.generatePresignedUrl(bucketName, key, expiration);
+        ossClient.shutdown();
+        return url.toString();
     }
 }
