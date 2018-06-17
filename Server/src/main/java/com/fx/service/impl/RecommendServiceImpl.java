@@ -57,7 +57,7 @@ public class RecommendServiceImpl implements RecommendService {
         List<Mission> missions = missionService.findUnfinishedMission();
         List<Mission> another = new ArrayList<>();
         for (int i = 0; i < missions.size() && i < 12 ; i++) {
-            another.add(missions.get(i));
+            another.add(missions.get(missions.size() - i - 1));
         }
         return another;
     }
@@ -113,11 +113,17 @@ public class RecommendServiceImpl implements RecommendService {
             factors[maxIndex] = -1;
             indexs[i] = maxIndex;
         }
+        // 增加一点随机性 更好玩一些
         ArrayList<Mission> results = new ArrayList<>();
-        for (int i = 0; i < 12 && i < missions.size(); i++) {
+        for (int i = 0; i < 12 * 1.5 && i < missions.size(); i++) {
             results.add(missions.get(indexs[i]));
         }
+        while (results.size()>12){
+            int index = (int)(Math.random() * results.size());
+            results.remove(index);
+        }
         return results;
+
     }
 
     private double calculateFactor(Mission mission) {

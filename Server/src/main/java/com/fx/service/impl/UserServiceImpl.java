@@ -23,6 +23,13 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService{
+    UserRepository userRepository;
+    MissionRepository missionRepository;
+    public UserServiceImpl(){
+        userRepository = new UserRepositoryImpl();
+        missionRepository = new MissionRepositoryImpl();
+    }
+
     /**
      *
      * @param username
@@ -36,12 +43,21 @@ public class UserServiceImpl implements UserService{
         return 0;
     }
 
-    UserRepository userRepository;
-    MissionRepository missionRepository;
-    public UserServiceImpl(){
-        userRepository = new UserRepositoryImpl();
-        missionRepository = new MissionRepositoryImpl();
+    /**
+     * 得到用户的标签
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public List<String> findTagsByUsername(String username) {
+        User user = userRepository.findUserByUsername(username);
+        if (user!=null)
+            return user.getTags();
+        return new ArrayList<>();
     }
+
+
     /**
      * 增加用户
      *
