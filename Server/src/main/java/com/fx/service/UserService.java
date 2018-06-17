@@ -21,6 +21,7 @@ public interface UserService {
      */
     public ResultMessage signUp(User user);
 
+    public int findLevelByUsername(String username);
         /**
          * 登录
          *

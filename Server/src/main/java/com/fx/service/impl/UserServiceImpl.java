@@ -23,6 +23,18 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService{
+    /**
+     *
+     * @param username
+     * @return 等级值 最小为0
+     */
+    @Override
+    public int findLevelByUsername(String username) {
+        User user = userRepository.findUserByUsername(username);
+        if (user!=null)
+            return user.getLevel();
+        return 0;
+    }
 
     UserRepository userRepository;
     MissionRepository missionRepository;

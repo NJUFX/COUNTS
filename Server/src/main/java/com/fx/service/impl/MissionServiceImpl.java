@@ -208,6 +208,11 @@ public class MissionServiceImpl implements MissionService {
         return missionRepository.findMissionByType(type);
     }
 
+    @Override
+    public List<Mission> findUnfinishedMission() {
+        return missionRepository.findUnFinishedMission();
+    }
+
     /**
      * 根据发布者的id(实际为username)查找发布的任务
      *

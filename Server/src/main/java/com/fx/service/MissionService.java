@@ -117,6 +117,7 @@ public interface MissionService {
      */
     public List<Mission> findMissionByType(String type);
 
+    public List<Mission> findUnfinishedMission();
 
     public String getFirstImage(int missionid);
 

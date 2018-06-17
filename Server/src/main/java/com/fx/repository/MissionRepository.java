@@ -81,4 +81,10 @@ public interface MissionRepository {
      * @return
      */
     public  List<Mission> getAllMission();
+
+    /**
+     * 得到待完成的任务
+     * @return
+     */
+    public List<Mission> findUnFinishedMission();
 }
