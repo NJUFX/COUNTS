@@ -41,9 +41,9 @@ public class ResultServiceImpl  implements ResultService {
      */
     @Override
     public String getResult(int missionID, int type) {
-        if (type==0)
-            return getAutoResult(missionID);
         if (type==1)
+            return getAutoResult(missionID);
+        if (type==0)
             return getOrdinaryResult(missionID);
         return null;
     }
@@ -60,7 +60,7 @@ public class ResultServiceImpl  implements ResultService {
     private String getOrdinaryResult(int missionID){
         String filename = dir + missionID;
         String zipName = filename + "/result.zip";
-        zipHelper.compress(filename,filename+"/"+"result.zip");
+        zipHelper.compress(filename,filename+".zip");
         File file = new File(zipName);
         String key = "result" + missionID;
 
