@@ -80,7 +80,17 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
 
-    //todo 再开新坑 基于卖方市场的推荐算法 假设为 4
+    //finished 再开新坑 基于卖方市场的推荐算法 假设为 4
+    /**
+     *    计算影响因子 考虑因素
+     *    就任务而言
+     *    距离开始时间 结束时间
+     *    已接收人数 总人数
+     *    难度
+     *    金钱奖励
+     *    将要考虑的因素 发布者的等级？ 等级加权
+     *
+     */
     private List<Mission> requestorRecommend() {
         List<Mission> missions = missionService.findUnfinishedMission();
         double[] factors = new double[missions.size()];
@@ -94,8 +104,8 @@ public class RecommendServiceImpl implements RecommendService {
                 if (factors[j] > factors[maxIndex]) {
                     maxIndex = j;
                 }
-                factors[maxIndex] = -1;
             }
+            factors[maxIndex] = -1;
             indexs[i] = maxIndex;
         }
         ArrayList<Mission> results = new ArrayList<>();
@@ -136,14 +146,5 @@ public class RecommendServiceImpl implements RecommendService {
         }
 
     }
-    /**
-     *    计算影响因子 考虑因素
-     *    就任务而言
-     *    距离开始时间 结束时间
-     *    已接收人数 总人数
-     *    难度
-     *    金钱奖励
-     *    将要考虑的因素 发布者的等级？ 等级加权
-     *
-     */
+
 }
