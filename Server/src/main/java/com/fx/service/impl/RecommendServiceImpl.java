@@ -49,11 +49,10 @@ public class RecommendServiceImpl implements RecommendService {
     /**
      * top5推荐法 推荐最热门的
      *
-     * @param username
      * @return
      */
     //todo  最新发布的12个吧 ...
-    private List<Mission> top5recommend(String username) {
+    private List<Mission> top5recommend() {
         List<Mission> missions = missionService.findUnfinishedMission();
         List<Mission> another = new ArrayList<>();
         for (int i = 0; i < missions.size() && i < 12 * 1.5 ; i++) {
@@ -87,7 +86,7 @@ public class RecommendServiceImpl implements RecommendService {
     private List<Mission> contentRecommend(String username) {
         List<Mission> missions = missionService.findUnfinishedMission();
         List<Mission> neededMissions = new ArrayList<>();
-        List<String> usertags = new ArrayList<>();
+        List<String> usertags = userService.findTagsByUsername(username);
         for (int i = 0; i < missions.size(); i++) {
            List<String > tags =  missions.get(i).getTags();
             for (String s: usertags
