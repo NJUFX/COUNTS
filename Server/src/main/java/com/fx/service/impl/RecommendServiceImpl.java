@@ -52,9 +52,14 @@ public class RecommendServiceImpl implements RecommendService {
      * @param username
      * @return
      */
-    //todo
+    //todo  最新发布的12个吧 ...
     private List<Mission> top5recommend(String username) {
-        return null;
+        List<Mission> missions = missionService.findUnfinishedMission();
+        List<Mission> another = new ArrayList<>();
+        for (int i = 0; i < missions.size() && i < 12 ; i++) {
+            another.add(missions.get(i));
+        }
+        return another;
     }
 
     /**
