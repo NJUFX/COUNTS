@@ -85,7 +85,32 @@ public class RecommendServiceImpl implements RecommendService {
      */
     //todo
     private List<Mission> contentRecommend(String username) {
-        return null;
+        List<Mission> missions = missionService.findUnfinishedMission();
+        List<Mission> neededMissions = new ArrayList<>();
+        List<String> usertags = new ArrayList<>();
+        for (int i = 0; i < missions.size(); i++) {
+           List<String > tags =  missions.get(i).getTags();
+            for (String s: usertags
+                 ) {
+                if (tags.contains(s)){
+                    neededMissions.add(missions.get(i));
+                    break;
+                }
+            }
+        }
+        while (neededMissions.size() < 12){
+            for (int i = 0; i < missions.size(); i++) {
+                if(!neededMissions.contains(missions.get(i))){
+                    neededMissions.add(missions.get(i));
+                }
+            }
+        }
+        while (neededMissions.size()>12){
+            int index = (int)(Math.random() * neededMissions.size());
+            neededMissions.remove(index);
+        }
+
+        return neededMissions;
     }
 
 
