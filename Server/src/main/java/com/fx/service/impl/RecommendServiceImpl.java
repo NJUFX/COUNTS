@@ -56,8 +56,12 @@ public class RecommendServiceImpl implements RecommendService {
     private List<Mission> top5recommend(String username) {
         List<Mission> missions = missionService.findUnfinishedMission();
         List<Mission> another = new ArrayList<>();
-        for (int i = 0; i < missions.size() && i < 12 ; i++) {
+        for (int i = 0; i < missions.size() && i < 12 * 1.5 ; i++) {
             another.add(missions.get(missions.size() - i - 1));
+        }
+        while (another.size()>12){
+            int index = (int)(Math.random() * another.size());
+            another.remove(index);
         }
         return another;
     }
