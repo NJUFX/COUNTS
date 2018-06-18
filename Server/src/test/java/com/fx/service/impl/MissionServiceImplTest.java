@@ -1,5 +1,6 @@
 package com.fx.service.impl;
 
+import com.fx.model.Mission;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -29,5 +30,10 @@ public class MissionServiceImplTest {
         List<String> tags = new ArrayList<>();
         tags.add("strawberry");
         missionService.mkdirsForAutoClassification(3,tags);
+    }
+    @Test
+    public void testUnfinished(){
+        List<Mission> missions = missionService.findUnfinishedMission();
+        System.out.println(missions.size());
     }
 }

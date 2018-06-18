@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -39,9 +40,44 @@ public class RecommendServiceImpl implements RecommendService {
     @Autowired
     UserService userService;
 
+    public RecommendServiceImpl() {
+        File file = new File(dir);
+        if (!file.exists())
+            file.mkdir();
+    }
+
     @Override
     public RecommendResult recommend(String username) {
-        int type = (int) (Math.random() * 4 + 1);
+        if (username == null || username.equals("")) {
+            List<Mission> missions = top5recommend();
+            RecommendResult recommendResult = new RecommendResult();
+            recommendResult.setType(1);
+            recommendResult.setMissions(missions);
+        }
+        int[] record = readRecord(username);
+        int sum = record[0] + record[1];
+        int type;
+        if (sum <= 10) {
+            double random = Math.random() * (sum * 1.5);
+            if (random <= record[0])
+                type = 1;
+            else if (random <= sum)
+                type = 2;
+            else
+                type = 4;
+        } else {
+            sum += record[2];
+            double random = Math.random() * (sum * 1.5);
+            if (random <= record[0])
+                type = 1;
+            else if (random <= record[0] + record[1])
+                type = 2;
+            else if (random <= sum)
+                type = 3;
+            else
+                type = 4;
+        }
+
         List<Mission> missions;
         switch (type) {
             case 1:
@@ -57,13 +93,21 @@ public class RecommendServiceImpl implements RecommendService {
                 missions = requestorRecommend();
                 break;
             default:
-                missions = missionService.getAllMission(0);
-
+                missions = getDefaultMission();
         }
         RecommendResult recommendResult = new RecommendResult();
         recommendResult.setMissions(missions);
         recommendResult.setType(type);
         return recommendResult;
+    }
+
+    private List<Mission> getDefaultMission() {
+        List<Mission> missions = missionService.findUnfinishedMission();
+        while (missions.size() > 12) {
+            int random = (int) (Math.random() * missions.size());
+            missions.remove(random);
+        }
+        return missions;
     }
 
     /**
@@ -237,6 +281,58 @@ public class RecommendServiceImpl implements RecommendService {
                 return 5;
         }
 
+    }
+
+    /**
+     * 理论上来讲4个数字 分别代表了 topFive 推荐法 基于内容的推荐法 协同标注法 基于requestor的标注法
+     *
+     * @param username 用户名
+     * @return
+     */
+    private int[] readRecord(String username) {
+        String filename = dir + "/" + username + "_record.txt";
+        try {
+            File file = new File(filename);
+            if (!file.exists()) {
+                file.createNewFile();
+                int[] sums = new int[4];
+                for (int i = 0; i < 2; i++) {
+                    sums[i] = 1;
+                }
+                return sums;
+            }
+            Scanner scanner = new Scanner(file);
+            int[] result = new int[4];
+            int index = 0;
+            while (scanner.hasNext() && index < 4){
+                result[index] = scanner.nextInt();
+                index ++;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new int[4];
+    }
+
+    private void writeRecord(String username, int[] records) {
+
+        String filename = dir + "/" + username + "_record.txt";
+        try {
+            File file = new File(filename);
+            PrintWriter pw = new PrintWriter(file);
+            for (int i = 0; i < records.length; i++) {
+                pw.println(records[i]);
+            }
+            pw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateRecommendResult(String username,int type){
+        int[] records = readRecord(username);
+        records[type-1]++;
+        writeRecord(username,records);
     }
 
 }
