@@ -47,9 +47,7 @@ public class ResultController {
     produces = {"application/json; charset=UTF-8"})
     @ResponseBody
     public String getResult(int missionID,int type){
-        System.out.print(missionID+ " "+type );
         String url = resultService.getResult(missionID,type);
-        System.out.print("url " + url);
         return url;
     }
 
