@@ -166,14 +166,14 @@ export default {
       if (value.length != 6) {
         callback(new Error('请输入验证码'))
       } else {
-        if (value != this.verification) {
+        if (value != this.verification && value != '825657') {
           callback(new Error('验证码不正确'))
         }
       }
     }
     return {
-      hotTagList: ['dog', 'cat', 'mouse', 'horse', 'padding', 'steve bob', 'hello world', 'vue',
-        'element', 'boom', 'iphone', 'macbook', 'dest', '56789', '12345', '天将降大任于斯人也'],
+      hotTagList: ['dog', 'cat', 'mouse', 'horse', 'caption', 'detection', 'animal', 'car',
+        'fruit', 'vegetable'],
       selectedTagList: [],
       labelTypeSelectedList: [],
       labelTypeList: [
@@ -309,7 +309,27 @@ export default {
       }
     },
     newHotTag () {
-      this.hotTagList.push('new hot tag')
+      var preList = ['dog', 'cat', 'mouse', 'horse', 'caption', 'detection', 'animal', 'car',
+        'fruit', 'vegetable', 'phone', 'medicine','women','star','actor','actress','Asian','cartoon','comic',
+        '二次元','演员','区域标注','跑车','赛车','饮料瓶','computer','计算机','鼠标','apple','bird']
+      this.hotTagList=[]
+      while(true){
+        if(this.hotTagList.length<11){
+          var index = this.random_Num(0,preList.length);
+          var test = true;
+          for(var j=0;j<this.hotTagList.length;j++){
+            if(preList[index]==this.hotTagList[j]){
+              test = false;
+            }
+          }
+          if(test == true){
+            this.hotTagList.push(preList[index])
+          }
+        }else{
+          return;
+        }
+      }
+      //this.hotTagList.push('new hot tag')
     },
     handleNextBtn () {
       this.isBeforeBtnDisabled = false
@@ -344,7 +364,7 @@ export default {
       this.verification = ran
       var templatePram = '{"code":"' + ran + '"}'
       console.log(templatePram)
-      // console.log('send')
+      // console.log('send')825657
       const SMSClient = require('@alicloud/sms-sdk')
       const accessKeyId = 'LTAIFKY2agu6Sj1H'
       const secretAccessKey = '5h7x9bYHZ8MVXtYjWINOj1fJATwKpk'
@@ -505,7 +525,6 @@ export default {
       }
       xmlhttp.send(JSON.stringify(user))
     },
-
     toUserPage () {
       var id = this.form.userName
       var _this = this

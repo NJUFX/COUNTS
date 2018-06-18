@@ -411,6 +411,7 @@
             console.log('return info')
             if (JSON.parse(xmlhttp.responseText).result == true) {
               _this.openSucc('操作成功！')
+              _this.calculate()
             }else{
               _this.openInfo('您已经加入该项目');
               for(var i=0;i<_this.projectInfo.length;i++){
@@ -431,6 +432,16 @@
         var path = localStorage.getItem('server')+'/counts/mission/addAcceptMission'
         xmlhttp.open('POST', path, true)
         xmlhttp.send(formData)
+      },
+      calculate(){
+        var xmlhttp =  new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log(xmlhttp.responseText)
+          }
+        }
+        var path = localStorage.getItem('server')+'/counts/mission/calculate'
+        xmlhttp.open('POST', path, true)
       },
       openProject (item) {
         localStorage.setItem('missionType', item.type)

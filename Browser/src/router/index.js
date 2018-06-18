@@ -8,7 +8,6 @@ import NewProject from '@/components/NewProject'
 import Admin from '@/components/Admin'
 import MyProject from '@/components/MyProject'
 import Test from '@/components/Test'
-import Test2 from '@/components/Test2'
 import Home from '@/components/Home'
 import ProjectDetails from '@/components/ProjectDetails'
 import CountsDetails from '@/components/CountsDetails'
@@ -111,10 +110,5 @@ export default new Router({
       name: 'Test',
       component: Test
     },
-    {
-      path: '/:username/test2',
-      name: 'Test2',
-      component: Test2
-    }
   ]
 })
