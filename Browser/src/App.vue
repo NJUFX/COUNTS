@@ -248,7 +248,7 @@
   }
   .headDropDown{
     position: absolute;
-    left:90%;
+    left:93%;
     top: 11px;
   }
   #userImg{

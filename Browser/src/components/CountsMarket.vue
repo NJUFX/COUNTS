@@ -411,25 +411,21 @@
             console.log('return info')
             if (JSON.parse(xmlhttp.responseText).result == true) {
               _this.openSucc('操作成功！')
-<<<<<<< HEAD
               for(var i=0;i<_this.projects.length;i++) {
                 if (_this.projects[i].id == id) {
-
                   _this.openProject(_this.projects[i]);
-=======
-              _this.calculate()
-            }else{
-              _this.openInfo('您已经加入该项目');
-              for(var i=0;i<_this.projectInfo.length;i++){
-                if(_this.projectInfo[i].id==id){
-                  _this.openProject(_this.projectInfo[i]);
->>>>>>> cfa1914e5497b461f0506687c17d277339af041f
+                  _this.calculate()
                   break;
                 }
               }
             }else{
               _this.openInfo('您已经加入该项目');
-
+              for(var i=0;i<_this.projects.length;i++){
+                if(_this.projects[i].id==id){
+                  _this.openProject(_this.projects[i]);
+                  break;
+                }
+              }
             }
           }
         }
