@@ -103,7 +103,8 @@ public class AcceptMissionRepositoryImpl implements AcceptMissionRepository {
         File[] allFiles = file.listFiles();
         ArrayList<AcceptedMission> acceptedMissions = new ArrayList<>();
         for (int i = 0; i < allFiles.length; i++) {
-            String username = allFiles[i].getName().split(".")[0];
+            int index = allFiles[i].getName().indexOf(".");
+            String username = allFiles[i].getName().substring(0,index);
             List<AcceptedMission> missions = findAcceptMissionByUsername(username);
             acceptedMissions.addAll(missions);
         }
