@@ -498,6 +498,7 @@
                 var name = dataSet[i].fileName
                 _this.imgList.push({url: dataurl, filename: name})
               }
+              console.log("1")
             }
           }
           let formData3 = new FormData()
@@ -605,7 +606,7 @@
             let formDataDetRes = new FormData()
             formDataDetRes.append('missionid', localStorage.getItem('missionID'))
             formDataDetRes.append('username', localStorage.getItem('username'))
-            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/autodetectionlabel', true)
+            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/autodetectionlabel', false)
             xmlhttp0.send(formDataDetRes)
             break
           }
@@ -658,14 +659,22 @@
         var _this = this
         for (var i = 0; i < _this.detectionInfoList.length; i++) {
           if (_this.detectionInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
+            console.log(_this.detectionInfoList[i])
             //把点画上去
             var canvas = document.getElementById('myCanvas')
             var ctx = canvas.getContext('2d')
-            for(var j=0;j<_this.detectionInfoList[i].dots.length-1;j = j+2){
-              var x1 = _this.detectionInfoList[i].dots[j].x*900
-              var y1 = _this.detectionInfoList[i].dots[j].y*_this.currentImgHeight
-              var x2 = _this.detectionInfoList[i].dots[j+1].x*900
-              var y2 = _this.detectionInfoList[i].dots[j+1].y*_this.currentImgHeight
+            //console.log("3")
+            //console.log(_this.currentImgHeight)
+            console.log(_this.detectionInfoList[i])
+            for (var j = 0; j < _this.detectionInfoList[i].dots.length - 1; j = j + 2) {
+              var x1 = _this.detectionInfoList[i].dots[j].x * 900
+              var y1 = _this.detectionInfoList[i].dots[j].y * _this.currentImgHeight
+              var x2 = _this.detectionInfoList[i].dots[j + 1].x * 900
+              var y2 = _this.detectionInfoList[i].dots[j + 1].y * _this.currentImgHeight
+              ctx.beginPath()
+              ctx.moveTo(x1, y1)
+              ctx.strokeStyle = '#000000'
+              ctx.rect(x1, y1, x2 - x1, y2 - y1)
               ctx.lineWidth = 2
               ctx.strokeStyle = 'rgba(52, 136, 255, 1)'
               ctx.fillStyle = 'rgba(52, 136, 255, 0.5)'
@@ -675,6 +684,7 @@
             }
           }
         }
+
       },
 
       // 提交图片
@@ -876,6 +886,7 @@
         imgObj.src = img
         // 待图片加载完后，将其显示在canvas上
         imgObj.onload = function () {
+          console.log("2")
           var ctx = cvs.getContext('2d')
           // 压缩图片
           var rate = 900 / imgObj.width
@@ -884,9 +895,9 @@
           // ctx.drawImage(this, 0, 0);//this即是imgObj,保持图片的原始大小：470*480
           ctx.drawImage(this, 0, 0, 900, cvs.height)// 改变图片的大小到900*500
           // 设置当前图片标注
+          _this.setCurrentImgInfo()
         }
 
-        _this.setCurrentImgInfo()
       },
       // 以下两个方法分别用于画折线和矩形
       drawBrokenLine () {
@@ -964,7 +975,6 @@
               ctx.fill()
               _this.pointList.push({x: x2/900, y: y2/_this.currentImgHeight})
               //console.log(_this.pointList)
-
               ctx.strokeRect(x1, y1, x2 - x1, y2 - y1)
               c.onmousemove = null
               c.onmouseup = null

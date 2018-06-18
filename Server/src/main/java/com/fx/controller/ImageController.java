@@ -94,6 +94,7 @@ public class ImageController {
     )
     @ResponseBody
     public void uploadAutoDetectionImg(int missionID, MultipartFile file[]) throws Exception {
+        System.out.println("999");
         int size = file.length;
         int i = 0;
 
