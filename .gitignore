@@ -86,3 +86,4 @@ fabric.properties
 /data/
 /Server/data/
 !/counts.jar
+!/deliver/
