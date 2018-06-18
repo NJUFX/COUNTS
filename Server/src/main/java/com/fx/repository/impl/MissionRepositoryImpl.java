@@ -27,7 +27,7 @@ public class MissionRepositoryImpl implements MissionRepository {
     List<Mission> newMissions = new ArrayList<>();
     String current = new TimeUtil().toString();
         for (int i = 0; i < missions.size(); i++) {
-            if(missions.get(i).getBegin().compareTo(current) >= 0 && missions.get(i).getEnd().compareTo(current)<=0)
+            if(missions.get(i).getBegin().compareTo(current) <= 0 && missions.get(i).getEnd().compareTo(current)>=0)
                 if(missions.get(i).getCurrentNumber() < missions.get(i).getMaxNumber())
                     newMissions.add(missions.get(i));
         }
@@ -46,7 +46,6 @@ public class MissionRepositoryImpl implements MissionRepository {
                 e.printStackTrace();
             }
         gson = new Gson();
-        System.out.println(file.getAbsolutePath());
     }
 
     /**

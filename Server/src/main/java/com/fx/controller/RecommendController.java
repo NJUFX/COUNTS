@@ -17,26 +17,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/counts/recommend")
 @CrossOrigin
-public class RecommendController{
+public class RecommendController {
     @Autowired
     RecommendService recommendService;
+
     @RequestMapping(
-            value = "/mission",
-            method = RequestMethod.POST,
-            produces = {"application/json; charset=UTF-8"}
+        value = "/mission",
+        method = RequestMethod.POST,
+        produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public RecommendResult recommend(String username){
+    public RecommendResult recommend(String username) {
         return recommendService.recommend(username);
     }
+
     @RequestMapping(
         value = "/calculate",
         method = RequestMethod.POST,
         produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public void calculate(){
+    public int calculate() {
         new CFHelper().calculate();
+        return 0;
     }
 
 }
