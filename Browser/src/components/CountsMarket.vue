@@ -440,7 +440,7 @@
             console.log(xmlhttp.responseText)
           }
         }
-        var path = localStorage.getItem('server')+'/counts/mission/calculate'
+        var path = localStorage.getItem('server')+'/counts/recommend/calculate'
         xmlhttp.open('POST', path, true)
       },
       openProject (item) {

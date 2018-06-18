@@ -15,7 +15,6 @@ import Result from '@/components/Result'
 import Register from '@/components/Register'
 import Message from '@/components/Message'
 import AutoLabel from '@/components/AutoLabel'
-import AutoJudge from '@/components/AutoJudge'
 Vue.use(Router)
 
 export default new Router({
@@ -39,11 +38,6 @@ export default new Router({
       path: '/:username/autoLabel',
       name: 'AutoLabel',
       component: AutoLabel
-    },
-    {
-      path: '/:username/autoJudge',
-      name: 'AutoJudge',
-      component: AutoJudge
     },
     {
       path: '/:username/message',

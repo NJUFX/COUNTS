@@ -497,61 +497,63 @@
         var xmlhttp = new XMLHttpRequest()
         var _this = this
         xmlhttp.onreadystatechange = function () {
-          if (JSON.parse(xmlhttp.responseText) != null) {
-            _this.autoProjects=[]
-            var arrays = JSON.parse(xmlhttp.responseText)
-            _this.project_total = arrays.length;
-            if(arrays.length!=0){
-              _this.hasProject = true
-            }
-            var cap = 0, seg = 0, dec = 0, attr = 0, cla = 0, fin = 0, unfin = 0
-            for (var i = 0; i < arrays.length; i++) {
-              _this.autoProjects.push({
-                id: arrays[i].id,
-                missionname: arrays[i].missionName,
-                type: arrays[i].type,
-                cover: '',
-                counts: arrays[i].points,
-                percent:0,
-                details: arrays[i].description,
-                isAuto:1,
-                show:true,
-              })
-
-              var type = arrays[i].type
-              if (type == 'Classification') {
-                cla++
-              } else if (type == 'Detection') {
-                dec++
-              } else if (type == 'Segmentation') {
-                seg++
-              } else if (type == 'Caption') {
-                cap++
-              } else if (type == 'Attribute') {
-                attr++
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (JSON.parse(xmlhttp.responseText) != null) {
+              _this.autoProjects = []
+              var arrays = JSON.parse(xmlhttp.responseText)
+              _this.project_total = arrays.length;
+              if (arrays.length != 0) {
+                _this.hasProject = true
               }
-            }
+              var cap = 0, seg = 0, dec = 0, attr = 0, cla = 0, fin = 0, unfin = 0
+              for (var i = 0; i < arrays.length; i++) {
+                _this.autoProjects.push({
+                  id: arrays[i].id,
+                  missionname: arrays[i].missionName,
+                  type: arrays[i].type,
+                  cover: '',
+                  counts: arrays[i].points,
+                  percent: 0,
+                  details: arrays[i].description,
+                  isAuto: 1,
+                  show: true,
+                })
 
-            var L = [cla, dec, seg, cap, attr];
-            var m = _this.max(L)
-            _this.myData.max += (parseInt(''+ m/10)+1)*10;
-            _this.project_total += arrays.length;
-            _this.myData.attribute += attr
-            _this.myData.caption += cap
-            _this.myData.classification += cla
-            _this.myData.segmentation += seg
-            _this.myData.detection += dec
-            _this.myData.finished += fin
-            _this.myData.unfinished += unfin
+                var type = arrays[i].type
+                if (type == 'Classification') {
+                  cla++
+                } else if (type == 'Detection') {
+                  dec++
+                } else if (type == 'Segmentation') {
+                  seg++
+                } else if (type == 'Caption') {
+                  cap++
+                } else if (type == 'Attribute') {
+                  attr++
+                }
+              }
 
-            console.log('this is auto projects.');
-            for(var i=0;i<_this.autoProjects.length;i++){
-              if(_this.autoProjects[i].cover='')
-                console.log('here')
+              var L = [cla, dec, seg, cap, attr];
+              var m = _this.max(L)
+              _this.myData.max += (parseInt('' + m / 10) + 1) * 10;
+              _this.project_total += arrays.length;
+              _this.myData.attribute += attr
+              _this.myData.caption += cap
+              _this.myData.classification += cla
+              _this.myData.segmentation += seg
+              _this.myData.detection += dec
+              _this.myData.finished += fin
+              _this.myData.unfinished += unfin
+
+              for (var i = 0; i < _this.autoProjects.length; i++) {
+                if (_this.autoProjects[i].cover = '')
+                  console.log('here')
                 _this.getAutoFirstImage(_this.autoProjects[i].id, i);
+              }
+              _this.drawPieCharts()
+              _this.drawRadarCharts()
+
             }
-            _this.drawPieCharts()
-            _this.drawRadarCharts()
 
           }
         }
