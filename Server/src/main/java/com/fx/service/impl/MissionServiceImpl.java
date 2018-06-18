@@ -462,15 +462,19 @@ public class MissionServiceImpl implements MissionService {
            mid.setMissionName(autoMission.getMissionName());
            if(!autoUserMissions.get(i).isFinishTrain()){
                mid.setStatus("Train");
+               mid.setFinished(autoUserMissions.get(i).getTrainNum());
                mid.setSize(autoUserMissions.get(i).getTrainEnd()-autoUserMissions.get(i).getTrainStart()+1);
+               autoMissions.add(mid);
            }
            else if(autoUserMissions.get(i).isFinishTrain()&&!autoUserMissions.get(i).isFinishTest()){
                mid.setStatus("Test");
+               mid.setFinished(autoUserMissions.get(i).getTestNum());
                mid.setSize(autoUserMissions.get(i).getTestEnd()-autoUserMissions.get(i).getTestStart()+1);
-
+               autoMissions.add(mid);
            }
 
-           autoMissions.add(mid);
+            System.out.println(mid.getId()+"  +"+mid.getFinished());
+           //autoMissions.add(mid);
 
 
             //if(autoUserMissions.get(i).get)

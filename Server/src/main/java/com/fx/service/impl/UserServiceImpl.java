@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService{
 
 
         Mission midmission = missionRepository.findMissionByID(missionid);
-        AcceptedMission acceptedMission = new AcceptedMission(missionid,midmission.getMissionName(),midmission.getBegin(),midmission.getEnd(),midmission.getType(),0,num);
+        AcceptedMission acceptedMission = new AcceptedMission(missionid,midmission.getMissionName(),midmission.getBegin(),midmission.getEnd(),midmission.getType(),0,num, midmission.getPoints());
 
         User mid = userRepository.findUserById(userid);
 

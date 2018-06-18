@@ -602,6 +602,15 @@ public class LabelController {
         return labelService.getAutoDetectionLabel(missionid,username);
     }
 
+    @RequestMapping(
+        value = "/add/autoone",
+        method = RequestMethod.POST,
+        produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public void addAutoOne(String missionid,String username){
+        labelService.addAutoOne(missionid, username);
+    }
 
 
 

@@ -576,7 +576,8 @@
             points: _this.ruleForm.workerPoints,
             maxNumber: _this.ruleForm.workerNumber,
             selects: [],
-            tags: this.selectedTagList
+            tags: _this.selectedTagList,
+            sum:_this.imgFileList.length
           }
           if (mission.type == 'Classification' || mission.type == 'Attribute') {
             mission.selects =  _this.selectsArray

@@ -17,7 +17,7 @@
           <span>当前标注结果是否正确？</span>
           <div style="height: 5px"></div>
           <el-row>
-            <el-button type="success" icon="el-icon-check" size="small" @click="nextImg">正确，下一张</el-button>
+            <el-button type="success" icon="el-icon-check" size="small" @click="correctAndNext">正确，下一张</el-button>
             <el-button type="info" icon="el-icon-close" size="small" @click="handleTabClick">有问题，重新标注</el-button>
           </el-row>
         </el-tab-pane>
@@ -313,6 +313,7 @@
       this.missionID = localStorage.getItem('missionID')
       this.getAutoMission()
       this.downloadSource()
+      console.log(this.missionID)
     },
     watch: {
       imgList: {
@@ -528,7 +529,7 @@
             // 下载整体标注结果集
             xmlhttp.onreadystatechange = function () {
               if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                //console.log(JSON.parse(xmlhttp.responseText))
+                console.log(JSON.parse(xmlhttp.responseText))
                 //console.log(_this.missionID)
                 // 下载所有的整体标注结果
                var captionResult = JSON.parse(xmlhttp.responseText)
@@ -703,7 +704,6 @@
       // 提交图片
       commitImg () {
         this.commitAndStay()
-        //this.updateLabeled(this.labeled);
         this.nextImg()
 
       },
@@ -747,6 +747,7 @@
                   position: 'top-left'
                 })
                // _this.labeled++;
+
               }
               else if(JSON.parse(xmlhttp1.responseText) == 'EXIST'){
                 _this.$notify({
@@ -756,6 +757,7 @@
                   duration: 2000,
                   position: 'top-left'
                 })
+
               }
               else{
                 _this.$notify({
@@ -796,6 +798,7 @@
                   position: 'top-left'
                 })
                 //_this.labeled++;
+
               }
               else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
                 _this.$notify({
@@ -805,6 +808,7 @@
                   duration: 2000,
                   position: 'top-left'
                 })
+
               }
               else{
                 _this.$notify({
@@ -835,7 +839,6 @@
           }
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-              console.log(JSON.parse(xmlhttp.responseText))
               if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
                 _this.$notify({
                   title: '提交成功',
@@ -846,6 +849,7 @@
                 })
                // _this.labeled++;
                 //console.log(_this.labeled)
+
               }
               else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
                 _this.$notify({
@@ -856,6 +860,7 @@
                   position: 'top-left'
                 })
                 console.log(_this.labeled)
+
               }
               else{
                 _this.$notify({
@@ -1112,6 +1117,21 @@
         this.backToPersonalCenterDialogVisible = false;
         var path = '/' + localStorage.getItem('username') + '/myProject'
         this.$router.push({path: path})
+      },
+      correctAndNext(){
+        var _this = this;
+        var xmlhttp5 = new XMLHttpRequest()
+        xmlhttp5.onreadystatechange = function () {
+          if (xmlhttp5.readyState == 4 && xmlhttp5.status == 200) {
+            _this.nextImg()
+          }
+        }
+        let formData = new FormData()
+        formData.append('username', localStorage.getItem('username'))
+        formData.append('missionid', localStorage.getItem('missionID'))
+        //console.log(localStorage.getItem('missionID'))
+        xmlhttp5.open('POST', 'http://localhost:8080/counts/label/add/autoone', false)
+        xmlhttp5.send(formData)
       },
 
     }

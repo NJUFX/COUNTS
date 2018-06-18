@@ -108,7 +108,7 @@ public class MLServiceImpl implements MLService {
 
                         String[] labels = new String[autoMission.getTypes().size()];
                         for(int k=0;k<=labels.length-1;k++){
-                            labels[k] = autoMission.getTypes().get(i);
+                            labels[k] = autoMission.getTypes().get(k);
                         }
                    // System.out.println("1234444");
                         AutoClassificationLabel mid  = pbServer.predictClassificationLabel(files[i].getName(),"../data/autoImage/"+missionid+"/allimage/"+files[i].getName(),"../data/tensorflow/pbmodel",labels,"output_graph.pb");

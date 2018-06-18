@@ -78,7 +78,7 @@ public class AcceptedMission {
         this.recommendType = recommendType;
     }
 
-    public AcceptedMission(int id, String missionName, String begin, String end, String type, int finished, int sum) {
+    public AcceptedMission(int id, String missionName, String begin, String end, String type, int finished, int sum, int point) {
         this.id = id;
         this.missionName = missionName;
         this.begin = begin;
@@ -86,6 +86,7 @@ public class AcceptedMission {
         this.type = type;
         this.finished = finished;
         this.sum = sum;
+        this.point = point;
     }
 
     public int getId() {
@@ -172,6 +173,14 @@ public class AcceptedMission {
 
     public void setRecommendType(int recommendType) {
         this.recommendType = recommendType;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
 }
 

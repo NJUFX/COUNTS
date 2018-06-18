@@ -362,7 +362,9 @@ public class MissionController {
     )
     @ResponseBody
     public List<AcceptedMission> getAcceptMissionByUsername(String username) {
-        return missionService.findAcceptedMissionByUsername(username);
+        return   missionService.findAcceptedMissionByUsername(username);
+        //System.out.println(list.get(0).);
+
     }
     @RequestMapping(
             value = "/getAcceptedMissionByUsernameMissionID",

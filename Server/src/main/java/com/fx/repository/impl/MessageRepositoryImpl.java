@@ -33,7 +33,7 @@ public class MessageRepositoryImpl implements MessageRepository {
     @Override
     public ResultMessage addMessage(String username, Message message) {
         int maxID = 0;
-        List<Message> messages = new ArrayList<>();
+        List<Message> messages = findMessageByUsername(username);
         for (int i = 0; i < messages.size(); i++) {
             if (maxID < messages.get(i).getId())
                 maxID = messages.get(i).getId();
@@ -47,7 +47,7 @@ public class MessageRepositoryImpl implements MessageRepository {
     @Override
     public ResultMessage addMessages(String username, List<Message> messages) {
         int maxID = 0;
-        List<Message> oldMessages = new ArrayList<>();
+        List<Message> oldMessages = findMessageByUsername(username);
         for (int i = 0; i < messages.size(); i++) {
             if (maxID < oldMessages.get(i).getId())
                 maxID = oldMessages.get(i).getId();

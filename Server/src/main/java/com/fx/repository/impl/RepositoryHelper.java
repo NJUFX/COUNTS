@@ -106,37 +106,37 @@ public class RepositoryHelper<T> {
     }
 
     public ResultMessage initialize(int userid, int missionID) {
-        String DataDir = DataConst.FILE_PATH + missionID;
-        File dir = new File(DataDir);
-        if (!dir.exists())
-            dir.mkdir();
-        UserRepository userRepository = new UserRepositoryImpl();
-        User user = userRepository.findUserById(userid);
-        String username = user.getUsername();
-        String datafile = DataDir + "/" + username + ".txt";
-        File file = new File(datafile);
-        try {
-            if (!file.exists())
-                file.createNewFile();
-            PrintWriter printWriter = new PrintWriter(file);
-            String imageDir = DataConst.FILE_PATH + "image/" + missionID;
-            File dirs = new File(imageDir);
-            File[] images = dirs.listFiles();
-            String[] filenames = new String[images.length];
-            for (int i = 0; i < filenames.length; i++) {
-                filenames[i] = images[i].getName();
-            }
-            String prefix = "{\"fileName\":\"";
-            String postfix = "\"}";
-
-            for (int i = 0; i < filenames.length; i++) {
-                String json = prefix + filenames[i] + postfix;
-                printWriter.println(json);
-            }
-            printWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        String DataDir = DataConst.FILE_PATH + missionID;
+//        File dir = new File(DataDir);
+//        if (!dir.exists())
+//            dir.mkdir();
+//        UserRepository userRepository = new UserRepositoryImpl();
+//        User user = userRepository.findUserById(userid);
+//        String username = user.getUsername();
+//        String datafile = DataDir + "/" + username + ".txt";
+//        File file = new File(datafile);
+//        try {
+//            if (!file.exists())
+//                file.createNewFile();
+//            PrintWriter printWriter = new PrintWriter(file);
+//            String imageDir = DataConst.FILE_PATH + "image/" + missionID;
+//            File dirs = new File(imageDir);
+//            File[] images = dirs.listFiles();
+//            String[] filenames = new String[images.length];
+//            for (int i = 0; i < filenames.length; i++) {
+//                filenames[i] = images[i].getName();
+//            }
+//            String prefix = "{\"fileName\":\"";
+//            String postfix = "\"}";
+//
+//            for (int i = 0; i < filenames.length; i++) {
+//                String json = prefix + filenames[i] + postfix;
+//                printWriter.println(json);
+//            }
+//            printWriter.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 
         return ResultMessage.SUCCESS;

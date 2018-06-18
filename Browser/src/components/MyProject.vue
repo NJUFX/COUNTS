@@ -600,6 +600,7 @@ export default {
               _this.hasProject = true
             }
             for (var i = 0; i < arrays.length; i++) {
+              console.log('points '+arrays[i].point)
               _this.projectInfo.push({
                 id: arrays[i].id,
                 missionname: arrays[i].missionName,
@@ -614,7 +615,8 @@ export default {
                 isEnd: false,
                 isContinue: true,
                 annotationType: 0,
-                show: true
+                show: true,
+                counts: arrays[i].point
               })
               if (arrays[i].finished == arrays[i].sum) {
                 fin++

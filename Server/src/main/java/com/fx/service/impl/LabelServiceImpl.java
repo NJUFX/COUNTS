@@ -114,6 +114,10 @@ public class LabelServiceImpl implements LabelService{
      */
     public ResultMessage SaveCanvas(LocalLabel localLabel){
 
+        //if(localLabel.getDots()==null){
+        //    return ResultMessage.SUCCESS;
+        //}
+        //System.out.println("New Bee");
         String userID = localLabel.getUserName();
         //String location = localLabel.getLocation();
         String imgStr = localLabel.getUrl();
@@ -146,33 +150,33 @@ public class LabelServiceImpl implements LabelService{
         }
         */
 
-
-        String type = missionRepository.findMissionByID(Integer.parseInt(localLabel.getMissionID())).getType();
-
-        System.out.println("type!!!!"+type);
-        if(type.equals("Detection")){
-            DetectionLabel detectionLabel = new DetectionLabel(picturename,localLabel.getDots());
-            detectionLabelRepository.addDetectionLabel(Integer.parseInt(localLabel.getMissionID()),localLabel.getUserName(),detectionLabel);
-        }else{
-            SegmentationLabel segmentationLabel = new SegmentationLabel(picturename,localLabel.getDots());
-            segmentationLabelRepository.addSegmentationLabel(Integer.parseInt(localLabel.getMissionID()),localLabel.getUserName(),segmentationLabel);
-        }
-
-
-
-
-
-
         //没有判断文件夹是否存在，不知道可以不可以
-       try {
-           PrintWriter pw = new PrintWriter(p + "/img.txt");
+        try {
+            PrintWriter pw = new PrintWriter(p + "/img.txt");
             pw.println(imgStr);
             pw.close();
-       }catch (Exception e){
-           e.printStackTrace();
-       }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        String type = missionRepository.findMissionByID(Integer.parseInt(localLabel.getMissionID())).getType();
 
-             return ResultMessage.SUCCESS;
+
+        System.out.println("type!!!!"+type);
+          if(type.equals("Detection")){
+          DetectionLabel detectionLabel = new DetectionLabel(picturename,localLabel.getDots());
+          if(localLabel.getDots()==null){
+              return ResultMessage.SUCCESS;
+          }
+          else
+           return detectionLabelRepository.addDetectionLabel(Integer.parseInt(localLabel.getMissionID()),localLabel.getUserName(),detectionLabel);
+        }else{
+              if(localLabel.getDots()==null) return ResultMessage.SUCCESS;
+              else {
+                  SegmentationLabel segmentationLabel = new SegmentationLabel(picturename, localLabel.getDots());
+                  return segmentationLabelRepository.addSegmentationLabel(Integer.parseInt(localLabel.getMissionID()), localLabel.getUserName(), segmentationLabel);
+              }
+        }
+
         }
 
 
@@ -312,6 +316,11 @@ public class LabelServiceImpl implements LabelService{
             }
         }
         else{
+            mid.setTestNum(mid.getTestNum()+1);
+            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()) {
+                mid.setFinishTrain(true);
+                mid.setFinishTest(true);
+            }
 //            /**
 //             * 讲道理其实check的时候不需要调用add方法
 //             */
@@ -348,6 +357,12 @@ public class LabelServiceImpl implements LabelService{
             }
         }
         else{
+            mid.setTestNum(mid.getTestNum()+1);
+            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()) {
+                mid.setFinishTrain(true);
+                mid.setFinishTest(true);
+            }
+
 //            mid.setTestNum(mid.getTestNum()+1);
 //            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
 //                mid.setFinishTest(true);
@@ -383,6 +398,11 @@ public class LabelServiceImpl implements LabelService{
             }
         }
         else{
+            mid.setTestNum(mid.getTestNum()+1);
+            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()) {
+                mid.setFinishTrain(true);
+                mid.setFinishTest(true);
+            }
 //            mid.setTestNum(mid.getTestNum()+1);
 //            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
 //                mid.setFinishTest(true);
@@ -449,6 +469,36 @@ public class LabelServiceImpl implements LabelService{
     public List<AutoDetectionLabel> getAutoDetectionLabel(String missionid,String username){
 
         return autoDetectionLabelReposity.findAutoDetectionLabel(Integer.parseInt(missionid));
+    }
+
+    public void addAutoOne(String missionid,String username){
+        List<AutoUserMission> lists = autoUserMissionRepository.findAutoUserMissionByUsername(username);
+        AutoUserMission mid =null;
+        for(int i=0;i<=lists.size()-1;i++){
+            if(lists.get(i).getMissionId()==Integer.parseInt(missionid)){
+                mid = lists.get(i);
+                break;
+            }
+        }
+
+
+
+            //AutoUserMission mid = new AutoUserMission();
+            mid.setTestNum(mid.getTestNum()+1);
+            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()) {
+                mid.setFinishTrain(true);
+                mid.setFinishTest(true);
+            }
+//            mid.setTestNum(mid.getTestNum()+1);
+//            if(mid.getTestStart()+mid.getTestNum()-1==mid.getTestEnd()){
+//                mid.setFinishTest(true);
+//                mid.setFinishTrain(true);
+//            }
+
+        autoUserMissionRepository.updateAutoUserMission(username,mid);
+        //ResultMessage message =  autoDetectionLabelReposity.addAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
+
+
     }
 
 }

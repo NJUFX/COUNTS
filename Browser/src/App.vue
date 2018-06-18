@@ -111,6 +111,7 @@
                 _this.show=true
               else
                 _this.show=false
+              console.log('unread '+_this.unreadInfoNumber)
               localStorage.setItem('unreadInfoNumber',''+_this.unreadInfoNumber)
             }
           }
@@ -250,7 +251,7 @@
   }
   .headDropDown{
     position: absolute;
-    right: 3%;
+    left:90%;
     top: 11px;
   }
   #userImg{

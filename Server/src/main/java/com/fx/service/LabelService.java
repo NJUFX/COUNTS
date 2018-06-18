@@ -163,4 +163,6 @@ public interface LabelService {
     public List<AutoClassificationLabel> getAutoClassificationLabel(String missionid,String username);
 
     public List<AutoDetectionLabel> getAutoDetectionLabel(String missionid,String username);
+
+    public void addAutoOne(String missionid,String username);
 }

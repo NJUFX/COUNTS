@@ -290,6 +290,7 @@ export default {
       acceptMission: null, //存储项目评分，已完成数量等信息
       autoMission: null, //自动化项目的信息
       isAutoLabel: '0',
+      backToPersonalCenterDialogVisible: false,
       //correctJudge: false,
       //ratingAccess: true,
 
@@ -458,6 +459,7 @@ export default {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var newImg = JSON.parse(xmlhttp.responseText)
             _this.imgList[_this.imgPos].url = newImg.url
+            //_this.commitAndStay()
             _this.draw()
           }
         }
@@ -465,7 +467,7 @@ export default {
         formData3.append('missionid', localStorage.getItem('missionID'))
         formData3.append('imgname', this.imgList[this.imgPos].filename)
         // console.log("12345678");
-        xmlhttp.open('POST', 'http://localhost:8080/counts/image/checkimg', true)
+        xmlhttp.open('POST', 'http://localhost:8080/counts/image/checkimg', false)
         xmlhttp.send(formData3)
       }
     },
@@ -527,12 +529,33 @@ export default {
           // 下载整体标注结果集
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+              /*
               // 下载所有的整体标注结果
               // console.log("download")
               _this.captionInfoList = JSON.parse(xmlhttp.responseText)
+              console.log(_this.captionInfoList)
               // console.log(JSON.parse(xmlhttp.responseText));
               // console.log(_this.captionInfoList)
               _this.setCurrentImgCaptionInfo()
+*/
+                console.log(JSON.parse(xmlhttp.responseText))
+                //console.log(_this.missionID)
+                // 下载所有的整体标注结果
+                var captionResult = JSON.parse(xmlhttp.responseText)
+                for(var i=0;i<_this.imgList.length;i++){
+                  _this.captionInfoList.push({
+                    fileName: _this.imgList[i].filename,
+                    caption: "",
+                  })
+                  for(var j=0;j<captionResult.length;j++){
+                    //console.log(_this.captionInfoList[i].fileName+ " "+captionResult[j].fileName)
+                    if(_this.captionInfoList[i].fileName==captionResult[j].fileName){
+                      _this.captionInfoList[i].caption = captionResult[j].caption
+                    }
+                  }
+                _this.setCurrentImgCaptionInfo()
+              }
+
             }
           }
           let formDataCap = new FormData()
@@ -775,6 +798,8 @@ export default {
         xmlhttp1.send(JSON.stringify(data))
       }
       if (this.missionType == 'Caption') {
+        this.captionInfoList[this.imgPos].caption = _this.captionDialogInfo
+        console.log(this.captionInfoList[this.imgPos].caption)
         var captionLabel = {
           fileName: _this.imgList[_this.imgPos].filename,
           caption: _this.captionDialogInfo
@@ -1135,23 +1160,27 @@ export default {
     },
     updateLabeled(labeled){
       console.log("labeled")
-      var _this = this;
-      _this.acceptMission.finished = labeled;
-      //console.log(this.labeled)
-      console.log(_this.acceptMission.finished)
-      var _this = this;
-      var xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
-            console.log("labeled更新成功")
+      /*
+      if (this.missionType == 'Segmentation' || this.missionType == 'Detection') {
+        this.labeled = this.imgPos+1
+      }
+      */
+        var _this = this;
+        _this.acceptMission.finished = labeled;
+        //console.log(this.labeled)
+        console.log(_this.acceptMission.finished)
+        var _this = this;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (JSON.parse(xmlhttp.responseText) == 'SUCCESS') {
+              console.log("labeled更新成功")
+            }
           }
         }
-      }
-      xmlhttp.open('POST', 'http://localhost:8080/counts/mission//updateAcceptedMission', true)
-      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-      xmlhttp.send(JSON.stringify(_this.acceptMission))
-
+        xmlhttp.open('POST', 'http://localhost:8080/counts/mission//updateAcceptedMission', true)
+        xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        xmlhttp.send(JSON.stringify(_this.acceptMission))
     },
     backToPersonalCenter(){
       this.backToPersonalCenterDialogVisible = false;
