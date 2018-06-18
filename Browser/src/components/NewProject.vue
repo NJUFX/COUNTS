@@ -641,7 +641,8 @@
           for (var i = 0; i < this.imgFileList.length; i++) {
             formData.append('file', _this.imgFileList[i])
           }
-          xmlhttp.open('POST', 'http://localhost:8080/counts/image/uploadAutoDetectionImg', true)
+          //console.log("uploadSetection")
+          xmlhttp.open('POST', 'http://localhost:8080/counts/image/uploadAutoDetectionImg', false)
           xmlhttp.send(formData)
         }
       },

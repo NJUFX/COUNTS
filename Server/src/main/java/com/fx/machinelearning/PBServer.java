@@ -76,7 +76,7 @@ public class PBServer {
         return autoClassificationLabel;
     }
 
-    public AutoDetectionLabel predicObjectDetectionLabel(String filename,String imageFile, String modelDir, String[] labels, String PBName){
+    public AutoDetectionLabel predicObjectDetectionLabel(String filename,String imageFile, String modelDir){
 
         int width=0,height=0;
         try {
@@ -126,8 +126,8 @@ public class PBServer {
                 mid1.setY(floatboxed[0][i][1]);
                 mid2.setX(floatboxed[0][i][2]);
                 mid2.setY(floatboxed[0][i][3]);
-                dots.add(mid1);
                 dots.add(mid2);
+                dots.add(mid1);
             }
         }
         /*

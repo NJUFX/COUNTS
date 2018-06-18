@@ -94,14 +94,24 @@ public class ImageController {
     )
     @ResponseBody
     public void uploadAutoDetectionImg(int missionID, MultipartFile file[]) throws Exception {
+        System.out.println("999");
         int size = file.length;
         int i = 0;
+
+        for (MultipartFile f : file) {
+
+
+            String imgName = f.getOriginalFilename();//这里图片还是以原名命名
+            System.out.println(imgName);
+            imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/allimage/", imgName);
+        }
+
         for (MultipartFile f : file) {
             String imgName = f.getOriginalFilename();//这里图片还是以原名命名
             if (i <= size / 2)
-                imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/images/test", imgName);
+                imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/images/test/", imgName);
             else
-                imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/images/train", imgName);
+                imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/images/train/", imgName);
             i++;
         }
     }

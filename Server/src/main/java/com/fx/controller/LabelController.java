@@ -510,8 +510,8 @@ public class LabelController {
             produces = {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public ResultMessage addAutoDetectionLabel(@RequestBody@RequestParam(value="autoDetectionLabelBean") AutoDetectionLabelBean autoDetectionLabelBean){
-
+    public ResultMessage addAutoDetectionLabel(@RequestBody AutoDetectionLabelBean autoDetectionLabelBean){
+        System.out.println(autoDetectionLabelBean==null);
         return labelService.addAutoDetectionLabel(autoDetectionLabelBean);
 
     }

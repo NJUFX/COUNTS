@@ -4,6 +4,7 @@ import com.fx.model.Mission;
 import com.fx.repository.MissionRepository;
 import com.fx.util.DataConst;
 import com.fx.util.ResultMessage;
+import com.fx.util.TimeUtil;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -19,7 +20,20 @@ import java.util.Scanner;
 public class MissionRepositoryImpl implements MissionRepository {
     File file;
     Gson gson;
-    RepositoryHelper<Mission> helper = new RepositoryHelper<>(Mission.class);
+
+    @Override
+    public List<Mission> findUnFinishedMission() {
+    List<Mission> missions =  getAllMission();
+    List<Mission> newMissions = new ArrayList<>();
+    String current = new TimeUtil().toString();
+        for (int i = 0; i < missions.size(); i++) {
+            if(missions.get(i).getBegin().compareTo(current) >= 0 && missions.get(i).getEnd().compareTo(current)<=0)
+                if(missions.get(i).getCurrentNumber() < missions.get(i).getMaxNumber())
+                    newMissions.add(missions.get(i));
+        }
+        return newMissions;
+    }
+
     public MissionRepositoryImpl() {
         // String fileName =  "Mission.txt";
         //String fileName = "E:\\大二下\\软工\\COUNTS_Phase_II\\data\\Mission.txt";
@@ -166,7 +180,6 @@ public class MissionRepositoryImpl implements MissionRepository {
      */
     @Override
     public ResultMessage initialize(int userid, int missionname) {
-        helper.initialize(userid, missionname);
         return ResultMessage.SUCCESS;
     }
 

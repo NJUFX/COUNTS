@@ -1,6 +1,5 @@
 package com.fx.service;
 
-import com.fx.bean.OptMessage;
 import com.fx.bean.UserData;
 import com.fx.bean.UserProfile;
 import com.fx.model.User;
@@ -21,7 +20,21 @@ public interface UserService {
      */
     public ResultMessage signUp(User user);
 
-        /**
+    /**
+     * 得到用户的等级
+     * @param username
+     * @return
+     */
+    public int findLevelByUsername(String username);
+
+    /**
+     * 得到用户的标签
+     * @param username
+     * @return
+     */
+    public List<String> findTagsByUsername(String username);
+
+    /**
          * 登录
          *
          * @param username 用户账号

@@ -298,12 +298,13 @@ public class LabelServiceImpl implements LabelService{
                 break;
             }
         }
-        if(autoClassificationLabelBean.getKind().equals("train")){
+        if(autoClassificationLabelBean.getKind().equals("Train")){
             mid.setTrainNum(mid.getTrainNum()+1);
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);
                 mid.setFinishTest(false);
 
+               // System.out.println("111111111");
                 /**
                  * 在这里调用训练集
                  */
@@ -337,7 +338,7 @@ public class LabelServiceImpl implements LabelService{
                 break;
             }
         }
-        if(autoCaptionLabelBean.getKind().equals("train")){
+        if(autoCaptionLabelBean.getKind().equals("Train")){
             mid.setTrainNum(mid.getTrainNum()+1);
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);
@@ -370,7 +371,7 @@ public class LabelServiceImpl implements LabelService{
                 break;
             }
         }
-        if(autoDetectionLabelBean.getKind().equals("train")){
+        if(autoDetectionLabelBean.getKind().equals("Train")){
             mid.setTrainNum(mid.getTrainNum()+1);
             if(mid.getTrainStart()+mid.getTrainNum()-1==mid.getTrainEnd()){
                 mid.setFinishTrain(true);
@@ -389,7 +390,9 @@ public class LabelServiceImpl implements LabelService{
 //            }
         }
         autoUserMissionRepository.updateAutoUserMission(username,mid);
-        return  autoDetectionLabelReposity.addAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
+        ResultMessage message =  autoDetectionLabelReposity.addAutoDetectionLabel(autoDetectionLabelBean.getMissionid(),autoDetectionLabelBean.getAutoDetectionLabel());
+
+        return message;
     }
 
     public ResultMessage updateAutoClassificationLabel(AutoClassificationLabelBean autoClassificationLabelBean){

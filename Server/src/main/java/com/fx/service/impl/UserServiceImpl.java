@@ -23,13 +23,41 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService{
-
     UserRepository userRepository;
     MissionRepository missionRepository;
     public UserServiceImpl(){
         userRepository = new UserRepositoryImpl();
         missionRepository = new MissionRepositoryImpl();
     }
+
+    /**
+     *
+     * @param username
+     * @return 等级值 最小为0
+     */
+    @Override
+    public int findLevelByUsername(String username) {
+        User user = userRepository.findUserByUsername(username);
+        if (user!=null)
+            return user.getLevel();
+        return 0;
+    }
+
+    /**
+     * 得到用户的标签
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public List<String> findTagsByUsername(String username) {
+        User user = userRepository.findUserByUsername(username);
+        if (user!=null)
+            return user.getTags();
+        return new ArrayList<>();
+    }
+
+
     /**
      * 增加用户
      *
