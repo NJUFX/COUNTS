@@ -168,7 +168,7 @@
         var _this = this
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            console.log(JSON.parse(xmlhttp.responseText))
+            console.log('rec '+JSON.parse(xmlhttp.responseText))
             _this.recommandType = JSON.parse(xmlhttp.responseText).type
             var arrays = JSON.parse(xmlhttp.responseText).missions
             _this.project_total = arrays.length

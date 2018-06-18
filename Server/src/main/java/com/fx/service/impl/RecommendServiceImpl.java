@@ -290,7 +290,7 @@ public class RecommendServiceImpl implements RecommendService {
      * @return
      */
     private int[] readRecord(String username) {
-        String filename = dir + "/" + username + ".csv";
+        String filename = dir + "/" + username + "_record.txt";
         try {
             File file = new File(filename);
             if (!file.exists()) {
@@ -303,8 +303,10 @@ public class RecommendServiceImpl implements RecommendService {
             }
             Scanner scanner = new Scanner(file);
             int[] result = new int[4];
-            for (int i = 0; i < 4; i++) {
-                result[i] = scanner.nextInt();
+            int index = 0;
+            while (scanner.hasNext() && index < 4){
+                result[index] = scanner.nextInt();
+                index ++;
             }
             return result;
         } catch (Exception e) {
@@ -315,7 +317,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     private void writeRecord(String username, int[] records) {
 
-        String filename = dir + "/" + username + ".csv";
+        String filename = dir + "/" + username + "_record.txt";
         try {
             File file = new File(filename);
             PrintWriter pw = new PrintWriter(file);

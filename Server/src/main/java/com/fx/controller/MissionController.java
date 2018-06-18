@@ -275,6 +275,7 @@ public class MissionController {
     )
     @ResponseBody
     public List<AutoMissionPresentation> getAutoMissionByWorkerID(String username){
+        System.out.println(username);
         return missionService.getAutoMissionByWorkerID(username);
     }
 

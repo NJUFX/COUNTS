@@ -40,7 +40,7 @@
       <div style="position: absolute; top: 0px;width: 1100px; left: 50%; margin-left: -550px; background-color: white;">
         <div style="position: absolute;top: 0;left: 0; width: 100%; height:370px; background-color: white"></div>
         <div>
-          <el-cascader style="position: absolute; left: 30px; top: 10px;"
+          <el-cascader style="position: absolute; left: 30px; top: 10px;" placeholder="全部项目"
                        expand-trigger="hover"
                        :options="labelTypeOptions"
                        v-model="selectLabelTypeOption"
@@ -58,7 +58,7 @@
                 <span class="time" style="position: absolute; left: 5px;top: 30px;font-size: 14px; color:black">时间：{{item.dateStart}} - {{item.dateEnd}}</span>
                 <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
                 <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
-                <el-button style="position: absolute; left: 190px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="goProjectDetails(item.id)">项目详情</el-button>
+                <el-button style="position: absolute; left: 50px;top: 75px;font-size: 14px;"  type="text" class="card_button" @click="goProjectDetails(item.id)">项目详情</el-button>
                 <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="downloadData(item.id,0)">数据下载</el-button>
               </div>
               <div class="imgOnClick" >
@@ -75,7 +75,7 @@
                 <span style="position: absolute;left:90px; top: 28px;font-size: 15px;color:green">自动化标注</span>
                 <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
                 <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
-                <el-button style="position: absolute; left: 50px;top: 75px;font-size: 14px;" type="text" @click="goProjectDetails(item.id)">项目详情</el-button>
+
                 <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="downloadData(item.id,1)">数据下载</el-button>
               </div>
               <div class="imgOnClick" >
@@ -223,6 +223,7 @@
         </el-button>
       </el-tooltip>
     </div>
+    <a style="position: absolute; top: 0;" id="download_a" download="download">this is a download link</a>
   </div>
 </template>
 
@@ -476,11 +477,15 @@
             if (xmlhttp.responseText != null) {
               var url = xmlhttp.responseText
               console.log('url ' + url)
-              window.open(url)
+             // window.open(url)
+              _this.downloadHref = url;
+              document.getElementById('download_a').href = url
+              document.getElementById('download_a').download = 'download.txt'
+              document.getElementById('download_a').click();
             }
           }
         }
-        var path = 'http://localhost:8080/counts/counts/result/getResult'
+        var path = 'http://localhost:8080/counts/result/getResult'
         xmlhttp.open('POST',path, true)
         let formData = new FormData()
         formData.append('missionID',''+mid)

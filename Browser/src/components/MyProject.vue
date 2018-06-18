@@ -290,19 +290,6 @@ export default {
     }
     return {
       autoProjects:[
-        {
-          id: '1',
-          missionname: 'auto test',
-          charts_id: '' + '1' + '_charts',
-          imgFinished: 4,
-          imgToDo: 7,
-          type: 'Caption',
-          cover: '',
-          percent: 0,
-          annotationType: 1,
-          status:'train',
-          show: true
-        }
       ],
       selectLabelTypeOption:[],
       labelTypeOptions:[
