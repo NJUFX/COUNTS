@@ -2,6 +2,7 @@ package com.fx.controller;
 
 import com.fx.bean.RecommendResult;
 import com.fx.service.RecommendService;
+import com.fx.service.impl.CFHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,4 +29,14 @@ public class RecommendController{
     public RecommendResult recommend(String username){
         return recommendService.recommend(username);
     }
+    @RequestMapping(
+        value = "/calculate",
+        method = RequestMethod.POST,
+        produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public void calculate(){
+        new CFHelper().calculate();
+    }
+
 }

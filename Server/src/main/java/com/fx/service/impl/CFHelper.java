@@ -98,7 +98,6 @@ public class CFHelper {
         }
         // 如果分值大于 用户的平均分 则推荐
         for (int i = 0; i < usernames.size(); i++) {
-
             String filename = dirname + "/" + usernames.get(i) + ".txt";
             try {
                 PrintWriter pw = new PrintWriter(filename);

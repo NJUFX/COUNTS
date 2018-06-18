@@ -62,7 +62,7 @@ public class ResultServiceImpl  implements ResultService {
         String zipName = filename + "/result.zip";
         zipHelper.compress(filename,filename+".zip");
         File file = new File(zipName);
-        String key = "result" + missionID;
+        String key = "result_" + missionID;
 
         if (!file.exists()) {
             System.out.println("file not exist");

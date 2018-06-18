@@ -29,13 +29,14 @@ public class MissionServiceImpl implements MissionService {
     UserRepository userRepository;
     AutoUserMissionRepository autoUserMissionRepository;
     MessageRepository messageRepository;
+    RecommendServiceImpl recommendService = new RecommendServiceImpl();
     @Override
     public ResultMessage addAcceptedMission(String username, int id, int recommendType) {
         Mission mission = findMissionByID(id);
         if (mission.getCurrentNumber() > mission.getMaxNumber())
             return ResultMessage.FALSE;
         AcceptedMission acceptedMission = new AcceptedMission(username, mission, recommendType);
-
+        recommendService.updateRecommendResult(username,recommendType);
         ResultMessage message = acceptMissionRepository.addAcceptMission(acceptedMission);
         if (message == ResultMessage.SUCCESS) {
             mission.setCurrentNumber(mission.getCurrentNumber() + 1);
@@ -363,6 +364,7 @@ public class MissionServiceImpl implements MissionService {
         File training = new File(dirname + "/training");
         training.mkdir();
     }
+
 
 
     @Override
