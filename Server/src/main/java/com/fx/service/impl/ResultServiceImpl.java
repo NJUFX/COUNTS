@@ -50,16 +50,18 @@ public class ResultServiceImpl  implements ResultService {
 
     private String getAutoResult(int missionID){
         String filename = autoDir + missionID + autoFilename;
-        File file = new File(filename);
+
+        zipHelper.compress(filename,autoDir+missionID+".zip");
+        File file = new File(autoDir+missionID+".zip");
         if (!file.exists())
-        return null;
+            return null;
         String key = "auto_"+missionID;
         String s =  ossHelper.upload(file,key);
         return s;
     }
     private String getOrdinaryResult(int missionID){
         String filename = dir + missionID;
-        String zipName = filename + "/result.zip";
+        String zipName = filename + ".zip";
         zipHelper.compress(filename,filename+".zip");
         File file = new File(zipName);
         String key = "result_" + missionID;
