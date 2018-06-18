@@ -47,7 +47,7 @@
         <el-tab-pane class="el-tab-pane" name='4'>
           <span slot="label"><i class="el-icon-time"></i> 项目进度</span>
           <div style="height: 10px"></div>
-          <el-progress :text-inside="true" :stroke-width="18" :percentage="(labeled/imgList.length)*100"></el-progress>
+          <el-progress :text-inside="true" :stroke-width="18" :percentage="((imgPos+1)/imgList.length)*100"></el-progress>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -197,6 +197,18 @@
       </div>
     </el-dialog>
     <!--评分对话框结束-->
+    <!--返回个人中心对话框开始-->
+    <el-dialog title="返回个人中心" :visible.sync="backToPersonalCenterDialogVisible">
+      <div class="block">
+        <span class="demonstration">已经是最后一张，确定返回个人中心吗？</span>
+        <div style="height: 10px"></div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button  icon="el-icon-close" @click="backToPersonalCenterDialogVisible = false">取消</el-button>
+        <el-button type="primary"icon="el-icon-circle-plus-outline" @click="backToPersonalCenter">确定</el-button>
+      </div>
+    </el-dialog>
+    <!--返回个人中心对话框结束-->
   </el-container>
 </template>
 
@@ -291,6 +303,7 @@
         status: '',
         correctJudge: false,
         currentImgHeight: 0,
+        backToPersonalCenterDialogVisible: false
         //ratingAccess: true,
 
       }
@@ -438,21 +451,21 @@
         }
         if (this.missionType == 'Detection') {
           this.colorPos = 0
-          // _this.imgDataClear();
+          this.detectionInfoList[this.imgPos] = []
           var xmlhttp = new XMLHttpRequest()
           var _this = this
           xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-              var newImg = JSON.parse(xmlhttp.responseText)
-              _this.imgList[_this.imgPos].url = newImg.url
+              //console.log(xmlhttp.responseText)
+              _this.imgList[_this.imgPos].url = xmlhttp.responseText
               _this.draw()
             }
           }
           let formData3 = new FormData()
           formData3.append('missionid', localStorage.getItem('missionID'))
-          formData3.append('imgname', this.imgList[this.imgPos].filename)
+          formData3.append('filename', this.imgList[this.imgPos].filename)
           // console.log("12345678");
-          xmlhttp.open('POST', 'http://localhost:8080/counts/image/checkimg', true)
+          xmlhttp.open('POST', 'http://localhost:8080/counts/image/get/autooriginimage', true)
           xmlhttp.send(formData3)
         }
       },
@@ -498,6 +511,7 @@
                 var name = dataSet[i].fileName
                 _this.imgList.push({url: dataurl, filename: name})
               }
+              console.log("1")
             }
           }
           let formData3 = new FormData()
@@ -605,7 +619,7 @@
             let formDataDetRes = new FormData()
             formDataDetRes.append('missionid', localStorage.getItem('missionID'))
             formDataDetRes.append('username', localStorage.getItem('username'))
-            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/autodetectionlabel', true)
+            xmlhttp0.open('POST', 'http://localhost:8080/counts/label/get/autodetectionlabel', false)
             xmlhttp0.send(formDataDetRes)
             break
           }
@@ -658,14 +672,22 @@
         var _this = this
         for (var i = 0; i < _this.detectionInfoList.length; i++) {
           if (_this.detectionInfoList[i].fileName === _this.imgList[_this.imgPos].filename) {
+            console.log(_this.detectionInfoList[i])
             //把点画上去
             var canvas = document.getElementById('myCanvas')
             var ctx = canvas.getContext('2d')
-            for(var j=0;j<_this.detectionInfoList[i].dots.length-1;j = j+2){
-              var x1 = _this.detectionInfoList[i].dots[j].x*900
-              var y1 = _this.detectionInfoList[i].dots[j].y*_this.currentImgHeight
-              var x2 = _this.detectionInfoList[i].dots[j+1].x*900
-              var y2 = _this.detectionInfoList[i].dots[j+1].y*_this.currentImgHeight
+            //console.log("3")
+            //console.log(_this.currentImgHeight)
+            console.log(_this.detectionInfoList[i])
+            for (var j = 0; j < _this.detectionInfoList[i].dots.length - 1; j = j + 2) {
+              var x1 = _this.detectionInfoList[i].dots[j].x * 900
+              var y1 = _this.detectionInfoList[i].dots[j].y * _this.currentImgHeight
+              var x2 = _this.detectionInfoList[i].dots[j + 1].x * 900
+              var y2 = _this.detectionInfoList[i].dots[j + 1].y * _this.currentImgHeight
+              ctx.beginPath()
+              ctx.moveTo(x1, y1)
+              ctx.strokeStyle = '#000000'
+              ctx.rect(x1, y1, x2 - x1, y2 - y1)
               ctx.lineWidth = 2
               ctx.strokeStyle = 'rgba(52, 136, 255, 1)'
               ctx.fillStyle = 'rgba(52, 136, 255, 0.5)'
@@ -675,6 +697,7 @@
             }
           }
         }
+
       },
 
       // 提交图片
@@ -723,7 +746,7 @@
                   duration: 2000,
                   position: 'top-left'
                 })
-                _this.labeled++;
+               // _this.labeled++;
               }
               else if(JSON.parse(xmlhttp1.responseText) == 'EXIST'){
                 _this.$notify({
@@ -772,7 +795,7 @@
                   duration: 2000,
                   position: 'top-left'
                 })
-                _this.labeled++;
+                //_this.labeled++;
               }
               else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
                 _this.$notify({
@@ -821,8 +844,8 @@
                   duration: 2000,
                   position: 'top-left'
                 })
-                _this.labeled++;
-                console.log(_this.labeled)
+               // _this.labeled++;
+                //console.log(_this.labeled)
               }
               else if(JSON.parse(xmlhttp.responseText) == 'EXIST'){
                 _this.$notify({
@@ -876,6 +899,7 @@
         imgObj.src = img
         // 待图片加载完后，将其显示在canvas上
         imgObj.onload = function () {
+          console.log("2")
           var ctx = cvs.getContext('2d')
           // 压缩图片
           var rate = 900 / imgObj.width
@@ -884,9 +908,9 @@
           // ctx.drawImage(this, 0, 0);//this即是imgObj,保持图片的原始大小：470*480
           ctx.drawImage(this, 0, 0, 900, cvs.height)// 改变图片的大小到900*500
           // 设置当前图片标注
+          _this.setCurrentImgInfo()
         }
 
-        _this.setCurrentImgInfo()
       },
       // 以下两个方法分别用于画折线和矩形
       drawBrokenLine () {
@@ -964,7 +988,6 @@
               ctx.fill()
               _this.pointList.push({x: x2/900, y: y2/_this.currentImgHeight})
               //console.log(_this.pointList)
-
               ctx.strokeRect(x1, y1, x2 - x1, y2 - y1)
               c.onmousemove = null
               c.onmouseup = null
@@ -1005,13 +1028,7 @@
           this.draw()
         }
         else{
-          this.$notify({
-            title: '最后一张',
-            message: '已经是最后一张了',
-            type: 'warning',
-            duration: 2000,
-            position: 'bottom-left'
-          })
+         this.backToPersonalCenterDialogVisible = true
         }
         this.imgDataClear()
       },
@@ -1069,7 +1086,7 @@
               _this.autoMission = autoMission;
               //console.log(autoMission)
               _this.missionType = _this.autoMission.type;
-              _this.labeled = _this.autoMission.finished;
+              //_this.labeled = _this.autoMission.finished;
               _this.missionID = _this.autoMission.id;
               _this.status  = _this.autoMission.status
               //console.log(_this.status)
@@ -1088,7 +1105,14 @@
           xmlhttp3.send(formData)
         }
       },
-
+      handleTabClick(){
+        this.reLabelImg()
+      },
+      backToPersonalCenter(){
+        this.backToPersonalCenterDialogVisible = false;
+        var path = '/' + localStorage.getItem('username') + '/myProject'
+        this.$router.push({path: path})
+      },
 
     }
   }

@@ -63,7 +63,6 @@
                   unread:!arrays[i].read,
                 })
               }
-              console.log('red '+arrays[0].read)
             }
           }
         }

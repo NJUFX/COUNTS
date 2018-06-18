@@ -3,7 +3,4 @@
 {"id":3,"requestorID":"fjx","finished":false,"size":0,"type":"Caption","points":10,"missionName":"auto 2","description":"auto2","types":[]}
 {"id":4,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
 {"id":5,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
-{"id":6,"requestorID":"fjx_req","finished":false,"size":0,"type":"Caption","points":10,"missionName":"test acp","description":"caption","types":[]}
-{"id":7,"requestorID":"fjx_req","finished":false,"size":6,"type":"Caption","points":10,"missionName":"auto test 2","description":"eeee","types":[]}
-{"id":8,"requestorID":"fjx_req","finished":false,"size":6,"type":"Caption","points":10,"missionName":"auto test 2","description":"eeee","types":[]}
-{"id":9,"requestorID":"fjx_req","finished":false,"size":5,"type":"Caption","points":10,"missionName":"auto test 1920","description":"test","types":[]}
+{"id":6,"requestorID":"fjx_req","finished":false,"size":5,"type":"Caption","points":10,"missionName":"测试","description":"测试","types":[]}

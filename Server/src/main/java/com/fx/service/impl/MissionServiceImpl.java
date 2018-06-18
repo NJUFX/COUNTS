@@ -36,6 +36,7 @@ public class MissionServiceImpl implements MissionService {
         if (mission.getCurrentNumber() > mission.getMaxNumber())
             return ResultMessage.FALSE;
         AcceptedMission acceptedMission = new AcceptedMission(username, mission, recommendType);
+        if (recommendType>0)
         recommendService.updateRecommendResult(username,recommendType);
         ResultMessage message = acceptMissionRepository.addAcceptMission(acceptedMission);
         if (message == ResultMessage.SUCCESS) {
@@ -364,7 +365,6 @@ public class MissionServiceImpl implements MissionService {
         File training = new File(dirname + "/training");
         training.mkdir();
     }
-
 
 
     @Override

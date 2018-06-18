@@ -108,14 +108,13 @@ public class MLController {
             //String realPath = new File("").getAbsolutePath() + File.separator + filePath;
 
             System.out.println("123");
-            String realPath = "E:\\大二下\\软工\\COUNTS_Phase_III\\data\\image\\2\\caption 词云.png";
+            String realPath = "d:\\Documents\\SEIII-Project\\COUNTS_Phase_III\\UserData.txt";
             File file = new File(realPath);
 
             if (file.exists()) {
                 System.out.println("come");
 
                 FileInputStream fis = null;
-
                 BufferedInputStream bis = null;
 
                 try {
