@@ -310,6 +310,21 @@ public class ImageController {
         return imageService.getFirstAutoImages(missionid, username);
     }
 
+    @RequestMapping(
+        value = "/get/autooriginimage",
+
+        method = RequestMethod.POST,
+        produces = {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public String getAutoOriginImages(String filename,int missionid) {
+
+        return imageService.getAutoOriginImage(filename,missionid);
+    }
+
+
+
+
 
 }
 
