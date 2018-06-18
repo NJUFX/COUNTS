@@ -411,10 +411,19 @@
             console.log('return info')
             if (JSON.parse(xmlhttp.responseText).result == true) {
               _this.openSucc('操作成功！')
+<<<<<<< HEAD
               for(var i=0;i<_this.projects.length;i++) {
                 if (_this.projects[i].id == id) {
 
                   _this.openProject(_this.projects[i]);
+=======
+              _this.calculate()
+            }else{
+              _this.openInfo('您已经加入该项目');
+              for(var i=0;i<_this.projectInfo.length;i++){
+                if(_this.projectInfo[i].id==id){
+                  _this.openProject(_this.projectInfo[i]);
+>>>>>>> cfa1914e5497b461f0506687c17d277339af041f
                   break;
                 }
               }
@@ -433,6 +442,16 @@
         var path = localStorage.getItem('server')+'/counts/mission/addAcceptMission'
         xmlhttp.open('POST', path, true)
         xmlhttp.send(formData)
+      },
+      calculate(){
+        var xmlhttp =  new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log(xmlhttp.responseText)
+          }
+        }
+        var path = localStorage.getItem('server')+'/counts/recommend/calculate'
+        xmlhttp.open('POST', path, true)
       },
       openProject (item) {
         localStorage.setItem('missionType', item.type)

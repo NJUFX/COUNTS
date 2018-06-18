@@ -8,7 +8,6 @@ import NewProject from '@/components/NewProject'
 import Admin from '@/components/Admin'
 import MyProject from '@/components/MyProject'
 import Test from '@/components/Test'
-import Test2 from '@/components/Test2'
 import Home from '@/components/Home'
 import ProjectDetails from '@/components/ProjectDetails'
 import CountsDetails from '@/components/CountsDetails'
@@ -16,7 +15,6 @@ import Result from '@/components/Result'
 import Register from '@/components/Register'
 import Message from '@/components/Message'
 import AutoLabel from '@/components/AutoLabel'
-import AutoJudge from '@/components/AutoJudge'
 Vue.use(Router)
 
 export default new Router({
@@ -40,11 +38,6 @@ export default new Router({
       path: '/:username/autoLabel',
       name: 'AutoLabel',
       component: AutoLabel
-    },
-    {
-      path: '/:username/autoJudge',
-      name: 'AutoJudge',
-      component: AutoJudge
     },
     {
       path: '/:username/message',
@@ -111,10 +104,5 @@ export default new Router({
       name: 'Test',
       component: Test
     },
-    {
-      path: '/:username/test2',
-      name: 'Test2',
-      component: Test2
-    }
   ]
 })

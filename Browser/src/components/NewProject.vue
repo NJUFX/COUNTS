@@ -221,8 +221,8 @@
         },
         doAutoLabel:false,
         isAutoLabel:false,
-        hotTagList:['dog','cat','mouse','horse','padding','steve bob','hello world','vue',
-          'element','boom','iphone','macbook','dest','56789','12345','天将降大任于斯人也'],
+        hotTagList:['dog', 'cat', 'mouse', 'horse', 'caption', 'detection', 'animal', 'car',
+          'fruit', 'vegetable'],
         selectedTagList:[],
         firstStep:true,
         secondStep:false,
@@ -353,8 +353,28 @@
           this.isBeforeBtnDisabled=true
         }
       },
-      newHotTag(){
-        this.hotTagList.push('new hot tag');
+      newHotTag () {
+        var preList = ['dog', 'cat', 'mouse', 'horse', 'caption', 'detection', 'animal', 'car',
+          'fruit', 'vegetable', 'phone', 'medicine','women','star','actor','actress','Asian','cartoon','comic',
+          '二次元','演员','区域标注','跑车','赛车','饮料瓶','computer','计算机','鼠标','apple','bird']
+        this.hotTagList=[]
+        while(true){
+          if(this.hotTagList.length<11){
+            var index = this.random_Num(0,preList.length);
+            var test = true;
+            for(var j=0;j<this.hotTagList.length;j++){
+              if(preList[index]==this.hotTagList[j]){
+                test = false;
+              }
+            }
+            if(test == true){
+              this.hotTagList.push(preList[index])
+            }
+          }else{
+            return;
+          }
+        }
+        //this.hotTagList.push('new hot tag')
       },
       handleNextBtn(){
         this.isBeforeBtnDisabled=false;

@@ -38,7 +38,6 @@
     data: function () {
       return {
         show:false,
-        sakura_show:true,
         headImg: HeadImg,
         unreadInfoNumber:0
       }
@@ -69,6 +68,7 @@
         '                                                                                                                                                                               '
       )
       console.log('   count_fx@163.com 欢迎您的来信')
+
       localStorage.setItem('server', 'http://localhost:8080')
       if (localStorage.getItem('username') != 'visitor' && localStorage.getItem('username') != 'undefined') {
         var xmlhttp = new XMLHttpRequest()
@@ -90,6 +90,7 @@
         xmlhttp.open('POST', 'http://localhost:8080/counts/user/getuser', true)
         xmlhttp.send(formData)
         this.getMessageNumber();
+        console.log('app.vue')
       }
     },
 
@@ -159,7 +160,6 @@
         }
       },
       goMarket: function () {
-
         if (localStorage.getItem('identify') == 'logout') {
           this.openInfo("You haven't logged in")
           var path = '/visitor/countsMarket'
@@ -169,9 +169,6 @@
           var path = '/' + localStorage.getItem('username') + '/countsMarket'
           this.$router.push({path: path})
         }
-      },
-      sakuraShowOrNot:function(){
-        this.sakura_show= !this.sakura_show
       },
       goMyProject: function () {
 
