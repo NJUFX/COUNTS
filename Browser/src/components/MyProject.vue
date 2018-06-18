@@ -40,7 +40,7 @@
       <div style="position: absolute; top: 0px;width: 1100px; left: 50%; margin-left: -550px; background-color: white;">
         <div style="position: absolute; top: 0px;left: 0; width: 100%; height: 370px; background-color: white"></div>
         <div>
-          <el-cascader style="position: absolute; left: 30px; top: 10px;"
+          <el-cascader style="position: absolute; left: 30px; top: 10px;" placeholder="全部项目"
             expand-trigger="hover"
             :options="labelTypeOptions"
             v-model="selectLabelTypeOption"

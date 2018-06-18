@@ -191,6 +191,18 @@
       </div>
     </el-dialog>
     <!--评分对话框结束-->
+    <!--返回个人中心对话框开始-->
+    <el-dialog title="返回个人中心" :visible.sync="backToPersonalCenterDialogVisible">
+      <div class="block">
+        <span class="demonstration">已经是最后一张，确定返回个人中心吗？</span>
+        <div style="height: 10px"></div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button  icon="el-icon-close" @click="backToPersonalCenterDialogVisible = false">取消</el-button>
+        <el-button type="primary"icon="el-icon-circle-plus-outline" @click="backToPersonalCenter">确定</el-button>
+      </div>
+    </el-dialog>
+    <!--返回个人中心对话框结束-->
     </el-container>
 </template>
 
@@ -1057,6 +1069,9 @@ export default {
         this.imgPos++
         this.draw()
       }
+      else{
+        this.backToPersonalCenterDialogVisible = true
+      }
       this.imgDataClear()
     },
     rateProject(){
@@ -1137,6 +1152,11 @@ export default {
       xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
       xmlhttp.send(JSON.stringify(_this.acceptMission))
 
+    },
+    backToPersonalCenter(){
+      this.backToPersonalCenterDialogVisible = false;
+      var path = '/' + localStorage.getItem('username') + '/myProject'
+      this.$router.push({path: path})
     },
 
 

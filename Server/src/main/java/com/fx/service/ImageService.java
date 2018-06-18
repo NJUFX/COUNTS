@@ -56,4 +56,5 @@ public interface ImageService {
 
     public String getFirstAutoImages(int missionid, String username);
 
+    public String getAutoOriginImage(String filename,int missionid);
 }
