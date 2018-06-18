@@ -467,7 +467,18 @@
 
     methods: {
       downloadData(val){
-        //,,,,,,
+        console.log('click')
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this;
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.responseText != null) {
+          //  var url = xmlhttp.responseText
+            console.log('url '+url)
+          //  window.open(url)
+          }
+        }
+        var path = 'http://localhost:8080/counts/counts/ml/download'
+        xmlhttp.open('POST',path, true)
       },
       getAutoMissionFromBack(){
         var xmlhttp = new XMLHttpRequest()
