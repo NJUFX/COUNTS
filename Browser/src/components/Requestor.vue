@@ -59,6 +59,7 @@
                 <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
                 <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
                 <el-button style="position: absolute; left: 190px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="goProjectDetails(item.id)">项目详情</el-button>
+                <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="downloadData(item.id,0)">数据下载</el-button>
               </div>
               <div class="imgOnClick" >
                 <img  src="../assets/img_1.png" style="width: 96%; position: absolute; left: 1.5%;top: 0px; height: 145px">
@@ -74,8 +75,8 @@
                 <span style="position: absolute;left:90px; top: 28px;font-size: 15px;color:green">自动化标注</span>
                 <span style="position: absolute; left: 5px;top: 52px;font-size: 14px;">类型：{{item.type}}</span>
                 <span style="position: absolute; left: 140px;top: 52px;font-size: 14px;">积分：{{item.counts}}</span>
-                <el-button style="position: absolute; left: 50px;top: 75px;font-size: 14px;" type="text" @click="handleProjectDetails(item.id)">项目详情</el-button>
-                <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="downloadData(item.id)">数据下载</el-button>
+                <el-button style="position: absolute; left: 50px;top: 75px;font-size: 14px;" type="text" @click="goProjectDetails(item.id)">项目详情</el-button>
+                <el-button style="position: absolute; left: 150px;top: 75px;font-size: 14px;" type="text" class="card_button" @click="downloadData(item.id,1)">数据下载</el-button>
               </div>
               <div class="imgOnClick" >
                 <img  src="../assets/img_1.png" style="width: 96%; position: absolute; left: 1.5%;top: 0px; height: 145px">
@@ -466,19 +467,26 @@
     },
 
     methods: {
-      downloadData(val){
+      downloadData(mid,type){
         console.log('click')
         var xmlhttp = new XMLHttpRequest()
         var _this = this;
         xmlhttp.onreadystatechange = function () {
-          if (xmlhttp.responseText != null) {
-          //  var url = xmlhttp.responseText
-            console.log('url '+url)
-          //  window.open(url)
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (xmlhttp.responseText != null) {
+              var url = xmlhttp.responseText
+              console.log('url ' + url)
+              window.open(url)
+            }
           }
         }
-        var path = 'http://localhost:8080/counts/counts/ml/download'
+        var path = 'http://localhost:8080/counts/counts/result/getResult'
         xmlhttp.open('POST',path, true)
+        let formData = new FormData()
+        formData.append('missionID',''+mid)
+        formData.append('type', ''+type)
+        console.log('mid '+mid+' '+type)
+        xmlhttp.send(formData)
       },
       getAutoMissionFromBack(){
         var xmlhttp = new XMLHttpRequest()
