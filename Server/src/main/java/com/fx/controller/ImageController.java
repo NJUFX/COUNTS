@@ -34,7 +34,7 @@ import java.util.List;
 public class ImageController {
     //图片存放地址
     // public static final String imageURL = "E:\\大二下\\软工\\ImageTest\\";
-    public static final String imageURL = "../data/image/";
+    public static final String imageURL = "./data/image/";
     @Autowired
     ImageService imageService;
 
@@ -46,7 +46,7 @@ public class ImageController {
     @Autowired
     UserService userService;
 
-    private final static String autoDirName = "../data/autoImage";
+    private final static String autoDirName = "./data/autoImage";
 
     public ImageController() {
         File file = new File(autoDirName);

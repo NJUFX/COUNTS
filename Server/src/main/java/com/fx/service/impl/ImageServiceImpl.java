@@ -269,7 +269,7 @@ public class ImageServiceImpl implements ImageService{
 
         List<Image> result = new ArrayList<>();
 
-        String path = "../data/autoImage/"+missionid+"/";
+        String path = "./data/autoImage/"+missionid+"/";
 
         if(autoMission.getType().equals("Classification")){
 
@@ -342,7 +342,7 @@ public class ImageServiceImpl implements ImageService{
 
         List<Image> result = new ArrayList<>();
 
-        String path = "../data/autoImage/"+missionid+"/";
+        String path = "./data/autoImage/"+missionid+"/";
 
         if(autoMission.getType().equals("Classification")){
 

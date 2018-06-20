@@ -16,11 +16,11 @@ import java.util.Scanner;
  * Created by Hanxinhu at 20:58 2018/5/29/029
  */
 public class CapAndClaResultRepositoryImpl implements CapAndClaResultRepository {
-    private static final String prefix  = "../data/result";
+    private static final String prefix  = "./data/result";
     private static final String postfix = ".txt";
     Gson gson = new Gson();
     public CapAndClaResultRepositoryImpl(){
-        File file = new File("../data");
+        File file = new File("./data");
         if (!file.exists())
             try{
             file.mkdir();

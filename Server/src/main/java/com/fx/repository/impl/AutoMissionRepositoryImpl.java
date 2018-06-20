@@ -17,11 +17,11 @@ import java.util.Scanner;
  * Created by Hanxinhu at 16:09 2018/6/8/008
  */
 public class AutoMissionRepositoryImpl implements AutoMissionRepository {
-    private static final String filename = "../data/AutoMission.txt";
+    private static final String filename = "./data/AutoMission.txt";
     Gson gson = new Gson();
 
     public AutoMissionRepositoryImpl() {
-        File file = new File("../data");
+        File file = new File("./data");
         try {
             if (!file.exists())
                 file.mkdir();

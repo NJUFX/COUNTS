@@ -36,7 +36,7 @@ public class MLServiceImpl implements MLService {
         List<AutoUserMission> autoUserMission = autoUserMissionRepository.findAutoUserMissionByUsername(username);
         AutoMission autoMission = autoMissionRepository.findAutoMissionByID(missionid);
 
-        String path = "../data/autoImage/" + missionid + "/allImage";
+        String path = "./data/autoImage/" + missionid + "/allImage";
 
         for (int j = 0; j <= autoUserMission.size() - 1; j++) {
             if (autoUserMission.get(j).getMissionId() == missionid) {
@@ -87,7 +87,7 @@ public class MLServiceImpl implements MLService {
         List<AutoUserMission> autoUserMission = autoUserMissionRepository.findAutoUserMissionByUsername(username);
         AutoMission autoMission = autoMissionRepository.findAutoMissionByID(missionid);
 
-        String path = "../data/autoImage/" + missionid + "/allimage";
+        String path = "./data/autoImage/" + missionid + "/allimage";
 
         for (int j = 0; j <= autoUserMission.size() - 1; j++) {
             if (autoUserMission.get(j).getMissionId() == missionid) {
@@ -111,7 +111,7 @@ public class MLServiceImpl implements MLService {
                             labels[k] = autoMission.getTypes().get(k);
                         }
                    // System.out.println("1234444");
-                        AutoClassificationLabel mid  = pbServer.predictClassificationLabel(files[i].getName(),"../data/autoImage/"+missionid+"/allimage/"+files[i].getName(),"../data/tensorflow/pbmodel",labels,"output_graph.pb");
+                        AutoClassificationLabel mid  = pbServer.predictClassificationLabel(files[i].getName(),"./data/autoImage/"+missionid+"/allimage/"+files[i].getName(),"./data/tensorflow/pbmodel",labels,"output_graph.pb");
                         autoClassificationLabelRepository.addAutoClassificationLabel(missionid,mid);
                         // System.out.println(head+url);
                         //lists.add(head+url);
@@ -127,7 +127,7 @@ public class MLServiceImpl implements MLService {
         List<AutoUserMission> autoUserMission = autoUserMissionRepository.findAutoUserMissionByUsername(username);
         AutoMission autoMission = autoMissionRepository.findAutoMissionByID(missionid);
 
-        String path = "../data/autoImage/" + missionid + "/allimage";
+        String path = "./data/autoImage/" + missionid + "/allimage";
 
         for (int j = 0; j <= autoUserMission.size() - 1; j++) {
             if (autoUserMission.get(j).getMissionId() == missionid) {
@@ -156,7 +156,7 @@ public class MLServiceImpl implements MLService {
                         BASE64Encoder encoder = new BASE64Encoder();
                         String url = encoder.encode(data);
                         //String head = "data:image/" + files[i].getName().split("[.]")[1] + ";base64,";
-                        AutoDetectionLabel mid  = pbServer.predicObjectDetectionLabel(files[i].getName(),"../data/autoImage/"+missionid+"/allimage/"+files[i].getName(),"../data/tensorflow/odmodel");
+                        AutoDetectionLabel mid  = pbServer.predicObjectDetectionLabel(files[i].getName(),"./data/autoImage/"+missionid+"/allimage/"+files[i].getName(),"./data/tensorflow/odmodel");
                         autoDetectionLabelReposity.addAutoDetectionLabel(missionid,mid);
                         // System.out.println(head+url);
                         //lists.add(head+url);

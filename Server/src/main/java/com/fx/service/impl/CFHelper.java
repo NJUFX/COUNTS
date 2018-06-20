@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Hanxinhu at 15:03 2018/6/17/017
  */
 public class CFHelper {
-    private static final String dirname = "../data/recommend";
+    private static final String dirname = "./data/recommend";
 
     public CFHelper() {
         File file = new File(dirname);

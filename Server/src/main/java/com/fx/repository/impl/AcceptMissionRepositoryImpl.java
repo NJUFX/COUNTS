@@ -16,7 +16,7 @@ import java.util.Scanner;
  * Created by Hanxinhu at 17:37 2018/6/11/011
  */
 public class AcceptMissionRepositoryImpl implements AcceptMissionRepository {
-    private static final String dir = "../data/AcceptMission";
+    private static final String dir = "./data/AcceptMission";
     Gson gson = new Gson();
 
     public AcceptMissionRepositoryImpl() {

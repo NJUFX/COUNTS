@@ -432,7 +432,7 @@ public class LabelServiceImpl implements LabelService{
     public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username){
 
         /*
-        String path = "../data/autoImage/"+missionid+"/allimage";
+        String path = "./data/autoImage/"+missionid+"/allimage";
 
         File file = new File(path);
         System.out.println(file.getAbsolutePath());
