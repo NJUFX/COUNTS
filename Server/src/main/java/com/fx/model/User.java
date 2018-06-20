@@ -90,6 +90,30 @@ public class User {
      * 用户经常标注的类型 比如 军事、动物等
      */
     private List<String> tags;
+    /**
+     * 最近登录时间
+     */
+    private String latestSignIn;
+    /**
+     * 注册时间
+     */
+    private String registerTime;
+
+    public String getLatestSignIn() {
+        return latestSignIn;
+    }
+
+    public void setLatestSignIn(String latestSignIn) {
+        this.latestSignIn = latestSignIn;
+    }
+
+    public String getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime;
+    }
 
     public List<String> getTags() {
         return tags;

@@ -1,4 +1,4 @@
-spackage com.fx.repository.impl;
+package com.fx.repository.impl;
 
 import com.fx.model.AutoUserMission;
 import com.fx.repository.AutoUserMissionRepository;
