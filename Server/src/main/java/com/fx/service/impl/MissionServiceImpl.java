@@ -339,7 +339,7 @@ public class MissionServiceImpl implements MissionService {
     }
 
     public void mkdirsForAutoCaption(int id) {
-        String dirname = "../data/autoImage/" + id;
+        String dirname = "./data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
             dir.mkdir();
@@ -350,7 +350,7 @@ public class MissionServiceImpl implements MissionService {
     }
 
     public void mkdirsForAutoDetection(int id) {
-        String dirname = "../data/autoImage/" + id;
+        String dirname = "./data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
             dir.mkdir();
@@ -379,7 +379,7 @@ public class MissionServiceImpl implements MissionService {
     }
 
     public void mkdirsForAutoClassification(int id, List<String> types) {
-        String dirname = "../data/autoImage/" + id;
+        String dirname = "./data/autoImage/" + id;
         File dir = new File(dirname);
         if (!dir.exists())
             dir.mkdir();

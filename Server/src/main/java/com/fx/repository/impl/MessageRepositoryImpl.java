@@ -16,7 +16,7 @@ import java.util.Scanner;
  * Created by Hanxinhu at 15:11 2018/6/10/010
  */
 public class MessageRepositoryImpl implements MessageRepository {
-    private static final String dirname = "../data/message";
+    private static final String dirname = "./data/message";
 
     Gson gson = new Gson();
 

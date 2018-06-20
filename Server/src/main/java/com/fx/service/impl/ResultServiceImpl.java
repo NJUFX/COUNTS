@@ -17,9 +17,9 @@ public class ResultServiceImpl  implements ResultService {
     }
    private OSSHelper ossHelper = new OSSHelper();
     private ZipHelper zipHelper = new ZipHelper();
-   private static final String autoDir = "../data/autoImage/";
+   private static final String autoDir = "./data/autoImage/";
    private static final String autoFilename = "/label.txt";
-   private static final String dir = "../data/";
+   private static final String dir = "./data/";
 
     /**
      * 得到整体描述的结果

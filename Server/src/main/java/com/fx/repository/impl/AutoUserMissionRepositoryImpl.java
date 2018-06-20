@@ -1,4 +1,4 @@
-package com.fx.repository.impl;
+spackage com.fx.repository.impl;
 
 import com.fx.model.AutoUserMission;
 import com.fx.repository.AutoUserMissionRepository;
@@ -16,7 +16,7 @@ import java.util.Scanner;
  * Created by Hanxinhu at 19:45 2018/6/12/012
  */
 public class AutoUserMissionRepositoryImpl implements AutoUserMissionRepository {
-    private static final String dirname = "../data/autoUserMission";
+    private static final String dirname = "./data/autoUserMission";
     Gson gson = new Gson();
     public AutoUserMissionRepositoryImpl(){
         File file = new File(dirname);

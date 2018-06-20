@@ -136,7 +136,7 @@ public class RecommendServiceImpl implements RecommendService {
      * @return
      */
     //todo
-    private static final String dir = "../data/recommend";
+    private static final String dir = "./data/recommend";
 
     private List<Mission> CFrecommend(String username) {
         String filename = dir + "/" + username + ".txt";

@@ -1,6 +1,5 @@
 package com.fx.util;
 
-import java.sql.Time;
 import java.util.Calendar;
 
 /**
@@ -11,13 +10,15 @@ public class TimeUtil {
     private int year;
     private int month;
     private int day;
-    public TimeUtil(){
-        Calendar calendar= Calendar.getInstance();
-        this.day =calendar.get(Calendar.DATE);
+
+    public TimeUtil() {
+        Calendar calendar = Calendar.getInstance();
+        this.day = calendar.get(Calendar.DATE);
         this.month = calendar.get(Calendar.MONTH) + 1;
         this.year = calendar.get(Calendar.YEAR);
     }
-    public TimeUtil(String date){
+
+    public TimeUtil(String date) {
         String[] param = date.split("-");
         year = Integer.parseInt(param[0]);
         month = Integer.parseInt(param[1]);
@@ -29,9 +30,10 @@ public class TimeUtil {
         TimeUtil timeUtil2 = new TimeUtil("2018-06-17");
         System.out.println(timeUtil1.IntervalTime(timeUtil2));
     }
+
     @Override
     public String toString() {
-        return String.format("%4d-%02d-%02d",year,month,day);
+        return String.format("%4d-%02d-%02d", year, month, day);
     }
 
     public int getYear() {
@@ -57,7 +59,8 @@ public class TimeUtil {
     public void setDay(int day) {
         this.day = day;
     }
-    public int IntervalTime(TimeUtil newTime){
+
+    public int IntervalTime(TimeUtil newTime) {
         Calendar calendar = Calendar.getInstance();
         //第一个日期的秒值
         long firstSecond = 0;
@@ -78,6 +81,6 @@ public class TimeUtil {
             , 0);
         secondSecond = calendar.getTimeInMillis();
         //
-        return (int)Math.abs((secondSecond - firstSecond) / (1000 * 60 * 60)) ;
+        return (int) Math.abs((secondSecond - firstSecond) / (1000 * 60 * 60));
     }
 }
