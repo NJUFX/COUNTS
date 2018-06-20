@@ -6,3 +6,4 @@
 {"id":6,"requestorID":"fjx_req","finished":false,"size":5,"type":"Caption","points":10,"missionName":"测试","description":"测试","types":[]}
 {"id":7,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
 {"id":8,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}
+{"id":9,"requestorID":"hxh","finished":false,"size":0,"type":"Classification","points":30,"beginTime":"2018-6-10 8:55:00"}

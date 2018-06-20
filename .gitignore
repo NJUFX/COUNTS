@@ -85,7 +85,4 @@ crashlytics-build.properties
 fabric.properties
 /data/
 /Server/data/
-!/counts.jar
-!/deliver/
-!/deliver/out/
-!/deliver/out/counts.jar
+
