@@ -21,7 +21,6 @@
               <el-menu-item index="1-2">发布者等级分布</el-menu-item>
               <el-menu-item index="1-3">系统用户分布情况</el-menu-item>
               <el-menu-item index="1-4">用户组成结构</el-menu-item>
-
             </el-menu-item-group>
           </el-submenu>
 
@@ -53,25 +52,28 @@
     </div>
     <div style="position: absolute; width: 5px; height:30px; background-color:#ffd04b; left: 235px; top: 80px"></div>
     <h2 style="position: absolute;left: 20%;top: 60px">用户数据</h2>
-    <div style="position: absolute; top: 57px;left: 199px;  width: 1001px;height: auto; padding-left: 30px;padding-top: 50px">
+    <div style="position: absolute; top: 57px;left: 230px;  width: 1001px;height: auto; padding-left: 30px;padding-top: 50px">
 
-      <el-card class="card">
-        <div id="requstorNum" style="width:100%; height:350px;"></div>
-      </el-card>
-      <el-card class="card">
-        <div id="workerNum" style="width:100%; height:350px;"></div>
-      </el-card>
       <el-card class="card" >
-        <div id="userDistribution" style="width:100%; height:350px;"></div>
+        <div id="userDistribution" style="width:100%; height:410px;"></div>
       </el-card>
       <el-card class="card">
-        <div id="userNum" style="width:100%; height:350px;"></div>
+        <div id="requstorNum" style="width:100%; height:410px;"></div>
       </el-card>
       <el-card class="card">
-        <div id="missionNum" style="width:100%; height:350px;"></div>
+        <div id="workerNum" style="width:100%; height:410px;"></div>
       </el-card>
       <el-card class="card">
-        <div id="missionComplete" style="width:100%; height:350px;"></div>
+        <div id="userNum" style="width:100%; height:410px;"></div>
+      </el-card>
+      <el-card class="card">
+        <div id="missionNum" style="width:100%; height:410px;"></div>
+      </el-card>
+      <el-card class="card">
+        <div id="missionComplete" style="width:100%; height:410px;"></div>
+      </el-card>
+      <el-card class="card">
+        <div id="boxChart" style="width:100%; height:410px;"></div>
       </el-card>
 
     </div>
@@ -1108,7 +1110,28 @@ export default {
       }
 
       myChart.setOption(option)
-    }
+    },
+    drawBoxChart(){
+      var myChart = echarts.init(document.getElementById('boxChart'))
+      var myData = []
+      var option = {
+        xAxis: {
+          data: ['2017-10-24', '2017-10-25', '2017-10-26', '2017-10-27']
+        },
+        yAxis: {},
+        series: [{
+          type: 'k',
+          data: [
+            [20, 30, 10, 35],
+            [40, 35, 30, 55],
+            [33, 38, 33, 40],
+            [40, 40, 32, 42]
+          ]
+        }]
+      };
+      //option.series[0].data = myData
+      myChart.setOption(option)
+    },
 
   },
   mounted: function () {
@@ -1118,6 +1141,7 @@ export default {
     this.drawMissionComplete()
     this.drawUserDistribution()
     this.drawMissionNum()
+    this.drawBoxChart()
   }
 }
 </script>
@@ -1128,10 +1152,11 @@ export default {
 
   }
   .card{
-    width: 43%;
-    margin: 30px;
-    float: left;
-  //background:rgba(0,191,255,0.1);
+    width: 86%;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    height: 450px;
+    //background:rgba(0,191,255,0.1);
   ;
 
   }
