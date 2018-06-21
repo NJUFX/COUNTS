@@ -18,6 +18,7 @@ import com.fx.service.AnalysisService;
 import com.fx.util.TimeUtil;
 import org.springframework.stereotype.Service;
 
+import javax.sound.sampled.Line;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -469,5 +470,59 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Override
     public int[] getRecommendWeight(String username) {
         return new int[0];
+    }
+
+    /**
+     * work的热力图
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public LineChart getWorkerChart(String username) {
+        TimeUtil timeUtil = new TimeUtil();
+        TimeUtil startTime = timeUtil.minusDay(29);
+        ArrayList<String> x = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            x.add(startTime.addDay(i).toString());
+        }
+        ArrayList<Integer> y = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            String time = startTime.addDay(i).toString();
+            List<UserLog> logs = userLogRepository.findUserLogByUsernameAndActionAndTime(username,
+                UserLog.WORK,time);
+            y.add(logs.size());
+        }
+        LineChart lineChart = new LineChart();
+        lineChart.setX(x);
+        lineChart.setY(y);
+        return lineChart;
+    }
+
+    /**
+     * requestor
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public LineChart getRequestorChart(String username) {
+        TimeUtil timeUtil = new TimeUtil();
+        TimeUtil startTime = timeUtil.minusDay(29);
+        ArrayList<String> x = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            x.add(startTime.addDay(i).toString());
+        }
+        ArrayList<Integer> y = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            String time = startTime.addDay(i).toString();
+            List<UserLog> logs = userLogRepository.findUserLogByUsernameAndActionAndTime(username,
+                UserLog.RELEASE,time);
+            y.add(logs.size());
+        }
+        LineChart lineChart = new LineChart();
+        lineChart.setX(x);
+        lineChart.setY(y);
+        return lineChart;
     }
 }

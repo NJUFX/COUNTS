@@ -78,4 +78,17 @@ public interface AnalysisService {
      */
     public int[] getRecommendWeight(String username);
 
+    /**
+     * work的热力图
+     * @param username
+     * @return
+     */
+    public LineChart getWorkerChart(String username);
+
+    /**
+     * requestor
+     * @param username
+     * @return
+     */
+    public LineChart getRequestorChart(String username);
 }
