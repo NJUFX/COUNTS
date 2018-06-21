@@ -60,6 +60,11 @@ public class TimeUtil {
         this.day = day;
     }
 
+    /**
+     * 返回小时数
+     * @param newTime
+     * @return
+     */
     public int IntervalTime(TimeUtil newTime) {
         Calendar calendar = Calendar.getInstance();
         //第一个日期的秒值
@@ -82,5 +87,14 @@ public class TimeUtil {
         secondSecond = calendar.getTimeInMillis();
         //
         return (int) Math.abs((secondSecond - firstSecond) / (1000 * 60 * 60));
+    }
+
+    /**
+     *
+     * @param another
+     * @return 返回相隔的天数
+     */
+    public int InvervalDay(TimeUtil another){
+        return IntervalTime(another) / 24;
     }
 }
