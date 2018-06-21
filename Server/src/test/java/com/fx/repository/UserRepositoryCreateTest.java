@@ -25,8 +25,8 @@ public class UserRepositoryCreateTest {
         int labelMax = 800;
         int expMax = 2500;
         int levelMax = 5;
+        String [] roles = {"Worker","Requestor"};
         TimeUtil t = new TimeUtil();
-        String role = "Worker";
         for (int i = 0; i < 400; i++) {
             User user = new User();
             int random = (int) (address.length * Math.random());
@@ -37,8 +37,9 @@ public class UserRepositoryCreateTest {
                 if (!tags.contains(hotTags[random]))
                     tags.add(hotTags[random]);
             }
+            random = (int)(Math.random() * 2);
             user.setUsername(username + i);
-            user.setRole(role);
+            user.setRole(roles[random]);
             user.setLatestSignIn(t.minusDay((int)(Math.random()* 15)).toString());
 
             String registerTime =  new TimeUtil(user.getLatestSignIn()).minusDay((int)(Math.random() * 7 + 1)).toString();

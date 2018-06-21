@@ -53,4 +53,17 @@ public class UserLogRepositoryTest {
             userLogRepository.addUserLog(userLog);
         }
     }
+    @Test
+    public void create4(){
+        UserLog userLog = new UserLog();
+        for (int i = 0; i < 400; i++) {
+            String username = "test" + i;
+            String action = UserLog.RELEASE;
+            String time = new TimeUtil().minusDay((int) (Math.random() * 30)).toString();
+            userLog.setAction(action);
+            userLog.setTime(time);
+            userLog.setUsername(username);
+            userLogRepository.addUserLog(userLog);
+        }
+    }
 }
