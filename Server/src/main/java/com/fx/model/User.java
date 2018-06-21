@@ -99,6 +99,16 @@ public class User {
      */
     private String registerTime;
 
+    private int labelNum;
+
+    public int getLabelNum() {
+        return labelNum;
+    }
+
+    public void setLabelNum(int labelNum) {
+        this.labelNum = labelNum;
+    }
+
     public String getLatestSignIn() {
         return latestSignIn;
     }
