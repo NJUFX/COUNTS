@@ -173,7 +173,6 @@ public class AnalysisController {
     )
     @ResponseBody
     public LineChart getActiveMember(){
-
         return analysisService.getActiveMemberLine();
     }
     @RequestMapping(
@@ -189,7 +188,7 @@ public class AnalysisController {
         x.add("众包推荐");
         x.add("总体");
         List<Integer> y = new ArrayList<>();
-        y.add(80);
+        y.add(20);
         y.add(70);
         y.add(60);
         y.add(80);
@@ -200,28 +199,5 @@ public class AnalysisController {
         return lineChart;
     }
 
-    /**
-     * 返回推荐算法中各各方法的权重
-     * @return
-     */
-    @RequestMapping(
-        value = "/getRecommendWeight",
-        method = RequestMethod.GET
-    )
-    public int [] getRecommendWeight(){
-        int [] weights = {2,3,4,5};
-        return weights;
-    }
-    /**
-     * 返回推荐算法中特定用户的方法的权重
-     * @return
-     */
-    @RequestMapping(
-        value = "/getUserRecommendWeight",
-        method = RequestMethod.GET
-    )
-    public int [] getUserRecommendWeight(String username){
-        int [] weights = {7,3,4,5};
-        return weights;
-    }
+
 }
