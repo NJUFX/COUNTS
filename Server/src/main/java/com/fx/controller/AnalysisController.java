@@ -1,5 +1,6 @@
 package com.fx.controller;
 
+import com.fx.bean.BoxChart;
 import com.fx.bean.MissionMonthChart;
 import com.fx.bean.UserLevelChart;
 import com.fx.bean.UserLocationChart;
@@ -118,6 +119,26 @@ public class AnalysisController {
     public MissionMonthChart getMissionMonthChart(){
 
         return analysisService.getMissionMonthChart();
+    }
+
+    @RequestMapping(
+        value = "/boxchart",
+        method = RequestMethod.GET
+    )
+    @ResponseBody
+    public List<Integer> getBoxChart(){
+
+        return analysisService.getBoxChart();
+    }
+
+    @RequestMapping(
+        value = "/predictchart",
+        method = RequestMethod.GET
+    )
+    @ResponseBody
+    public float getPredictChart(){
+
+        return analysisService.getPredictChart();
     }
 
 }

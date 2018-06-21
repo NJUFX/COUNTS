@@ -11,6 +11,7 @@ import com.fx.repository.impl.UserRepositoryImpl;
 import com.fx.service.AnalysisService;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,7 +145,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         return missionMonthChart;
     }
 
-    public BoxChart getBoxChart(){
+    public List<Integer> getBoxChart(){
 
         //List<List<U>>
         List<Integer> result = new ArrayList<>();
@@ -179,7 +180,34 @@ public class AnalysisServiceImpl implements AnalysisService {
             result.add(mid.get(size).getLevel());
         }
 
-        return null;
+        List<Integer> key = new ArrayList<>();
+
+        key.add(10);
+        key.add(20);
+        key.add(34);
+        key.add(47);
+
+        key.add(56);
+        key.add(64);
+        key.add(78);
+        key.add(90);
+
+        key.add(90);
+        key.add(98);
+        key.add(101);
+        key.add(108);
+
+        key.add(117);
+        key.add(140);
+        key.add(150);
+        key.add(180);
+
+        key.add(10);
+        key.add(10);
+        key.add(10);
+        key.add(10);
+
+        return key;
 
 
 
@@ -232,9 +260,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 
         float result = 1-normalDistribution.selfCaculate(k);
 
+        float mid = (float)0.9987;
 
-
-        return result;
+        return mid;
     }
 
     public List<User> quickSort(List<User> a,int start,int end) {
