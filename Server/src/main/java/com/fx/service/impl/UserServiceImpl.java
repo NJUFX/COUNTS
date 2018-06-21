@@ -12,6 +12,7 @@ import com.fx.repository.impl.MissionRepositoryImpl;
 import com.fx.repository.impl.UserRepositoryImpl;
 import com.fx.service.UserService;
 import com.fx.util.ResultMessage;
+import com.fx.util.TimeUtil;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -65,6 +66,7 @@ public class UserServiceImpl implements UserService{
      * @return 是否增加成功
      */
     public ResultMessage signUp(User user){
+        user.setRegisterTime(new TimeUtil().toString());
         return userRepository.addUser(user);
     }
 
@@ -76,11 +78,15 @@ public class UserServiceImpl implements UserService{
      * @return 当前登录状态
      */
     public ResultMessage signIn(String username, String password){
-        String passwordReal = userRepository.findPasswordByUsername(username);
-        if (passwordReal==null)
+        User user = userRepository.findUserByUsername(username);
+        if (user==null)
             return ResultMessage.NOT_EXIST;
-        if (password .equals(passwordReal))
-        return ResultMessage.SUCCESS;
+        if (password .equals(user.getPassword()))
+        {
+            user.setLatestSignIn(new TimeUtil().toString());
+            userRepository.updateUser(user);
+            return ResultMessage.SUCCESS;
+        }
         else
             return ResultMessage.FAILED;
     }
