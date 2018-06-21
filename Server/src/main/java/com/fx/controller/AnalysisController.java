@@ -258,7 +258,8 @@ public class AnalysisController {
         method = RequestMethod.GET
     )
     public int [] getRecommendWeight(){
-        return new int[4];
+        int [] weights = {2,3,4,5};
+        return weights;
     }
     /**
      * 返回推荐算法中特定用户的方法的权重
@@ -269,6 +270,7 @@ public class AnalysisController {
         method = RequestMethod.GET
     )
     public int [] getUserRecommendWeight(String username){
-        return new int[4];
+        int [] weights = {7,3,4,5};
+        return weights;
     }
 }
