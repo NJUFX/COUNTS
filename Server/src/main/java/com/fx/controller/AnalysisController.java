@@ -134,7 +134,7 @@ public class AnalysisController {
         method = RequestMethod.GET
     )
     @ResponseBody
-    public List<Integer> getBoxChart(){
+    public List<List<Integer>> getBoxChart(){
 
         return analysisService.getBoxChart();
     }
@@ -200,28 +200,6 @@ public class AnalysisController {
         return lineChart;
     }
 
-    /**
-     * 返回推荐算法中各各方法的权重
-     * @return
-     */
-    @RequestMapping(
-        value = "/getRecommendWeight",
-        method = RequestMethod.GET
-    )
-    public int [] getRecommendWeight(){
-        int [] weights = {2,3,4,5};
-        return weights;
-    }
-    /**
-     * 返回推荐算法中特定用户的方法的权重
-     * @return
-     */
-    @RequestMapping(
-        value = "/getUserRecommendWeight",
-        method = RequestMethod.GET
-    )
-    public int [] getUserRecommendWeight(String username){
-        int [] weights = {7,3,4,5};
-        return weights;
-    }
+ 
 }
+
