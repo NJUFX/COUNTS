@@ -18,6 +18,12 @@ public class TimeUtil {
         this.year = calendar.get(Calendar.YEAR);
     }
 
+    public TimeUtil(int year, int month, int day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
     public TimeUtil(String date) {
         String[] param = date.split("-");
         year = Integer.parseInt(param[0]);
@@ -62,6 +68,7 @@ public class TimeUtil {
 
     /**
      * 返回小时数
+     *
      * @param newTime
      * @return
      */
@@ -86,15 +93,38 @@ public class TimeUtil {
             , 0);
         secondSecond = calendar.getTimeInMillis();
         //
+        calendar.setTimeInMillis(secondSecond);
         return (int) Math.abs((secondSecond - firstSecond) / (1000 * 60 * 60));
     }
 
     /**
-     *
      * @param another
      * @return 返回相隔的天数
      */
-    public int InvervalDay(TimeUtil another){
+    public int IntervalDay(TimeUtil another) {
         return IntervalTime(another) / 24;
+    }
+
+    public TimeUtil addDay(int day) {
+        Calendar calendar = Calendar.getInstance();
+        //第一个日期的秒值
+        long firstSecond = 0;
+        calendar.set(this.year
+            , this.month - 1
+            , this.day
+            , 0
+            , 0
+            , 0);
+        firstSecond = calendar.getTimeInMillis();
+        firstSecond += (1000 * 60 * 60) * 24 * day;
+        calendar.setTimeInMillis(firstSecond);
+        int day2 = calendar.get(Calendar.DATE);
+        int month2 = calendar.get(Calendar.MONTH) + 1;
+        int year2 = calendar.get(Calendar.YEAR);
+        return new TimeUtil(year2, month2, day2);
+    }
+
+    public TimeUtil minusDay(int day) {
+        return addDay(-1 * day);
     }
 }
