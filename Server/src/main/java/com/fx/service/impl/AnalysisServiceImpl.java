@@ -145,67 +145,71 @@ public class AnalysisServiceImpl implements AnalysisService {
         return missionMonthChart;
     }
 
-    public List<Integer> getBoxChart(){
+    public List<List<Integer>> getBoxChart(){
 
+        //System.out.println("123");
         //List<List<U>>
         List<Integer> result = new ArrayList<>();
-        List<User> list = userRepository.findUserByType("Worker");
+//        List<User> list = userRepository.findUserByType("Worker");
+//
+//        List<List<User>> levels = new ArrayList<>();
+//
+//        String[] names = new String[]{"大众用户","黄金用户","铂金用户","钻石用户","星耀用户"};
+//
+//        for(int i=1;i<=5;i++){
+//            levels.add(new ArrayList<>());
+//        }
+//        //int max;
+//        for(int i=0;i<=list.size()-1;i++){
+//            levels.get(list.get(i).getLevel()).add(list.get(i));
+//        }
+//
+//        for(int i=0;i<=levels.size()-1;i++){
+//            levels.set(i,quickSort(levels.get(i),0,levels.get(i).size()-1));
+//        }
+//
+//        for(int i=0;i<=levels.size()-1;i++){
+//            List<User> mid = levels.get(i);
+//            int size = mid.size()-1;
+//            /**
+//             * 这里需要改成标注数
+//             */
+//            result.add(mid.get(0).getLevel());
+//            result.add(mid.get(size/4).getLevel());
+//            result.add(mid.get(size/2).getLevel());
+//            result.add(mid.get(3*size/2).getLevel());
+//            result.add(mid.get(size).getLevel());
+//        }
 
-        List<List<User>> levels = new ArrayList<>();
-
-        String[] names = new String[]{"大众用户","黄金用户","铂金用户","钻石用户","星耀用户"};
+        List<List<Integer>> key = new ArrayList<>();
 
         for(int i=1;i<=5;i++){
-            levels.add(new ArrayList<>());
+            key.add(new ArrayList<>());
         }
-        //int max;
-        for(int i=0;i<=list.size()-1;i++){
-            levels.get(list.get(i).getLevel()).add(list.get(i));
-        }
+        key.get(0).add(10);
+        key.get(0).add(20);
+        key.get(0).add(34);
+        key.get(0).add(47);
 
-        for(int i=0;i<=levels.size()-1;i++){
-            levels.set(i,quickSort(levels.get(i),0,levels.get(i).size()-1));
-        }
+        key.get(1).add(56);
+        key.get(1).add(64);
+        key.get(1).add(78);
+        key.get(1).add(90);
 
-        for(int i=0;i<=levels.size()-1;i++){
-            List<User> mid = levels.get(i);
-            int size = mid.size()-1;
-            /**
-             * 这里需要改成标注数
-             */
-            result.add(mid.get(0).getLevel());
-            result.add(mid.get(size/4).getLevel());
-            result.add(mid.get(size/2).getLevel());
-            result.add(mid.get(3*size/2).getLevel());
-            result.add(mid.get(size).getLevel());
-        }
+        key.get(2).add(90);
+        key.get(2).add(98);
+        key.get(2).add(101);
+        key.get(2).add(108);
 
-        List<Integer> key = new ArrayList<>();
+        key.get(3).add(117);
+        key.get(3).add(140);
+        key.get(3).add(150);
+        key.get(3).add(180);
 
-        key.add(10);
-        key.add(20);
-        key.add(34);
-        key.add(47);
-
-        key.add(56);
-        key.add(64);
-        key.add(78);
-        key.add(90);
-
-        key.add(90);
-        key.add(98);
-        key.add(101);
-        key.add(108);
-
-        key.add(117);
-        key.add(140);
-        key.add(150);
-        key.add(180);
-
-        key.add(10);
-        key.add(10);
-        key.add(10);
-        key.add(10);
+        key.get(4).add(300);
+        key.get(4).add(110);
+        key.get(4).add(130);
+        key.get(4).add(140);
 
         return key;
 
@@ -217,48 +221,48 @@ public class AnalysisServiceImpl implements AnalysisService {
 
     public float getPredictChart(){
 
-       //String str1 = "123",str2 = "456";
-        List<User> list = userRepository.findUserByType("Worker");
-
-        list = quickSortByTime(list,0,list.size()-1);
-
-        List<User> samples = new ArrayList<>();
-
-        for(int i=0;i<=list.size()-1;i++){
-            if((i+1)>list.size()-1||true/**!!!**/){
-
-            }
-            int index =0;
-            while(/****/list.get(i).getExp()==0){
-                index++;
-                //i++;
-            }
-            for(int j=0;j<=index/2-1;j++){
-                samples.add(list.get(i+j));
-            }
-            i = i+index;
-        }
-
-        int active = 0;
-        /**
-         * 记录活跃数量
-         */
-        for(int i=0;i<=samples.size()-1;i++){
-            active++;
-        }
-
-
-        NormalDistribution normalDistribution = new NormalDistribution();
-
-        float p=active/(samples.size()*7);
-
-        int n=0;
-
-        int num =1;
-
-        float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
-
-        float result = 1-normalDistribution.selfCaculate(k);
+//       //String str1 = "123",str2 = "456";
+//        List<User> list = userRepository.findUserByType("Worker");
+//
+//        list = quickSortByTime(list,0,list.size()-1);
+//
+//        List<User> samples = new ArrayList<>();
+//
+//        for(int i=0;i<=list.size()-1;i++){
+//            if((i+1)>list.size()-1||true/**!!!**/){
+//
+//            }
+//            int index =0;
+//            while(/****/list.get(i).getExp()==0){
+//                index++;
+//                //i++;
+//            }
+//            for(int j=0;j<=index/2-1;j++){
+//                samples.add(list.get(i+j));
+//            }
+//            i = i+index;
+//        }
+//
+//        int active = 0;
+//        /**
+//         * 记录活跃数量
+//         */
+//        for(int i=0;i<=samples.size()-1;i++){
+//            active++;
+//        }
+//
+//
+//        NormalDistribution normalDistribution = new NormalDistribution();
+//
+//        float p=active/(samples.size()*7);
+//
+//        int n=0;
+//
+//        int num =1;
+//
+//        float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
+//
+//        float result = 1-normalDistribution.selfCaculate(k);
 
         float mid = (float)0.9987;
 

@@ -3,7 +3,7 @@
     <div style="position:fixed; width:200px; height: 687px; left:0px; top:0px;background: #545c64; border:0px;z-index: -10000">
       <el-col :span="6" style="width: 200px; height: 630px; top: 57px;left:0px;position: absolute ; overflow: auto;border: 0px">
         <el-menu
-          default-active="4"
+          default-active="2"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -17,36 +17,30 @@
               <span>用户数据</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">工作者等级分布</el-menu-item>
+              <el-menu-item index="1-1">系统用户分布情况</el-menu-item>
               <el-menu-item index="1-2">发布者等级分布</el-menu-item>
-              <el-menu-item index="1-3">系统用户分布情况</el-menu-item>
+              <el-menu-item index="1-3">工作者等级分布</el-menu-item>
               <el-menu-item index="1-4">用户组成结构</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
-          <el-submenu index="2">
+          <el-menu-item index="2">
+            <i class="el-icon-menu"></i>
+            <span slot="title">任务状态数</span>
+          </el-menu-item>
+
+          <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-document"></i>
-              <span>任务进度</span>
+              <span>流量统计</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="2-1">任务状态数</el-menu-item>
-              <el-menu-item index="2-2">任务完成率</el-menu-item>
+              <el-menu-item index="3-1">用户流失阈值率</el-menu-item>
+              <el-menu-item index="3-2">用户分流标注数量统计</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
-          <el-menu-item index="5">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航二</span>
-          </el-menu-item>
-          <el-menu-item index="3" >
-            <i class="el-icon-document"></i>
-            <span slot="title">导航三</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-setting"></i>
-            <span slot="title">导航四</span>
-          </el-menu-item>
+
         </el-menu>
       </el-col>
     </div>
@@ -76,6 +70,10 @@
         <div id="boxChart" style="width:100%; height:410px;"></div>
       </el-card>
 
+      <el-card class="card">
+        <div id="LineChart" style="width:100%; height:410px;"></div>
+      </el-card>
+
     </div>
   </div>
 
@@ -85,6 +83,8 @@
 import ElAside from 'element-ui/packages/aside/src/main'
 import echarts from 'echarts'
 import 'echarts/map/js/china.js'
+import 'echarts/dist/extension/dataTool'
+
 
 export default {
   components: {ElAside},
@@ -99,19 +99,27 @@ export default {
           break
         }
         case '1-2': {
-          window.scrollTo(0, 0)
+          window.scrollTo(0, 530)
           break
         }
         case '1-3': {
-          window.scrollTo(0, 530)
+          window.scrollTo(0, 1060)
           break
         }
         case '1-4': {
-          window.scrollTo(0, 530)
+          window.scrollTo(0, 1560)
           break
         }
-        case '2-1': {
-          window.scrollTo(0, 900)
+        case '2': {
+          window.scrollTo(0, 2060)
+          break
+        }
+        case '3-1': {
+          window.scrollTo(0, 2560)
+          break
+        }
+        case '3-2': {
+          window.scrollTo(0, 3060)
           break
         }
       }
@@ -269,7 +277,7 @@ export default {
         },
         series: [
           {
-            name: '布者等级',
+            name: '发布者等级',
             type: 'pie',
             radius: '55%',
             center: ['50%', '50%'],
@@ -478,7 +486,16 @@ export default {
     },
     drawMissionComplete () {
       var myChart = echarts.init(document.getElementById('missionComplete'))
-      var myData = 25
+      var myData = 0
+      var xmlhttp = new XMLHttpRequest()
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+         myData = xmlhttp.responseText*100
+        }
+      }
+      xmlhttp.open('GET', 'http://localhost:8080/counts/analysis/predictchart', false)
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xmlhttp.send(null)
       var option = {
         tooltip: {
           formatter: '{a} <br/>{b} : {c}%'
@@ -494,14 +511,13 @@ export default {
             name: '业务指标',
             type: 'gauge',
             detail: {formatter: '{value}%'},
-            data: [{value: 50, name: '任务完成率'}]
+            data: [{value: 50, name: '用户流失阈值率'}]
           }
         ]
       }
       option.series[0].data[0].value = myData
       myChart.setOption(option)
     },
-
     drawUserDistribution () {
       var myChart = echarts.init(document.getElementById('userDistribution'))
       var geoCoordMap = {
@@ -1113,24 +1129,99 @@ export default {
     },
     drawBoxChart(){
       var myChart = echarts.init(document.getElementById('boxChart'))
-      var myData = []
+      var data = []
+      var xmlhttp = new XMLHttpRequest()
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          console.log(JSON.parse(xmlhttp.responseText))
+          data = echarts.dataTool.prepareBoxplotData(JSON.parse(xmlhttp.responseText))
+          //console.log(data)
+        }
+      }
+      xmlhttp.open('GET', 'http://localhost:8080/counts/analysis/boxchart', false)
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xmlhttp.send(null)
       var option = {
-        xAxis: {
-          data: ['2017-10-24', '2017-10-25', '2017-10-26', '2017-10-27']
+        title: [
+          {
+            text: '用户分流标注数量统计',
+            left: 'center',
+          },
+          {
+            text: 'upper: Q3 + 1.5 * IRQ \nlower: Q1 - 1.5 * IRQ',
+            borderColor: '#999',
+            borderWidth: 1,
+            textStyle: {
+              fontSize: 14
+            },
+            left: '10%',
+            top: '90%'
+          }
+        ],
+        tooltip: {
+          trigger: 'item',
+          axisPointer: {
+            type: 'shadow'
+          }
         },
-        yAxis: {},
-        series: [{
-          type: 'k',
-          data: [
-            [20, 30, 10, 35],
-            [40, 35, 30, 55],
-            [33, 38, 33, 40],
-            [40, 40, 32, 42]
-          ]
-        }]
+        grid: {
+          left: '10%',
+          right: '10%',
+          bottom: '15%'
+        },
+        xAxis: {
+          type: 'category',
+          data: data.axisData,
+          boundaryGap: true,
+          nameGap: 30,
+          splitArea: {
+            show: false
+          },
+          axisLabel: {
+            formatter: '{value}'
+          },
+          splitLine: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: '',
+          splitArea: {
+            show: true
+          }
+        },
+        series: [
+          {
+            name: 'boxplot',
+            type: 'boxplot',
+            data: data.boxData,
+            tooltip: {
+              formatter: function (param) {
+                console.log(param)
+                return [
+                  'Experiment ' + param.name + ': ',
+                  'upper: ' + param.data[5],
+                  'Q3: ' + param.data[4],
+                  'median: ' + param.data[3],
+                  'Q1: ' + param.data[2],
+                  'lower: ' + param.data[1]
+                ].join('<br/>')
+              }
+            }
+          },
+          {
+            name: 'outlier',
+            type: 'scatter',
+            data: data.outliers
+          }
+        ]
       };
       //option.series[0].data = myData
       myChart.setOption(option)
+    },
+    drawLineChart(){
+
     },
 
   },
@@ -1142,6 +1233,7 @@ export default {
     this.drawUserDistribution()
     this.drawMissionNum()
     this.drawBoxChart()
+    this.drawLineChart()
   }
 }
 </script>
