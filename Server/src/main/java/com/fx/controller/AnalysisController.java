@@ -154,76 +154,27 @@ public class AnalysisController {
         method = RequestMethod.GET
     )
     @ResponseBody
-    public LineChart getLineChart(){
-        LineChart chart = new LineChart();
-        List<String> x = new ArrayList<>();
-        x.add("2018-06-01");
-        x.add("2018-06-02");
-        x.add("2018-06-03");
-        x.add("2018-06-04");
-        x.add("2018-06-05");
-        x.add("2018-06-06");
-        List<Integer> y = new ArrayList<>();
-        y.add(1);
-        y.add(2);
-        y.add(3);
-        y.add(4);
-        y.add(5);
-        y.add(6);
-        chart.setX(x);
-        chart.setY(y);
+    public LineChart getNewMemberLine(){
 
-        return chart;
+        return analysisService.getNewMemberLine();
     }
     @RequestMapping(
         value = "/MemberLine",
         method = RequestMethod.GET
     )
     @ResponseBody
-    public LineChart getNewLineChart(){
-        LineChart chart = new LineChart();
-        List<String> x = new ArrayList<>();
-        x.add("2018-06-01");
-        x.add("2018-06-02");
-        x.add("2018-06-03");
-        x.add("2018-06-04");
-        x.add("2018-06-05");
-        x.add("2018-06-06");
-        List<Integer> y = new ArrayList<>();
-        y.add(1);
-        y.add(2);
-        y.add(3);
-        y.add(4);
-        y.add(5);
-        y.add(6);
-        chart.setX(x);
-        chart.setY(y);
-        return chart;
+    public LineChart getMemberLine(){
+
+        return analysisService.getMemberLine();
     }
     @RequestMapping(
-        value = "/leftMemberLine",
+        value = "/activeMemberLine",
         method = RequestMethod.GET
     )
     @ResponseBody
-    public LineChart getLeftMember(){
-        LineChart chart = new LineChart();
-        List<String> x = new ArrayList<>();
-        x.add("2018-06-01");
-        x.add("2018-06-02");
-        x.add("2018-06-03");
-        x.add("2018-06-04");
-        x.add("2018-06-05");
-        x.add("2018-06-06");
-        List<Integer> y = new ArrayList<>();
-        y.add(1);
-        y.add(2);
-        y.add(3);
-        y.add(4);
-        y.add(5);
-        y.add(6);
-        chart.setX(x);
-        chart.setY(y);
-        return chart;
+    public LineChart getActiveMember(){
+
+        return analysisService.getActiveMemberLine();
     }
     @RequestMapping(
         value = "/getRecommendRate",

@@ -94,7 +94,7 @@ public class TimeUtil {
         secondSecond = calendar.getTimeInMillis();
         //
         calendar.setTimeInMillis(secondSecond);
-        return (int) Math.abs((secondSecond - firstSecond) / (1000 * 60 * 60));
+        return (int) ((secondSecond - firstSecond) / (1000 * 60 * 60));
     }
 
     /**
