@@ -369,11 +369,10 @@ public class AnalysisServiceImpl implements AnalysisService {
             if(index<=0||index>=29)
                 numbers[0]++;
             else
-                numbers[1]++;
+                numbers[index]++;
         }
         for (int i = 0; i < 30 - 1; i++) {
             numbers[i+1] += numbers[i];
-
         }
         ArrayList<Integer> y = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
@@ -406,6 +405,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 set.add(userLogs.get(j).getUsername());
             }
             y.add(set.size());
+            set.clear();
         }
         LineChart lineChart = new LineChart();
         lineChart.setX(x);
@@ -432,6 +432,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 set.add(userLogs.get(j).getUsername());
             }
             y.add(set.size());
+            set.clear();
         }
         LineChart lineChart = new LineChart();
         lineChart.setX(x);
