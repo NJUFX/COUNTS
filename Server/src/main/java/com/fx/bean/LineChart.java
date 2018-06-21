@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class LineChart {
     private List<String> x;
-    private List<Integer> y;
+    private List y;
 
     public LineChart() {
     }
@@ -21,11 +21,11 @@ public class LineChart {
         this.x = x;
     }
 
-    public List<Integer> getY() {
+    public List getY() {
         return y;
     }
 
-    public void setY(List<Integer> y) {
+    public void setY(List y) {
         this.y = y;
     }
 }
