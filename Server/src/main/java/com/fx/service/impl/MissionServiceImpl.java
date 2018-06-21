@@ -37,7 +37,7 @@ public class MissionServiceImpl implements MissionService {
             return ResultMessage.FALSE;
         AcceptedMission acceptedMission = new AcceptedMission(username, mission, recommendType);
         if (recommendType>0)
-        recommendService.updateRecommendResult(username,recommendType);
+        recommendService.updateRecord(username,recommendType);
         ResultMessage message = acceptMissionRepository.addAcceptMission(acceptedMission);
         if (message == ResultMessage.SUCCESS) {
             mission.setCurrentNumber(mission.getCurrentNumber() + 1);
