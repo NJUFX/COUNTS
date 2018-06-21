@@ -173,7 +173,9 @@ public class AnalysisController {
     )
     @ResponseBody
     public LineChart getActiveMember(){
-
+        LineChart lineChart = analysisService.getActiveMemberLine();
+        System.out.println(lineChart.getY());
+        System.out.println(lineChart.getX());
         return analysisService.getActiveMemberLine();
     }
     @RequestMapping(
