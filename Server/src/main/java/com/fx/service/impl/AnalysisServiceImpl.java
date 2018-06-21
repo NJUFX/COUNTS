@@ -1,19 +1,26 @@
+
 package com.fx.service.impl;
 
-import com.fx.bean.*;
+import com.fx.bean.LineChart;
+import com.fx.bean.MissionMonthChart;
+import com.fx.bean.UserLevelChart;
+import com.fx.bean.UserLocationChart;
 import com.fx.counting.NormalDistribution;
 import com.fx.model.Mission;
 import com.fx.model.User;
+import com.fx.model.UserLog;
 import com.fx.repository.MissionRepository;
+import com.fx.repository.UserLogRepository;
 import com.fx.repository.UserRepository;
 import com.fx.repository.impl.MissionRepositoryImpl;
+import com.fx.repository.impl.UserLogRepositoryImpl;
 import com.fx.repository.impl.UserRepositoryImpl;
 import com.fx.service.AnalysisService;
 import com.fx.util.TimeUtil;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -24,26 +31,29 @@ public class AnalysisServiceImpl implements AnalysisService {
 
     UserRepository userRepository = new UserRepositoryImpl();
     MissionRepository missionRepository = new MissionRepositoryImpl();
+    UserLogRepository userLogRepository = new UserLogRepositoryImpl();
+
     /**
      * 获得不同等级的工作者数
+     *
      * @return 代表不同等级的用户数目。一般是从1开始，到n结束，目前还没确定n这个上限,注意0一般是没有用的
      */
-    public List<UserLevelChart> getWorkerLevelChart(){
+    public List<UserLevelChart> getWorkerLevelChart() {
 
         List<User> list = userRepository.findUserByType("Worker");
 
         List<UserLevelChart> levels = new ArrayList<UserLevelChart>();
 
-        String[] names = new String[]{"大众用户","黄金用户","铂金用户","钻石用户","星耀用户"};
+        String[] names = new String[]{"大众用户", "黄金用户", "铂金用户", "钻石用户", "星耀用户"};
 
-        for(int i=1;i<=5;i++){
-            levels.add(new UserLevelChart(0,names[i-1]));
+        for (int i = 1; i <= 5; i++) {
+            levels.add(new UserLevelChart(0, names[i - 1]));
         }
         int max;
-        for(int i=0;i<=list.size()-1;i++){
-            for(int j=0;j<=levels.size()-1;j++){
-                if(levels.get(j).getName().equals(names[list.get(i).getLevel()])){
-                    levels.get(j).setValue(levels.get(j).getValue()+1);
+        for (int i = 0; i <= list.size() - 1; i++) {
+            for (int j = 0; j <= levels.size() - 1; j++) {
+                if (levels.get(j).getName().equals(names[list.get(i).getLevel()])) {
+                    levels.get(j).setValue(levels.get(j).getValue() + 1);
                 }
             }
         }
@@ -52,24 +62,25 @@ public class AnalysisServiceImpl implements AnalysisService {
 
     /**
      * 获得不同等级发布者数
+     *
      * @return 代表不同等级的用户数目。一般是从1开始，到n结束，目前还没确定n这个上限,注意0一般是没有用的
      */
-    public List<UserLevelChart> getRequestorLevelChart(){
+    public List<UserLevelChart> getRequestorLevelChart() {
 
         List<User> list = userRepository.findUserByType("Requestor");
 
         List<UserLevelChart> levels = new ArrayList<UserLevelChart>();
 
-        String[] names = new String[]{"大众用户","黄金用户","铂金用户","钻石用户","星耀用户"};
+        String[] names = new String[]{"大众用户", "黄金用户", "铂金用户", "钻石用户", "星耀用户"};
 
-        for(int i=1;i<=5;i++){
-            levels.add(new UserLevelChart(0,names[i-1]));
+        for (int i = 1; i <= 5; i++) {
+            levels.add(new UserLevelChart(0, names[i - 1]));
         }
         int max;
-        for(int i=0;i<=list.size()-1;i++){
-            for(int j=0;j<=levels.size()-1;j++){
-                if(levels.get(j).getName().equals(names[list.get(i).getLevel()])){
-                    levels.get(j).setValue(levels.get(j).getValue()+1);
+        for (int i = 0; i <= list.size() - 1; i++) {
+            for (int j = 0; j <= levels.size() - 1; j++) {
+                if (levels.get(j).getName().equals(names[list.get(i).getLevel()])) {
+                    levels.get(j).setValue(levels.get(j).getValue() + 1);
                 }
             }
         }
@@ -78,28 +89,30 @@ public class AnalysisServiceImpl implements AnalysisService {
 
     /**
      * 获得工作者的地理位置图表
+     *
      * @return
      */
-    public UserLocationChart getWorkerLocationChart(){
+    public UserLocationChart getWorkerLocationChart() {
 
         return null;
     }
 
     /**
      * 获得发布者的地理位置图表
+     *
      * @return
      */
-    public UserLocationChart getRequestorLocationChart(){
+    public UserLocationChart getRequestorLocationChart() {
 
         return null;
     }
 
-    public int getWorkerNumber(){
+    public int getWorkerNumber() {
 
         return userRepository.findUserByType("Worker").size();
     }
 
-    public int getRequestorNumber(){
+    public int getRequestorNumber() {
 
         return userRepository.findUserByType("Requestor").size();
     }
@@ -107,12 +120,12 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Override
     public MissionMonthChart getMissionMonthChart() {
         List<List<Mission>> missions = new ArrayList<>();
-       List<Mission> missions1 =  missionRepository.findMissionByBeginAndEnd("2018-01-01","2018-01-31");
-       List<Mission> missions2 =  missionRepository.findMissionByBeginAndEnd("2018-02-01","2018-02-28");
-        List<Mission> missions3 =  missionRepository.findMissionByBeginAndEnd("2018-03-01","2018-03-31");
-        List<Mission> missions4 =  missionRepository.findMissionByBeginAndEnd("2018-04-01","2018-04-30");
-        List<Mission> missions5 =  missionRepository.findMissionByBeginAndEnd("2018-05-01","2018-05-31");
-        List<Mission> missions6 =  missionRepository.findMissionByBeginAndEnd("2018-06-01","2018-06-30");
+        List<Mission> missions1 = missionRepository.findMissionByBeginAndEnd("2018-01-01", "2018-01-31");
+        List<Mission> missions2 = missionRepository.findMissionByBeginAndEnd("2018-02-01", "2018-02-28");
+        List<Mission> missions3 = missionRepository.findMissionByBeginAndEnd("2018-03-01", "2018-03-31");
+        List<Mission> missions4 = missionRepository.findMissionByBeginAndEnd("2018-04-01", "2018-04-30");
+        List<Mission> missions5 = missionRepository.findMissionByBeginAndEnd("2018-05-01", "2018-05-31");
+        List<Mission> missions6 = missionRepository.findMissionByBeginAndEnd("2018-06-01", "2018-06-30");
 
         missions.add(missions1);
         missions.add(missions2);
@@ -122,25 +135,24 @@ public class AnalysisServiceImpl implements AnalysisService {
         missions.add(missions6);
 
         //a1保存已完成数
-         int[] a1 = new int[]{0,0,0,0,0,0};
-        int[] a2 = new int[]{0,0,0,0,0,0};
-        for(int i=0;i<=missions.size()-1;i++){
-            for(int j=0;j<=missions.get(i).size()-1;j++){
-                if(missions.get(i).get(j).getCurrentNumber()>=missions.get(i).get(j).getMaxNumber()){
+        int[] a1 = new int[]{0, 0, 0, 0, 0, 0};
+        int[] a2 = new int[]{0, 0, 0, 0, 0, 0};
+        for (int i = 0; i <= missions.size() - 1; i++) {
+            for (int j = 0; j <= missions.get(i).size() - 1; j++) {
+                if (missions.get(i).get(j).getCurrentNumber() >= missions.get(i).get(j).getMaxNumber()) {
                     a1[i]++;
-                }
-                else{
+                } else {
                     a2[i]++;
                 }
             }
         }
 
-        int[] a3 = new int[]{0,0,0,0,0,0};
-        for(int i=0;i<=a3.length-1;i++){
+        int[] a3 = new int[]{0, 0, 0, 0, 0, 0};
+        for (int i = 0; i <= a3.length - 1; i++) {
             a3[i] = missions.get(i).size();
         }
 
-        MissionMonthChart missionMonthChart = new MissionMonthChart(a1,a2,a3);
+        MissionMonthChart missionMonthChart = new MissionMonthChart(a1, a2, a3);
 
 
         return missionMonthChart;
@@ -334,41 +346,127 @@ public class AnalysisServiceImpl implements AnalysisService {
         return a;
     }
 
-    public static void main(String[] args){
-//        User u1 = new User();
-//        u1.setLatestSignIn("2018-06-10");
-//        User u2 = new User();
-//        u2.setLatestSignIn("2018-06-07");
-//        User u3 = new User();
-//        u3.setLatestSignIn("2018-06-08");
-//
-//        List<User> list = new ArrayList<>();
-//
-//        list.add(u1);
-//        list.add(u2);
-//        list.add(u3);
-//
-//        AnalysisServiceImpl k = new AnalysisServiceImpl();
-//
-//        k.quickSortByTime(list,0,2);
-//
-//        for(int i=0;i<=2;i++){
-//            System.out.println(list.get(i).getLatestSignIn());
-//        }
+    /**
+     * 得到总用户数近30天的变化图
+     *
+     * @return
+     */
+    @Override
+    public LineChart getMemberLine() {
+        List<UserLog> logs = userLogRepository.findUserLogByAction(UserLog.REGISTER);
 
-        int active = 10;
-        int samples = 20;
-        float p=(float)0.02;
+        TimeUtil timeUtil = new TimeUtil();
+        TimeUtil startTime = timeUtil.minusDay(29);
+        ArrayList<String> x = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            x.add(startTime.addDay(i).toString());
+        }
+        int [] numbers = new int[30];
+        for (int i = 0; i < logs.size(); i++) {
+            String time = logs.get(i).getTime();
+            int index = startTime.IntervalDay(new TimeUtil(time));
+            if(index<=0||index>=29)
+                numbers[0]++;
+            else
+                numbers[index]++;
+        }
+        for (int i = 0; i < 30 - 1; i++) {
+            numbers[i+1] += numbers[i];
+        }
+        ArrayList<Integer> y = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            y.add(numbers[i]);
+        }
+        LineChart lineChart = new LineChart();
+        lineChart.setY(y);
+        lineChart.setX(x);
+        return lineChart;
+    }
 
-        int n=400;
+    /**
+     * 得到新增用户近30天的变化图
+     *
+     * @return
+     */
+    @Override
+    public LineChart getNewMemberLine() {
+        TimeUtil timeUtil = new TimeUtil();
+        TimeUtil startTime = timeUtil.minusDay(29);
+        ArrayList<String> x = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            x.add(startTime.addDay(i).toString());
+        }
+        ArrayList<Integer> y = new ArrayList<>();
+        HashSet<String> set = new HashSet<>();
+        for (int i = 0; i < 30; i++) {
+            List<UserLog> userLogs = userLogRepository.findUserLogByTimeAndAction(x.get(i), UserLog.REGISTER);
+            for (int j = 0; j < userLogs.size(); j++) {
+                set.add(userLogs.get(j).getUsername());
+            }
+            y.add(set.size());
+            set.clear();
+        }
+        LineChart lineChart = new LineChart();
+        lineChart.setX(x);
+        lineChart.setY(y);
+        return lineChart;
+    }
 
-        int num =1;
+    /**
+     * 得到近30天活跃用户的变化图
+     */
+    @Override
+    public LineChart getActiveMemberLine() {
+        TimeUtil timeUtil = new TimeUtil();
+        TimeUtil startTime = timeUtil.minusDay(29);
+        ArrayList<String> x = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            x.add(startTime.addDay(i).toString());
+        }
+        ArrayList<Integer> y = new ArrayList<>();
+        HashSet<String> set = new HashSet<>();
+        for (int i = 0; i < 30; i++) {
+            List<UserLog> userLogs = userLogRepository.findUserLogByTime(x.get(i));
+            for (int j = 0; j < userLogs.size(); j++) {
+                set.add(userLogs.get(j).getUsername());
+            }
+            y.add(set.size());
+            set.clear();
+        }
+        LineChart lineChart = new LineChart();
+        lineChart.setX(x);
+        lineChart.setY(y);
+        return lineChart;
+    }
 
-        NormalDistribution normalDistribution = new NormalDistribution();
-        float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
+    /**
+     * 得到推荐命中率的图
+     *
+     * @return
+     */
+    @Override
+    public LineChart getRecommendRate() {
+        return null;
+    }
 
-        float result = 1-normalDistribution.selfCaculate(k);
+    /**
+     * 得到总体推荐平均的权重值
+     *
+     * @return
+     */
+    @Override
+    public int[] getRecommendWeight() {
+        return new int[0];
+    }
 
-        System.out.println(result);
+    /**
+     * 得到目标用户的总体推荐权重的用户值
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public int[] getRecommendWeight(String username) {
+        return new int[0];
     }
 }

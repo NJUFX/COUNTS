@@ -190,7 +190,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
     private synchronized ResultMessage flushFile(List<User> users){
         try{
-            File file = new File("UserData.txt");
+            File file = new File("./data/UserData.txt");
             PrintWriter printWriter;
             printWriter = new PrintWriter(file);
             for (int i = 0; i < users.size() ; i++) {
@@ -206,7 +206,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private synchronized List<User> getUsers(){
-        File file = new File("UserData.txt");
+        File file = new File("./data/UserData.txt");
         List<User> users = new ArrayList<>();
         try{
             if (!file.exists())

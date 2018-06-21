@@ -98,6 +98,18 @@ public class User {
      * 注册时间
      */
     private String registerTime;
+    /**
+     * 已标注数量
+     */
+    private int labelNum;
+
+    public int getLabelNum() {
+        return labelNum;
+    }
+
+    public void setLabelNum(int labelNum) {
+        this.labelNum = labelNum;
+    }
 
     public String getLatestSignIn() {
         return latestSignIn;

@@ -37,6 +37,9 @@
             <el-menu-item-group>
               <el-menu-item index="3-1">用户流失阈值率</el-menu-item>
               <el-menu-item index="3-2">用户分流标注数量统计</el-menu-item>
+              <el-menu-item index="3-3">总用户数变化图</el-menu-item>
+              <el-menu-item index="3-4">活跃用户数变化图</el-menu-item>
+              <el-menu-item index="3-5">新增用户数变化图</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
@@ -69,9 +72,14 @@
       <el-card class="card">
         <div id="boxChart" style="width:100%; height:410px;"></div>
       </el-card>
-
       <el-card class="card">
-        <div id="LineChart" style="width:100%; height:410px;"></div>
+        <div id="totalUserChange" style="width:100%; height:410px;"></div>
+      </el-card>
+      <el-card class="card">
+        <div id="activeUserChange" style="width:100%; height:410px;"></div>
+      </el-card>
+      <el-card class="card">
+        <div id="newUserChange" style="width:100%; height:410px;"></div>
       </el-card>
 
     </div>
@@ -120,6 +128,18 @@ export default {
         }
         case '3-2': {
           window.scrollTo(0, 3060)
+          break
+        }
+        case '3-3': {
+          window.scrollTo(0, 3560)
+          break
+        }
+        case '3-4': {
+          window.scrollTo(0, 4060)
+          break
+        }
+        case '3-5': {
+          window.scrollTo(0, 4560)
           break
         }
       }
@@ -1220,8 +1240,170 @@ export default {
       //option.series[0].data = myData
       myChart.setOption(option)
     },
-    drawLineChart(){
+    drawTotalUserChange(){
+      var myChart = echarts.init(document.getElementById('totalUserChange'))
+      var dateList = []
+      var valueList = []
+      var xmlhttp = new XMLHttpRequest()
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          console.log(JSON.parse(xmlhttp.responseText))
+          dateList  = JSON.parse(xmlhttp.responseText).x
+          valueList = JSON.parse(xmlhttp.responseText).y
+        }
+      }
+      xmlhttp.open('GET', 'http://localhost:8080/counts/analysis//MemberLine', false)
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xmlhttp.send(null)
 
+      var option = {
+
+        // Make gradient line here
+        visualMap: [{
+          show: false,
+          type: 'continuous',
+          seriesIndex: 0,
+          min: 0,
+          max: 400
+        }, ],
+
+
+        title: [{
+          top: '5%',
+          left: 'center',
+          text: '总用户数变化图'
+        },],
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: [{
+          data: dateList
+        }],
+        yAxis: [{
+          splitLine: {show: false}
+        }, ],
+        grid: [{
+          bottom: '30%'
+        }, {
+          top: '60%'
+        }],
+        series: [{
+          type: 'line',
+          showSymbol: false,
+          data: valueList
+        }, ]
+      };
+      myChart.setOption(option)
+    },
+    drawActiveUserChange(){
+      var myChart = echarts.init(document.getElementById('activeUserChange'))
+      var dateList = []
+      var valueList = []
+      var xmlhttp = new XMLHttpRequest()
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          console.log(JSON.parse(xmlhttp.responseText))
+          dateList  = JSON.parse(xmlhttp.responseText).x
+          valueList = JSON.parse(xmlhttp.responseText).y
+        }
+      }
+      xmlhttp.open('GET', 'http://localhost:8080/counts/analysis//activeMemberLine', false)
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xmlhttp.send(null)
+
+      var option = {
+
+        // Make gradient line here
+        visualMap: [{
+          show: false,
+          type: 'continuous',
+          seriesIndex: 0,
+          min: 0,
+          max: 400
+        }, ],
+
+
+        title: [{
+          top: '5%',
+          left: 'center',
+          text: '活跃用户数变化图'
+        },],
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: [{
+          data: dateList
+        }],
+        yAxis: [{
+          splitLine: {show: false}
+        }, ],
+        grid: [{
+          bottom: '30%'
+        }, {
+          top: '60%'
+        }],
+        series: [{
+          type: 'line',
+          showSymbol: false,
+          data: valueList
+        }, ]
+      };
+      myChart.setOption(option)
+    },
+    drawNewUserChange(){
+      var myChart = echarts.init(document.getElementById('newUserChange'))
+      var dateList = []
+      var valueList = []
+      var xmlhttp = new XMLHttpRequest()
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          console.log(JSON.parse(xmlhttp.responseText))
+          dateList  = JSON.parse(xmlhttp.responseText).x
+          valueList = JSON.parse(xmlhttp.responseText).y
+        }
+      }
+      xmlhttp.open('GET', 'http://localhost:8080/counts/analysis//newMemberLine', false)
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xmlhttp.send(null)
+
+      var option = {
+
+        // Make gradient line here
+        visualMap: [{
+          show: false,
+          type: 'continuous',
+          seriesIndex: 0,
+          min: 0,
+          max: 400
+        }, ],
+
+
+        title: [{
+          top: '5%',
+          left: 'center',
+          text: '新增用户数变化图'
+        },],
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: [{
+          data: dateList
+        }],
+        yAxis: [{
+          splitLine: {show: false}
+        }, ],
+        grid: [{
+          bottom: '30%'
+        }, {
+          top: '60%'
+        }],
+        series: [{
+          type: 'line',
+          showSymbol: false,
+          data: valueList
+        }, ]
+      };
+      myChart.setOption(option)
     },
 
   },
@@ -1233,7 +1415,9 @@ export default {
     this.drawUserDistribution()
     this.drawMissionNum()
     this.drawBoxChart()
-    this.drawLineChart()
+    this.drawTotalUserChange()
+    this.drawActiveUserChange()
+    this.drawNewUserChange()
   }
 }
 </script>
