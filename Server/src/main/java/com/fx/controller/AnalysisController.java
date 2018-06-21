@@ -260,5 +260,15 @@ public class AnalysisController {
     public int [] getRecommendWeight(){
         return new int[4];
     }
-
+    /**
+     * 返回推荐算法中特定用户的方法的权重
+     * @return
+     */
+    @RequestMapping(
+        value = "/getUserRecommendWeight",
+        method = RequestMethod.GET
+    )
+    public int [] getUserRecommendWeight(String username){
+        return new int[4];
+    }
 }
