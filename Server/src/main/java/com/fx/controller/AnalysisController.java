@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -58,13 +59,22 @@ public class AnalysisController {
      * @return
      */
     @RequestMapping(
-            value = "/locationchart/worker",
+            value = "/locationchart",
             method = RequestMethod.GET,
             produces =  {"application/json; charset=UTF-8"}
     )
     @ResponseBody
-    public UserLocationChart getWorkerLocationChart(){
-        return analysisService.getWorkerLocationChart();
+    public HashMap<String,Integer> getWorkerLocationChart(){
+        HashMap<String,Integer> map = new HashMap<>();
+        map.put("北京",2);
+        map.put("南京",4);
+        map.put("西安",6);
+        map.put("武汉",6);
+        map.put("长春",6);
+        map.put("吉林",6);
+        map.put("鄂尔多斯",6);
+        map.put("无锡",6);
+        return map;
     }
 
     /**
@@ -214,6 +224,41 @@ public class AnalysisController {
         chart.setX(x);
         chart.setY(y);
         return chart;
+    }
+    @RequestMapping(
+        value = "/getRecommendRate",
+        method = RequestMethod.GET
+    )
+    @ResponseBody
+    public LineChart getRecommendRate(){
+        List<String> x = new ArrayList<>();
+        x.add("top5推荐");
+        x.add("内容推荐");
+        x.add("协调过滤推荐");
+        x.add("众包推荐");
+        x.add("总体");
+        List<Integer> y = new ArrayList<>();
+        y.add(80);
+        y.add(70);
+        y.add(60);
+        y.add(80);
+        y.add(90);
+        LineChart lineChart = new LineChart();
+        lineChart.setY(y);
+        lineChart.setX(x);
+        return lineChart;
+    }
+
+    /**
+     * 返回推荐算法中各各方法的权重
+     * @return
+     */
+    @RequestMapping(
+        value = "/getRecommendWeight",
+        method = RequestMethod.GET
+    )
+    public int [] getRecommendWeight(){
+        return new int[4];
     }
 
 }
