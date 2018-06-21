@@ -29,7 +29,9 @@ public class UserLogRepositoryImpl implements UserLogRepository {
     }
     @Override
     public ResultMessage addUserLog(UserLog userLog) {
-        writeUserLog(userLog);
+        List<UserLog> logs = readAllUserLog();
+        logs.add(userLog);
+        writeAllUserLog(logs);
         return ResultMessage.SUCCESS;
     }
 
@@ -117,7 +119,7 @@ public class UserLogRepositoryImpl implements UserLogRepository {
     private void  writeUserLog(UserLog userLog){
         try{
             File file = new File("./data/log.txt");
-            PrintWriter pw = new PrintWriter(new FileWriter(file),true);
+            PrintWriter pw = new PrintWriter(new FileWriter(file));
             pw.println(gson.toJson(userLog));
             pw.close();
         }catch (Exception e){

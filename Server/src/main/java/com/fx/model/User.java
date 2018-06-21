@@ -98,7 +98,9 @@ public class User {
      * 注册时间
      */
     private String registerTime;
-
+    /**
+     * 已标注数量
+     */
     private int labelNum;
 
     public int getLabelNum() {
