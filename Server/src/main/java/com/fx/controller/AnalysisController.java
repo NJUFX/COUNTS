@@ -1,9 +1,6 @@
 package com.fx.controller;
 
-import com.fx.bean.BoxChart;
-import com.fx.bean.MissionMonthChart;
-import com.fx.bean.UserLevelChart;
-import com.fx.bean.UserLocationChart;
+import com.fx.bean.*;
 import com.fx.service.AnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -139,6 +137,83 @@ public class AnalysisController {
     public float getPredictChart(){
 
         return analysisService.getPredictChart();
+    }
+
+    @RequestMapping(
+        value = "/newMemberLine",
+        method = RequestMethod.GET
+    )
+    @ResponseBody
+    public LineChart getLineChart(){
+        LineChart chart = new LineChart();
+        List<String> x = new ArrayList<>();
+        x.add("2018-06-01");
+        x.add("2018-06-02");
+        x.add("2018-06-03");
+        x.add("2018-06-04");
+        x.add("2018-06-05");
+        x.add("2018-06-06");
+        List<Integer> y = new ArrayList<>();
+        y.add(1);
+        y.add(2);
+        y.add(3);
+        y.add(4);
+        y.add(5);
+        y.add(6);
+        chart.setX(x);
+        chart.setY(y);
+
+        return chart;
+    }
+    @RequestMapping(
+        value = "/MemberLine",
+        method = RequestMethod.GET
+    )
+    @ResponseBody
+    public LineChart getNewLineChart(){
+        LineChart chart = new LineChart();
+        List<String> x = new ArrayList<>();
+        x.add("2018-06-01");
+        x.add("2018-06-02");
+        x.add("2018-06-03");
+        x.add("2018-06-04");
+        x.add("2018-06-05");
+        x.add("2018-06-06");
+        List<Integer> y = new ArrayList<>();
+        y.add(1);
+        y.add(2);
+        y.add(3);
+        y.add(4);
+        y.add(5);
+        y.add(6);
+        chart.setX(x);
+        chart.setY(y);
+        return chart;
+    }
+    @RequestMapping(
+        value = "/leftMemberLine",
+        method = RequestMethod.GET
+    )
+    @ResponseBody
+    public LineChart getLeftMember(){
+        LineChart chart = new LineChart();
+        List<String> x = new ArrayList<>();
+        x.add("2018-06-01");
+        x.add("2018-06-02");
+        x.add("2018-06-03");
+        x.add("2018-06-04");
+        x.add("2018-06-05");
+        x.add("2018-06-06");
+        List<Integer> y = new ArrayList<>();
+        y.add(1);
+        y.add(2);
+        y.add(3);
+        y.add(4);
+        y.add(5);
+        y.add(6);
+        chart.setX(x);
+        chart.setY(y);
+        return chart;
     }
 
 }
