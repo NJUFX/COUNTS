@@ -9,6 +9,7 @@ import com.fx.repository.UserRepository;
 import com.fx.repository.impl.MissionRepositoryImpl;
 import com.fx.repository.impl.UserRepositoryImpl;
 import com.fx.service.AnalysisService;
+import com.fx.util.TimeUtil;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -150,68 +151,53 @@ public class AnalysisServiceImpl implements AnalysisService {
         //System.out.println("123");
         //List<List<U>>
         List<Integer> result = new ArrayList<>();
-//        List<User> list = userRepository.findUserByType("Worker");
-//
-//        List<List<User>> levels = new ArrayList<>();
-//
-//        String[] names = new String[]{"大众用户","黄金用户","铂金用户","钻石用户","星耀用户"};
-//
-//        for(int i=1;i<=5;i++){
-//            levels.add(new ArrayList<>());
-//        }
-//        //int max;
-//        for(int i=0;i<=list.size()-1;i++){
-//            levels.get(list.get(i).getLevel()).add(list.get(i));
-//        }
-//
-//        for(int i=0;i<=levels.size()-1;i++){
-//            levels.set(i,quickSort(levels.get(i),0,levels.get(i).size()-1));
-//        }
-//
-//        for(int i=0;i<=levels.size()-1;i++){
-//            List<User> mid = levels.get(i);
-//            int size = mid.size()-1;
-//            /**
-//             * 这里需要改成标注数
-//             */
-//            result.add(mid.get(0).getLevel());
-//            result.add(mid.get(size/4).getLevel());
-//            result.add(mid.get(size/2).getLevel());
-//            result.add(mid.get(3*size/2).getLevel());
-//            result.add(mid.get(size).getLevel());
-//        }
+        List<User> list = userRepository.findUserByType("Worker");
 
-        List<List<Integer>> key = new ArrayList<>();
+        List<List<Integer>> levels = new ArrayList<>();
+
+        String[] names = new String[]{"大众用户","黄金用户","铂金用户","钻石用户","星耀用户"};
 
         for(int i=1;i<=5;i++){
-            key.add(new ArrayList<>());
+            levels.add(new ArrayList<>());
         }
-        key.get(0).add(10);
-        key.get(0).add(20);
-        key.get(0).add(34);
-        key.get(0).add(47);
+        //int max;
+        for(int i=0;i<=list.size()-1;i++){
+            levels.get(list.get(i).getLevel()).add(list.get(i).getLevel());
+        }
 
-        key.get(1).add(56);
-        key.get(1).add(64);
-        key.get(1).add(78);
-        key.get(1).add(90);
+       return levels;
 
-        key.get(2).add(90);
-        key.get(2).add(98);
-        key.get(2).add(101);
-        key.get(2).add(108);
-
-        key.get(3).add(117);
-        key.get(3).add(140);
-        key.get(3).add(150);
-        key.get(3).add(180);
-
-        key.get(4).add(300);
-        key.get(4).add(110);
-        key.get(4).add(130);
-        key.get(4).add(140);
-
-        return key;
+//        List<List<Integer>> key = new ArrayList<>();
+//
+//        for(int i=1;i<=5;i++){
+//            key.add(new ArrayList<>());
+//        }
+//        key.get(0).add(10);
+//        key.get(0).add(20);
+//        key.get(0).add(34);
+//        key.get(0).add(47);
+//
+//        key.get(1).add(56);
+//        key.get(1).add(64);
+//        key.get(1).add(78);
+//        key.get(1).add(90);
+//
+//        key.get(2).add(90);
+//        key.get(2).add(98);
+//        key.get(2).add(101);
+//        key.get(2).add(108);
+//
+//        key.get(3).add(117);
+//        key.get(3).add(140);
+//        key.get(3).add(150);
+//        key.get(3).add(180);
+//
+//        key.get(4).add(300);
+//        key.get(4).add(110);
+//        key.get(4).add(130);
+//        key.get(4).add(140);
+//
+//        return key;
 
 
 
@@ -221,52 +207,58 @@ public class AnalysisServiceImpl implements AnalysisService {
 
     public float getPredictChart(){
 
-//       //String str1 = "123",str2 = "456";
-//        List<User> list = userRepository.findUserByType("Worker");
-//
-//        list = quickSortByTime(list,0,list.size()-1);
-//
-//        List<User> samples = new ArrayList<>();
-//
-//        for(int i=0;i<=list.size()-1;i++){
-//            if((i+1)>list.size()-1||true/**!!!**/){
-//
-//            }
-//            int index =0;
-//            while(/****/list.get(i).getExp()==0){
-//                index++;
-//                //i++;
-//            }
-//            for(int j=0;j<=index/2-1;j++){
-//                samples.add(list.get(i+j));
-//            }
-//            i = i+index;
-//        }
-//
-//        int active = 0;
-//        /**
-//         * 记录活跃数量
-//         */
-//        for(int i=0;i<=samples.size()-1;i++){
-//            active++;
-//        }
-//
-//
-//        NormalDistribution normalDistribution = new NormalDistribution();
-//
-//        float p=active/(samples.size()*7);
-//
-//        int n=0;
-//
-//        int num =1;
-//
-//        float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
-//
-//        float result = 1-normalDistribution.selfCaculate(k);
+       //String str1 = "123",str2 = "456";
+        List<User> list = userRepository.findUserByType("Worker");
 
-        float mid = (float)0.9987;
+        list = quickSortByTime(list,0,list.size()-1);
 
-        return mid;
+        List<User> samples = new ArrayList<>();
+
+        for(int i=0;i<=list.size()-1;i++){
+            if((i+1)>list.size()-1||!list.get(i).getLatestSignIn().equals(list.get(i+1).getLatestSignIn())){
+
+                samples.add(list.get(i));
+            }
+            int index =0;
+            while(list.get(i+index).getLatestSignIn().equals(list.get(i+index+1).getLatestSignIn())){
+                index++;
+                //i++;
+            }
+            for(int j=0;j<=index/2-1;j++){
+                samples.add(list.get(i+j));
+            }
+            i = i+index;
+        }
+
+        int active = 0;
+        /**
+         * 记录活跃数量
+         */
+        TimeUtil current = new TimeUtil();
+        for(int i=0;i<=samples.size()-1;i++){
+
+
+            if(current.minusDay(7).toString().compareTo(samples.get(i).getLatestSignIn())==1){
+                active++;
+            }
+        }
+
+
+        NormalDistribution normalDistribution = new NormalDistribution();
+
+        float p=active/(samples.size());
+
+        int n=active;
+
+        int num =n/2;
+
+        float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
+
+        float result = 1-normalDistribution.selfCaculate(k);
+
+
+
+        return result;
     }
 
     public List<User> quickSort(List<User> a,int start,int end) {
@@ -310,10 +302,10 @@ public class AnalysisServiceImpl implements AnalysisService {
         /**
          * 这边要全部改成Time
          */
-        String base = a.get(end).getAvatar();
+        String base = a.get(end).getLatestSignIn();
         //start一旦等于end，就说明左右两个指针合并到了同一位置，可以结束此轮循环。
         while (start < end) {
-            while (start < end && a.get(start).getAvatar().compareTo( base)==-1)
+            while (start < end && a.get(start).getLatestSignIn().compareTo( base)==-1)
                 //从左边开始遍历，如果比基准值小，就继续向右走
                 start++;
             //上面的while循环结束时，就说明当前的a[start]的值比基准值大，应与基准值进行交换
@@ -325,7 +317,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 //交换后，此时的那个被调换的值也同时调到了正确的位置(基准值右边)，因此右边也要同时向前移动一位
                 end--;
             }
-            while (start < end && a.get(start).getAvatar().compareTo( base)!=-1)
+            while (start < end && a.get(start).getLatestSignIn().compareTo( base)!=-1)
                 //从右边开始遍历，如果比基准值大，就继续向左走
                 end--;
             //上面的while循环结束时，就说明当前的a[end]的值比基准值小，应与基准值进行交换
@@ -340,5 +332,43 @@ public class AnalysisServiceImpl implements AnalysisService {
 
         }
         return a;
+    }
+
+    public static void main(String[] args){
+//        User u1 = new User();
+//        u1.setLatestSignIn("2018-06-10");
+//        User u2 = new User();
+//        u2.setLatestSignIn("2018-06-07");
+//        User u3 = new User();
+//        u3.setLatestSignIn("2018-06-08");
+//
+//        List<User> list = new ArrayList<>();
+//
+//        list.add(u1);
+//        list.add(u2);
+//        list.add(u3);
+//
+//        AnalysisServiceImpl k = new AnalysisServiceImpl();
+//
+//        k.quickSortByTime(list,0,2);
+//
+//        for(int i=0;i<=2;i++){
+//            System.out.println(list.get(i).getLatestSignIn());
+//        }
+
+        int active = 10;
+        int samples = 20;
+        float p=(float)0.02;
+
+        int n=400;
+
+        int num =1;
+
+        NormalDistribution normalDistribution = new NormalDistribution();
+        float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
+
+        float result = 1-normalDistribution.selfCaculate(k);
+
+        System.out.println(result);
     }
 }
