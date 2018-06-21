@@ -1,8 +1,7 @@
 package com.fx.service.impl;
 
-import com.fx.bean.MissionMonthChart;
-import com.fx.bean.UserLevelChart;
-import com.fx.bean.UserLocationChart;
+import com.fx.bean.*;
+import com.fx.counting.NormalDistribution;
 import com.fx.model.Mission;
 import com.fx.model.User;
 import com.fx.repository.MissionRepository;
@@ -143,5 +142,171 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 
         return missionMonthChart;
+    }
+
+    public BoxChart getBoxChart(){
+
+        //List<List<U>>
+        List<Integer> result = new ArrayList<>();
+        List<User> list = userRepository.findUserByType("Worker");
+
+        List<List<User>> levels = new ArrayList<>();
+
+        String[] names = new String[]{"大众用户","黄金用户","铂金用户","钻石用户","星耀用户"};
+
+        for(int i=1;i<=5;i++){
+            levels.add(new ArrayList<>());
+        }
+        //int max;
+        for(int i=0;i<=list.size()-1;i++){
+            levels.get(list.get(i).getLevel()).add(list.get(i));
+        }
+
+        for(int i=0;i<=levels.size()-1;i++){
+            levels.set(i,quickSort(levels.get(i),0,levels.get(i).size()-1));
+        }
+
+        for(int i=0;i<=levels.size()-1;i++){
+            List<User> mid = levels.get(i);
+            int size = mid.size()-1;
+            /**
+             * 这里需要改成标注数
+             */
+            result.add(mid.get(0).getLevel());
+            result.add(mid.get(size/4).getLevel());
+            result.add(mid.get(size/2).getLevel());
+            result.add(mid.get(3*size/2).getLevel());
+            result.add(mid.get(size).getLevel());
+        }
+
+        return null;
+
+
+
+
+
+    }
+
+    public float getPredictChart(){
+
+       //String str1 = "123",str2 = "456";
+        List<User> list = userRepository.findUserByType("Worker");
+
+        list = quickSortByTime(list,0,list.size()-1);
+
+        List<User> samples = new ArrayList<>();
+
+        for(int i=0;i<=list.size()-1;i++){
+            if((i+1)>list.size()-1||true/**!!!**/){
+
+            }
+            int index =0;
+            while(/****/list.get(i).getExp()==0){
+                index++;
+                //i++;
+            }
+            for(int j=0;j<=index/2-1;j++){
+                samples.add(list.get(i+j));
+            }
+            i = i+index;
+        }
+
+        int active = 0;
+        /**
+         * 记录活跃数量
+         */
+        for(int i=0;i<=samples.size()-1;i++){
+            active++;
+        }
+
+
+        NormalDistribution normalDistribution = new NormalDistribution();
+
+        float p=active/(samples.size()*7);
+
+        int n=0;
+
+        int num =1;
+
+        float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
+
+        float result = 1-normalDistribution.selfCaculate(k);
+
+
+
+        return result;
+    }
+
+    public List<User> quickSort(List<User> a,int start,int end) {
+
+        /**
+         * 这边要全部改成标注数
+         */
+        int base = a.get(end).getExp();
+        //start一旦等于end，就说明左右两个指针合并到了同一位置，可以结束此轮循环。
+        while (start < end) {
+            while (start < end && a.get(start).getExp() <= base)
+                //从左边开始遍历，如果比基准值小，就继续向右走
+                start++;
+            //上面的while循环结束时，就说明当前的a[start]的值比基准值大，应与基准值进行交换
+            if (start < end) {
+                //交换
+                User temp = a.get(start);
+                a.set(start, a.get(end));
+                a.set(end, temp);
+                //交换后，此时的那个被调换的值也同时调到了正确的位置(基准值右边)，因此右边也要同时向前移动一位
+                end--;
+            }
+            while (start < end && a.get(end).getExp() >= base)
+                //从右边开始遍历，如果比基准值大，就继续向左走
+                end--;
+            //上面的while循环结束时，就说明当前的a[end]的值比基准值小，应与基准值进行交换
+            if (start < end) {
+                //交换
+                User temp = a.get(start);
+                a.set(start, a.get(end));
+                a.set(end, temp);
+                //交换后，此时的那个被调换的值也同时调到了正确的位置(基准值左边)，因此左边也要同时向后移动一位
+                start++;
+            }
+
+        }
+        return a;
+    }
+
+    public List<User> quickSortByTime(List<User> a,int start,int end){
+        /**
+         * 这边要全部改成Time
+         */
+        String base = a.get(end).getAvatar();
+        //start一旦等于end，就说明左右两个指针合并到了同一位置，可以结束此轮循环。
+        while (start < end) {
+            while (start < end && a.get(start).getAvatar().compareTo( base)==-1)
+                //从左边开始遍历，如果比基准值小，就继续向右走
+                start++;
+            //上面的while循环结束时，就说明当前的a[start]的值比基准值大，应与基准值进行交换
+            if (start < end) {
+                //交换
+                User temp = a.get(start);
+                a.set(start, a.get(end));
+                a.set(end, temp);
+                //交换后，此时的那个被调换的值也同时调到了正确的位置(基准值右边)，因此右边也要同时向前移动一位
+                end--;
+            }
+            while (start < end && a.get(start).getAvatar().compareTo( base)!=-1)
+                //从右边开始遍历，如果比基准值大，就继续向左走
+                end--;
+            //上面的while循环结束时，就说明当前的a[end]的值比基准值小，应与基准值进行交换
+            if (start < end) {
+                //交换
+                User temp = a.get(start);
+                a.set(start, a.get(end));
+                a.set(end, temp);
+                //交换后，此时的那个被调换的值也同时调到了正确的位置(基准值左边)，因此左边也要同时向后移动一位
+                start++;
+            }
+
+        }
+        return a;
     }
 }

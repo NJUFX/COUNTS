@@ -1,8 +1,6 @@
 package com.fx.service;
 
-import com.fx.bean.MissionMonthChart;
-import com.fx.bean.UserLevelChart;
-import com.fx.bean.UserLocationChart;
+import com.fx.bean.*;
 
 import java.util.List;
 
@@ -39,4 +37,9 @@ public interface AnalysisService {
     public int getRequestorNumber();
 
     public MissionMonthChart getMissionMonthChart();
+
+
+    public BoxChart getBoxChart();
+
+    public float getPredictChart();
 }
