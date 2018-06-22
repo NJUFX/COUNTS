@@ -53,7 +53,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         int max;
         for (int i = 0; i <= list.size() - 1; i++) {
             for (int j = 0; j <= levels.size() - 1; j++) {
-                if (levels.get(j).getName().equals(names[list.get(i).getLevel()])) {
+                if (levels.get(j).getName().equals(names[list.get(i).getLevel()-1])) {
                     levels.get(j).setValue(levels.get(j).getValue() + 1);
                 }
             }
@@ -80,7 +80,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         int max;
         for (int i = 0; i <= list.size() - 1; i++) {
             for (int j = 0; j <= levels.size() - 1; j++) {
-                if (levels.get(j).getName().equals(names[list.get(i).getLevel()])) {
+                if (levels.get(j).getName().equals(names[list.get(i).getLevel()-1])) {
                     levels.get(j).setValue(levels.get(j).getValue() + 1);
                 }
             }
