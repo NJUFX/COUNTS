@@ -60,7 +60,8 @@
 
     <div style="position: absolute; top:470px; width:100%;height: 70px;">
       <span style="font-size: 32px; color: black">— 标 / 注 / 项 / 目 —</span>
-      <el-button type="text" icon="el-icon-refresh" style="position:absolute;font-size: 16px; margin-left: 10px;margin-top: 3px" v-bind:onclick="getRecommandMission">换一批</el-button>
+    <!--  <el-button type="text" icon="el-icon-refresh" style="position:absolute;font-size: 16px; margin-left: 10px;margin-top: 3px" v-bind:onclick="refreshRecommendMission">换一批</el-button>-->
+      <el-button icon="el-icon-refresh" @click="refreshRecommendMission" style="position:absolute;font-size: 16px; margin-left: 10px;margin-top: 3px" type="text">换一批</el-button>
     </div>
 
     <div style="position: absolute; top:560px; width:100%;">
@@ -161,14 +162,82 @@
       }
     },
     methods: {
+      refreshRecommendMission(){
+        console.log('recommend')
+        this.isRecommand=true;
+        this.projects= []
+
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log(JSON.parse(xmlhttp.responseText))
+            _this.recommandType = JSON.parse(xmlhttp.responseText).type
+            var arrays = JSON.parse(xmlhttp.responseText).missions
+            _this.project_total = arrays.length
+            for (var i = 0; i < arrays.length; i++) {
+              var e = arrays[i]
+              var info = {
+                cover: '',
+                missionname: e.missionName,
+                counts: e.points,
+                details: e.description,
+                dateStart: e.begin,
+                dateEnd: e.end,
+                worker_total_number: e.maxNumber,
+                worker_now_number: e.currentNumber,
+                percent: (e.currentNumber / e.maxNumber * 100).toFixed(2),
+                type: e.type,
+                id: e.id,
+                isContinue:true,
+                isEnd:false,
+                isEnd2: false,
+                tags:e.tags
+              }
+              _this.projects.push(info)
+            }
+            for(var i=0;i<_this.projects.length;i++){
+              var time = _this.projects[i].dateEnd.split('-');
+              var end = new Date(time[0], parseInt(time[1])-1, parseInt(time[2])+1)
+              var now = new Date()
+              if(now <= end){
+                _this.projects[i].isEnd2=false;
+                if(_this.projects[i].worker_now_number<_this.projects[i].worker_total_number) {
+                  _this.projects[i].isContinue = true;
+                  _this.projects[i].isEnd = false;
+                }else{
+                  _this.projects[i].isContinue = false;
+                  _this.projects[i].isEnd = true;
+                }
+              }else{
+                _this.projects[i].isEnd2 = true;
+                _this.projects[i].isEnd = false;
+                _this.projects[i].isContinue = false;
+              }
+              _this.projects[i].isBan = !_this.projects[i].isContinue;
+              if(localStorage.getItem('identify')=='requester'){
+                _this.projects[i].isBan = true;
+              }
+              _this.getCoverImg(_this.projects[i].id, i);
+            }
+          }
+        }
+        let formData = new FormData()
+        console.log(localStorage.getItem('username'))
+        formData.append('username',localStorage.getItem('username'))
+        xmlhttp.open('POST', 'http://localhost:8080/counts/recommend/mission', true)
+        xmlhttp.send(formData)
+
+      },
       getRecommandMission(){
+        console.log('recommend')
         this.isRecommand=true;
         this.projects= []
         var xmlhttp = new XMLHttpRequest()
         var _this = this
         xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            console.log('rec '+JSON.parse(xmlhttp.responseText))
+            console.log(JSON.parse(xmlhttp.responseText))
             _this.recommandType = JSON.parse(xmlhttp.responseText).type
             var arrays = JSON.parse(xmlhttp.responseText).missions
             _this.project_total = arrays.length
