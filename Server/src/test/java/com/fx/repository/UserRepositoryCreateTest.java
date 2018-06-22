@@ -37,6 +37,9 @@ public class UserRepositoryCreateTest {
                 if (!tags.contains(hotTags[random]))
                     tags.add(hotTags[random]);
             }
+
+            user.setTags(tags);
+            tags.clear();
             random = (int)(Math.random() * 2);
             user.setUsername(username + i);
             user.setRole(roles[random]);
