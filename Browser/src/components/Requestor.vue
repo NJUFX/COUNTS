@@ -89,7 +89,7 @@
 
     </div>
     <div v-show="data_show" style="position: absolute;width: 100%; left: 0; top: 418px;">
-      <div style="position: absolute; top: 0px;width: 1100px; left: 50%; margin-left: -550px; background-color: white; height: 300px">
+      <div style="position: absolute; top: 0px;width: 1100px; left: 50%; margin-left: -550px; background-color: white; height: 500px">
         <div style="position: absolute; left: 5%; width: 90%; top: 10px;">
           <div style="position: relative;float:left; width: 400px; height: 250px;">
             <span style="position: absolute; left: 0px; top: 0px; text-align: left; font-size: 16px">项目完成情况</span>
@@ -100,6 +100,13 @@
               <span style="position: absolute; left: 0px; top: 0px; text-align: left; font-size: 16px">类型分布</span>
               <div id="radar" style="position: absolute;left: 100px; top: 50px;width: 300px; height: 200px;"></div>
             </div>
+          </div>
+          <div style="position: absolute; left:0;top:270px; width: 100%">
+            <span style="position: absolute; left: 0px; top: 0px; text-align: left; font-size: 16px">活动足迹</span>
+            <img style="width: 470px; position: absolute; left: 80px;top: 30px;" src="../assets/aboveLabel1.png">
+            <img style="width: 140px; position: absolute; left: 590px;top: 30px;" src="../assets/aboveLabel2.png">
+            <vuejs-heatmap style="position: absolute; left: -50px;top: 10px;" v-bind:entries="myEntries" tooltip-unit="Action" tooltip-enabled='true'>
+            </vuejs-heatmap>
           </div>
         </div>
       </div>
@@ -223,7 +230,7 @@
         </el-button>
       </el-tooltip>
     </div>
-    <a style="position: absolute; top: 0;" id="download_a" download="download">this is a download link</a>
+    <a style="position: absolute; top: 0;" id="download_a" download="download"></a>
   </div>
 </template>
 
@@ -232,11 +239,12 @@
     from 'element-china-area-data'
   import echarts from 'echarts'
   import vueCropper from 'vue-cropper'
-
+  import VuejsHeatmap from "vuejs-heatmap/src/VuejsHeatmap";
   export default {
     name: 'requester',
     components: {
-      vueCropper
+      vueCropper,
+      VuejsHeatmap
     },
     data () {
       var validateMail = (rule, value, callback) => {
@@ -254,6 +262,59 @@
         }
       }
       return {
+        myEntries:[
+          {
+            'counting':100,
+            'created_at':'2017-06-22'
+          },
+          {
+            'counting':100,
+            'created_at':'2017-07-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2017-08-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2017-09-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2017-10-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2017-11-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2017-12-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2018-01-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2018-02-01'
+          },{
+            'counting':100,
+            'created_at':'2018-03-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2018-04-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2018-05-01'
+          },
+          {
+            'counting':100,
+            'created_at':'2018-06-01'
+          },
+        ],
         selectLabelTypeOption:[],
         labelTypeOptions:[
           {
