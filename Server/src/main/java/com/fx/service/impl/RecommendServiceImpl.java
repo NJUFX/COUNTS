@@ -2,11 +2,11 @@ package com.fx.service.impl;
 
 import com.fx.bean.RecommendResult;
 import com.fx.model.Mission;
-import com.fx.service.MissionService;
+import com.fx.repository.MissionRepository;
+import com.fx.repository.impl.MissionRepositoryImpl;
 import com.fx.service.RecommendService;
 import com.fx.service.UserService;
 import com.fx.util.TimeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -35,15 +35,15 @@ import java.util.Scanner;
 @Service
 public class RecommendServiceImpl implements RecommendService {
 
-    @Autowired
-    MissionService missionService;
-    @Autowired
+
     UserService userService;
+    MissionRepository missionRepository = new MissionRepositoryImpl();
 
     public RecommendServiceImpl() {
         File file = new File(dir);
         if (!file.exists())
             file.mkdir();
+        userService = new UserServiceImpl();
     }
 
     @Override
@@ -66,8 +66,10 @@ public class RecommendServiceImpl implements RecommendService {
             else
                 type = 4;
         } else {
+            if (record[2] <= 5)
+                record[2] = 5;
             sum += record[2];
-            double random = Math.random() * (sum * 1.5);
+            int random = (int) (Math.random() * (sum * 2));
             if (random <= record[0])
                 type = 1;
             else if (random <= record[0] + record[1])
@@ -78,7 +80,7 @@ public class RecommendServiceImpl implements RecommendService {
                 type = 4;
         }
         updateSum(type);
-        updateSum(username,type);
+        updateSum(username, type);
         List<Mission> missions;
         switch (type) {
             case 1:
@@ -88,7 +90,7 @@ public class RecommendServiceImpl implements RecommendService {
                 missions = contentRecommend(username);
                 break;
             case 3:
-                missions = CFrecommend(username);
+                missions = CFRecommend(username);
                 break;
             case 4:
                 missions = requestorRecommend();
@@ -103,7 +105,7 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
     private List<Mission> getDefaultMission() {
-        List<Mission> missions = missionService.findUnfinishedMission();
+        List<Mission> missions = missionRepository.findUnFinishedMission();
         while (missions.size() > 12) {
             int random = (int) (Math.random() * missions.size());
             missions.remove(random);
@@ -118,9 +120,9 @@ public class RecommendServiceImpl implements RecommendService {
      */
     //todo  最新发布的12个吧 ...
     private List<Mission> top5recommend() {
-        List<Mission> missions = missionService.findUnfinishedMission();
+        List<Mission> missions = missionRepository.findUnFinishedMission();
         List<Mission> another = new ArrayList<>();
-        for (int i = 0; i < missions.size() && i < 12 * 1.5; i++) {
+        for (int i = 0; i < missions.size() && i < 12 * 2; i++) {
             another.add(missions.get(missions.size() - i - 1));
         }
         while (another.size() > 12) {
@@ -139,7 +141,7 @@ public class RecommendServiceImpl implements RecommendService {
     //todo
     private static final String dir = "./data/recommend";
 
-    private List<Mission> CFrecommend(String username) {
+    private List<Mission> CFRecommend(String username) {
         String filename = dir + "/" + username + ".txt";
         File file = new File(filename);
         if (!file.exists())
@@ -153,7 +155,7 @@ public class RecommendServiceImpl implements RecommendService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        List<Mission> missions = missionService.findUnfinishedMission();
+        List<Mission> missions = missionRepository.findUnFinishedMission();
         List<Mission> neededMission = new ArrayList<>();
         for (int i = 0; i < missions.size(); i++) {
             if (ids.contains(missions.get(i).getID()))
@@ -182,14 +184,13 @@ public class RecommendServiceImpl implements RecommendService {
      */
     //todo
     private List<Mission> contentRecommend(String username) {
-        List<Mission> missions = missionService.findUnfinishedMission();
+        List<Mission> missions = missionRepository.findUnFinishedMission();
         List<Mission> neededMissions = new ArrayList<>();
         List<String> usertags = userService.findTagsByUsername(username);
         for (int i = 0; i < missions.size(); i++) {
             List<String> tags = missions.get(i).getTags();
-            for (String s : usertags
-                ) {
-                if (tags.contains(s)) {
+            for (int j = 0; j < usertags.size(); j++) {
+                if (tags.contains(usertags.get(j))) {
                     neededMissions.add(missions.get(i));
                     break;
                 }
@@ -223,7 +224,7 @@ public class RecommendServiceImpl implements RecommendService {
      * 将要考虑的因素 发布者的等级？ 等级加权
      */
     private List<Mission> requestorRecommend() {
-        List<Mission> missions = missionService.findUnfinishedMission();
+        List<Mission> missions = missionRepository.findUnFinishedMission();
         double[] factors = new double[missions.size()];
         for (int i = 0; i < factors.length; i++) {
             factors[i] = calculateFactor(missions.get(i));
@@ -241,7 +242,7 @@ public class RecommendServiceImpl implements RecommendService {
         }
         // 增加一点随机性 更好玩一些
         ArrayList<Mission> results = new ArrayList<>();
-        for (int i = 0; i < 12 * 1.5 && i < missions.size(); i++) {
+        for (int i = 0; i < 12 * 2 && i < missions.size(); i++) {
             results.add(missions.get(indexs[i]));
         }
         while (results.size() > 12) {
@@ -314,6 +315,7 @@ public class RecommendServiceImpl implements RecommendService {
         writeRecord(username, records);
         updateResult(type);
     }
+
     //单人被推荐的次数
     private int[] readSum(String username) {
         String filename = dir + "/" + username + "_sum.txt";
@@ -332,6 +334,7 @@ public class RecommendServiceImpl implements RecommendService {
         sum[type - 1]++;
         writeSum(username, sum);
     }
+
     //总体推荐被接受的次数
     private void updateResult(int type) {
         int[] records = readResult();
@@ -357,7 +360,8 @@ public class RecommendServiceImpl implements RecommendService {
                 return new int[4];
             }
             Scanner scanner = new Scanner(file);
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4 && scanner.hasNextInt(); i++) {
+
                 sum[i] = scanner.nextInt();
             }
             scanner.close();
@@ -379,6 +383,7 @@ public class RecommendServiceImpl implements RecommendService {
             e.printStackTrace();
         }
     }
+
     //总体推荐的次数
     private void updateSum(int type) {
         int[] records = readSum();

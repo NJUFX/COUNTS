@@ -161,7 +161,7 @@ public class LabelServiceImpl implements LabelService{
         String type = missionRepository.findMissionByID(Integer.parseInt(localLabel.getMissionID())).getType();
 
 
-        System.out.println("type!!!!"+type);
+       // System.out.println("type!!!!"+type);
           if(type.equals("Detection")){
           DetectionLabel detectionLabel = new DetectionLabel(picturename,localLabel.getDots());
           if(localLabel.getDots()==null){

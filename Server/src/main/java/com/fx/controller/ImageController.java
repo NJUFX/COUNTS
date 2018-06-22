@@ -84,7 +84,7 @@ public class ImageController {
 
 
             String imgName = f.getOriginalFilename();//这里图片还是以原名命名
-            System.out.println(imgName);
+            //System.out.println(imgName);
             imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/allimage/", imgName);
         }
     }
@@ -94,7 +94,7 @@ public class ImageController {
     )
     @ResponseBody
     public void uploadAutoDetectionImg(int missionID, MultipartFile file[]) throws Exception {
-        System.out.println("999");
+        //System.out.println("999");
         int size = file.length;
         int i = 0;
 
@@ -102,7 +102,7 @@ public class ImageController {
 
 
             String imgName = f.getOriginalFilename();//这里图片还是以原名命名
-            System.out.println(imgName);
+            //System.out.println(imgName);
             imageService.uploadFileUtil(f.getBytes(), autoDirName + "/" + missionID + "/allimage/", imgName);
         }
 
@@ -131,7 +131,7 @@ public class ImageController {
     @ResponseBody
     public void uploadImg(int mission, MultipartFile file[]) throws Exception {
         //  System.out.println(mission.getID());
-        System.out.println("得到的areaName:" + imageURL);
+       // System.out.println("得到的areaName:" + imageURL);
         //写给后端coder：file似乎不要用requestparam定义，不然会报错。。。
 
         //  missionService.addMission(mission);

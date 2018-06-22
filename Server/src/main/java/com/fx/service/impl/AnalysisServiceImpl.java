@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.Line;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -175,7 +176,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         }
         //int max;
         for(int i=0;i<=list.size()-1;i++){
-            levels.get(list.get(i).getLevel()).add(list.get(i).getLevel());
+            levels.get(list.get(i).getLevel()-1).add(list.get(i).getLabelNum());
         }
 
         return levels;
@@ -231,6 +232,7 @@ public class AnalysisServiceImpl implements AnalysisService {
             if((i+1)>list.size()-1||!list.get(i).getLatestSignIn().equals(list.get(i+1).getLatestSignIn())){
 
                 samples.add(list.get(i));
+                continue;
             }
             int index =0;
             while(list.get(i+index).getLatestSignIn().equals(list.get(i+index+1).getLatestSignIn())){
@@ -259,17 +261,20 @@ public class AnalysisServiceImpl implements AnalysisService {
 
         NormalDistribution normalDistribution = new NormalDistribution();
 
-        float p=active/(samples.size());
 
+        float p=((float)active/((float)samples.size()));
+
+        //System.out.println("active "+active);
+        //System.out.println("sample "+samples.size());
+        System.out.println("p "+p);
         int n=active;
 
-        int num =n/2;
+        int num =n/4;
 
         float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
 
         float result = 1-normalDistribution.selfCaculate(k);
-
-
+        System.out.println(result);
 
         return result;
     }
@@ -489,7 +494,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         for (int i = 0; i < 30; i++) {
             String time = startTime.addDay(i).toString();
             List<UserLog> logs = userLogRepository.findUserLogByUsernameAndActionAndTime(username,
-                UserLog.WORK,time);
+                UserLog.ACCEPT,time);
             y.add(logs.size());
         }
         LineChart lineChart = new LineChart();
@@ -523,6 +528,22 @@ public class AnalysisServiceImpl implements AnalysisService {
         lineChart.setX(x);
         lineChart.setY(y);
         return lineChart;
+    }
+
+    @Override
+    public HashMap<String, Integer> getLocationChart() {
+       List<User> users =  userRepository.findAllUsers();
+        HashMap<String,Integer> map = new HashMap<>();
+        for (int i = 0; i < users.size() ; i++) {
+            if(map.containsKey(users.get(i).getCity())){
+                map.put(users.get(i).getCity(),1);
+            }else {
+                int number = map.get(users.get(i).getCity());
+                number++;
+                map.replace(users.get(i).getCity(),number);
+            }
+        }
+        return map;
     }
 }
 

@@ -510,7 +510,7 @@ export default {
       var xmlhttp = new XMLHttpRequest()
       xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-         myData = xmlhttp.responseText*100
+         myData = (xmlhttp.responseText*100).toFixed(2)
         }
       }
       xmlhttp.open('GET', 'http://localhost:8080/counts/analysis/predictchart', false)
