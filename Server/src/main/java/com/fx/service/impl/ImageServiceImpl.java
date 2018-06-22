@@ -41,7 +41,7 @@ public class ImageServiceImpl implements ImageService{
 
     public List<String> getMission(String mission){
         File file = new File(ImageController.imageURL +"/"+ mission);
-        System.out.println(file.getAbsolutePath());
+       // System.out.println(file.getAbsolutePath());
         if (!file.exists())
             return null;
 
@@ -73,9 +73,10 @@ public class ImageServiceImpl implements ImageService{
                 BASE64Encoder encoder = new BASE64Encoder();
                 String url = encoder.encode(data);
                 String head = "data:image/" + files[i].getName().split("[.]")[1] + ";base64,";
-
+                StringBuffer stringBuffer = new StringBuffer(head);
+                stringBuffer.append(url);
                // System.out.println(head+url);
-                lists.add(head+url);
+                lists.add(stringBuffer.toString());
                 /*
                 localLabel.setUrl(head + url);
                 localLabel.setOtherComments(null);
@@ -117,7 +118,7 @@ public class ImageServiceImpl implements ImageService{
         List<Image> result = new ArrayList<>();
 
         File file = new File(ImageController.imageURL +"/"+ missionid);
-        System.out.println(file.getAbsolutePath());
+       // System.out.println(file.getAbsolutePath());
         if (!file.exists())
             return null;
 
@@ -150,8 +151,10 @@ public class ImageServiceImpl implements ImageService{
                 String url = encoder.encode(data);
                 String head = "data:image/" + files[i].getName().split("[.]")[1] + ";base64,";
 
+                StringBuffer stringBuffer = new StringBuffer(head);
+                stringBuffer.append(url);
                 // System.out.println(head+url);
-                result.add(new Image(files[i].getName(),head+url));
+                result.add(new Image(files[i].getName(),stringBuffer.toString()));
                 /*
                 localLabel.setUrl(head + url);
                 localLabel.setOtherComments(null);
@@ -199,7 +202,7 @@ public class ImageServiceImpl implements ImageService{
         for(int i=0;i<=missions.size()-1;i++){
             if(missions.get(i).getMissionId() == missionid){
                 AutoUserMission mid = missions.get(i);
-                System.out.println(mid.getTrainStart()+" "+mid.getTrainEnd());
+               // System.out.println(mid.getTrainStart()+" "+mid.getTrainEnd());
                         return getAutoImage(mid.getMissionId(),username,mid.getTrainStart(),mid.getTrainEnd());
             }
 
@@ -290,7 +293,7 @@ public class ImageServiceImpl implements ImageService{
          * 根据不同类型为path赋值
          */
         File file = new File(path);
-        System.out.println(file.getAbsolutePath());
+       // System.out.println(file.getAbsolutePath());
         if (!file.exists())
             return null;
 
@@ -318,9 +321,11 @@ public class ImageServiceImpl implements ImageService{
                 String url = encoder.encode(data);
                 String head = "data:image/" + files[i].getName().split("[.]")[1] + ";base64,";
 
+                StringBuffer stringBuffer = new StringBuffer(head);
+                stringBuffer.append(url);
                 // System.out.println(head+url);
                 //System.out.println(files[i].getName()+" "+url);
-                result.add(new Image(files[i].getName(),head+url));
+                result.add(new Image(files[i].getName(),stringBuffer.toString()));
                 /*
                 localLabel.setUrl(head + url);
                 localLabel.setOtherComments(null);
@@ -363,7 +368,7 @@ public class ImageServiceImpl implements ImageService{
          * 根据不同类型为path赋值
          */
         File file = new File(path);
-        System.out.println(file.getAbsolutePath());
+       // System.out.println(file.getAbsolutePath());
         if (!file.exists())
             return null;
 
@@ -389,10 +394,12 @@ public class ImageServiceImpl implements ImageService{
                     String url = encoder.encode(data);
                     String head = "data:image/" + files[i].getName().split("[.]")[1] + ";base64,";
 
+                    StringBuffer stringBuffer = new StringBuffer(head);
+                    stringBuffer.append(url);
                     // System.out.println(head+url);
                     //System.out.println(files[i].getName()+" "+url);
                    // result.add(new Image(files[i].getName(), head + url));
-                    return head+url;
+                    return stringBuffer.toString();
                 /*
                 localLabel.setUrl(head + url);
                 localLabel.setOtherComments(null);

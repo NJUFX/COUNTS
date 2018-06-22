@@ -246,7 +246,7 @@ public class MissionController {
     )
     @ResponseBody
     public String getFirstImage(int missionid) {
-        System.out.println("first");
+        //System.out.println("first");
         return missionService.getFirstImage(missionid);
     }
 
@@ -275,7 +275,7 @@ public class MissionController {
     )
     @ResponseBody
     public List<AutoMissionPresentation> getAutoMissionByWorkerID(String username){
-        System.out.println(username);
+       // System.out.println(username);
         return missionService.getAutoMissionByWorkerID(username);
     }
 
@@ -292,11 +292,11 @@ public class MissionController {
         List<AutoMissionPresentation> lists = missionService.getAutoMissionByWorkerID(username);
         for(int i=0;i<=lists.size()-1;i++){
             if(lists.get(i).getId()==Integer.parseInt(missionid)){
-                System.out.println(lists.get(i).getStatus());
+                //System.out.println(lists.get(i).getStatus());
                 return lists.get(i);
             }
         }
-        System.out.println("456");
+       // System.out.println("456");
         return null;
     }
 
@@ -390,7 +390,7 @@ public class MissionController {
     )
     @ResponseBody
     public ResultMessage updateAcceptMission(@RequestBody AcceptedMission acceptedMission) {
-        System.out.println("controller" + acceptedMission.getFinished());
+       // System.out.println("controller" + acceptedMission.getFinished());
         return missionService.updateAcceptedMission(acceptedMission);
     }
 
