@@ -39,7 +39,56 @@ public interface AnalysisService {
     public MissionMonthChart getMissionMonthChart();
 
 
-    public List<List<Integer>> getBoxChart();
+    public List<Integer> getBoxChart();
 
     public float getPredictChart();
+
+    /**
+     * 得到总用户数近30天的变化图
+     * @return
+     */
+    public LineChart getMemberLine();
+
+    /**
+     * 得到新增用户近30天的变化图
+     * @return
+     */
+    public LineChart getNewMemberLine();
+    /**
+     * 得到近30天活跃用户的变化图
+     */
+    public LineChart getActiveMemberLine();
+
+    /**
+     * 得到推荐命中率的图
+     * @return
+     */
+    public LineChart getRecommendRate();
+
+    /**
+     * 得到总体推荐平均的权重值
+     * @return
+     */
+    public int[] getRecommendWeight();
+
+    /**
+     * 得到目标用户的总体推荐权重的用户值
+     * @param username
+     * @return
+     */
+    public int[] getRecommendWeight(String username);
+
+    /**
+     * work的热力图
+     * @param username
+     * @return
+     */
+    public LineChart getWorkerChart(String username);
+
+    /**
+     * requestor
+     * @param username
+     * @return
+     */
+    public LineChart getRequestorChart(String username);
 }

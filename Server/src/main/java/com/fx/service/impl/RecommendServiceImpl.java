@@ -77,7 +77,8 @@ public class RecommendServiceImpl implements RecommendService {
             else
                 type = 4;
         }
-
+        updateSum(type);
+        updateSum(username,type);
         List<Mission> missions;
         switch (type) {
             case 1:
@@ -289,50 +290,137 @@ public class RecommendServiceImpl implements RecommendService {
      * @param username 用户名
      * @return
      */
+    // 记录了单人接受推荐的数目
     private int[] readRecord(String username) {
         String filename = dir + "/" + username + "_record.txt";
-        try {
-            File file = new File(filename);
-            if (!file.exists()) {
-                file.createNewFile();
-                int[] sums = new int[4];
-                for (int i = 0; i < 2; i++) {
-                    sums[i] = 1;
-                }
-                return sums;
-            }
-            Scanner scanner = new Scanner(file);
-            int[] result = new int[4];
-            int index = 0;
-            while (scanner.hasNext() && index < 4){
-                result[index] = scanner.nextInt();
-                index ++;
-            }
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
+        File file = new File(filename);
+        int[] sum = readNumber(file);
+        if (sum[0] == 0 && sum[1] == 0) {
+            sum[0] = 1;
+            sum[1] = 1;
         }
-        return new int[4];
+        return sum;
     }
 
     private void writeRecord(String username, int[] records) {
-
         String filename = dir + "/" + username + "_record.txt";
+        File file = new File(filename);
+        writeNumber(file, records);
+    }
+
+    public void updateRecord(String username, int type) {
+        int[] records = readRecord(username);
+        records[type - 1]++;
+        writeRecord(username, records);
+        updateResult(type);
+    }
+    //单人被推荐的次数
+    private int[] readSum(String username) {
+        String filename = dir + "/" + username + "_sum.txt";
+        File file = new File(filename);
+        return readNumber(file);
+    }
+
+    private void writeSum(String username, int[] numbers) {
+        String filename = dir + "/" + username + "_sum.txt";
+        File file = new File(filename);
+        writeNumber(file, numbers);
+    }
+
+    private void updateSum(String username, int type) {
+        int[] sum = readSum(username);
+        sum[type - 1]++;
+        writeSum(username, sum);
+    }
+    //总体推荐被接受的次数
+    private void updateResult(int type) {
+        int[] records = readResult();
+        records[type - 1]++;
+        writeResult(records);
+    }
+
+    private void writeResult(int[] records) {
+        File file = new File("./data/recommend/sum.txt");
+        writeNumber(file, records);
+    }
+
+    private int[] readResult() {
+        File file = new File("./data/recommend/result.txt");
+        return readNumber(file);
+    }
+
+    private int[] readNumber(File file) {
+        int[] sum = new int[4];
         try {
-            File file = new File(filename);
+            if (!file.exists()) {
+                file.createNewFile();
+                return new int[4];
+            }
+            Scanner scanner = new Scanner(file);
+            for (int i = 0; i < 4; i++) {
+                sum[i] = scanner.nextInt();
+            }
+            scanner.close();
+            return sum;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sum;
+    }
+
+    private void writeNumber(File file, int[] number) {
+        try {
             PrintWriter pw = new PrintWriter(file);
-            for (int i = 0; i < records.length; i++) {
-                pw.println(records[i]);
+            for (int i = 0; i < 4; i++) {
+                pw.println(number[i]);
             }
             pw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void updateRecommendResult(String username,int type){
-        int[] records = readRecord(username);
-        records[type-1]++;
-        writeRecord(username,records);
+    //总体推荐的次数
+    private void updateSum(int type) {
+        int[] records = readSum();
+        records[type - 1]++;
+        writeSum(records);
     }
 
+    private void writeSum(int[] records) {
+        File file = new File("./data/recommend/sum.txt");
+        writeNumber(file, records);
+    }
+
+    private int[] readSum() {
+        File file = new File("./data/recommend/sum.txt");
+        return readNumber(file);
+    }
+
+    /**
+     * 得到总的推荐结果
+     *
+     * @return
+     */
+    @Override
+    public double[] getRecommendResult() {
+        int[] sum = readSum();
+        int[] result = readResult();
+        double[] rates = new double[sum.length + 1];
+        for (int i = 0; i < 4; i++) {
+            rates[i] = result[i] * 1.0 / sum[i];
+        }
+        return rates;
+    }
+
+    /**
+     * 得到特定的推荐结果
+     *
+     * @param username
+     */
+    @Override
+    public double[] getRecommendResult(String username) {
+        int[] result = readRecord(username);
+        int[] sum = readSum();
+        return new double[0];
+    }
 }

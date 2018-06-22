@@ -31,11 +31,7 @@ public class TimeUtil {
         day = Integer.parseInt(param[2]);
     }
 
-    public static void main(String[] args) {
-        TimeUtil timeUtil1 = new TimeUtil("2018-06-18");
-        TimeUtil timeUtil2 = new TimeUtil("2018-06-17");
-        System.out.println(timeUtil1.IntervalTime(timeUtil2));
-    }
+
 
     @Override
     public String toString() {
@@ -94,7 +90,7 @@ public class TimeUtil {
         secondSecond = calendar.getTimeInMillis();
         //
         calendar.setTimeInMillis(secondSecond);
-        return (int) Math.abs((secondSecond - firstSecond) / (1000 * 60 * 60));
+        return (int) ((secondSecond - firstSecond) / (1000 * 60 * 60));
     }
 
     /**
@@ -116,15 +112,21 @@ public class TimeUtil {
             , 0
             , 0);
         firstSecond = calendar.getTimeInMillis();
-        firstSecond += (1000 * 60 * 60) * 24 * day;
+        long minus = 1000 * 60 * 60* 24;
+        minus *= day;
+        firstSecond += minus;
         calendar.setTimeInMillis(firstSecond);
         int day2 = calendar.get(Calendar.DATE);
         int month2 = calendar.get(Calendar.MONTH) + 1;
         int year2 = calendar.get(Calendar.YEAR);
         return new TimeUtil(year2, month2, day2);
     }
+    public static void main(String[] args) {
 
+        System.out.println(new TimeUtil().addDay(-30).toString());
+    }
     public TimeUtil minusDay(int day) {
         return addDay(-1 * day);
     }
+
 }
