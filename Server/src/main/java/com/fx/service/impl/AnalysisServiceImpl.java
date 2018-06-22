@@ -490,7 +490,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         for (int i = 0; i < 30; i++) {
             String time = startTime.addDay(i).toString();
             List<UserLog> logs = userLogRepository.findUserLogByUsernameAndActionAndTime(username,
-                UserLog.WORK,time);
+                UserLog.ACCEPT,time);
             y.add(logs.size());
         }
         LineChart lineChart = new LineChart();
