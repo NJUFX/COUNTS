@@ -8,6 +8,7 @@ import com.fx.repository.*;
 import com.fx.repository.impl.*;
 import com.fx.service.MissionService;
 import com.fx.util.ResultMessage;
+import com.fx.util.TimeUtil;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
 
@@ -30,6 +31,7 @@ public class MissionServiceImpl implements MissionService {
     AutoUserMissionRepository autoUserMissionRepository;
     MessageRepository messageRepository;
     RecommendServiceImpl recommendService = new RecommendServiceImpl();
+    UserLogRepository userLogRepository = new UserLogRepositoryImpl();
     @Override
     public ResultMessage addAcceptedMission(String username, int id, int recommendType) {
         Mission mission = findMissionByID(id);
@@ -40,6 +42,11 @@ public class MissionServiceImpl implements MissionService {
         recommendService.updateRecord(username,recommendType);
         ResultMessage message = acceptMissionRepository.addAcceptMission(acceptedMission);
         if (message == ResultMessage.SUCCESS) {
+            UserLog userLog = new UserLog();
+            userLog.setUsername(username);
+            userLog.setAction(UserLog.ACCEPT);
+            userLog.setTime(new TimeUtil().toString());
+            userLogRepository.addUserLog(userLog);
             mission.setCurrentNumber(mission.getCurrentNumber() + 1);
             missionRepository.updateMission(mission);
             return ResultMessage.SUCCESS;
@@ -152,7 +159,11 @@ public class MissionServiceImpl implements MissionService {
         requestor.setExp(requestor.getExp() + mission.getPoints());
         requestor.setPoints(requestor.getPoints() - mission.getPoints());
         userRepository.updateUser(requestor);
-
+        UserLog userLog = new UserLog();
+        userLog.setUsername(mission.getRequestorID());
+        userLog.setAction(UserLog.RELEASE);
+        userLog.setTime(new TimeUtil().toString());
+        userLogRepository.addUserLog(userLog);
         return missionRepository.addMission(mission);
     }
 

@@ -6,9 +6,12 @@ import com.fx.controller.ImageController;
 import com.fx.model.AcceptedMission;
 import com.fx.model.Mission;
 import com.fx.model.User;
+import com.fx.model.UserLog;
 import com.fx.repository.MissionRepository;
+import com.fx.repository.UserLogRepository;
 import com.fx.repository.UserRepository;
 import com.fx.repository.impl.MissionRepositoryImpl;
+import com.fx.repository.impl.UserLogRepositoryImpl;
 import com.fx.repository.impl.UserRepositoryImpl;
 import com.fx.service.UserService;
 import com.fx.util.ResultMessage;
@@ -26,9 +29,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
     UserRepository userRepository;
     MissionRepository missionRepository;
+    UserLogRepository userLogRepository;
     public UserServiceImpl(){
         userRepository = new UserRepositoryImpl();
         missionRepository = new MissionRepositoryImpl();
+        userLogRepository = new UserLogRepositoryImpl();
     }
 
     /**
@@ -67,6 +72,11 @@ public class UserServiceImpl implements UserService{
      */
     public ResultMessage signUp(User user){
         user.setRegisterTime(new TimeUtil().toString());
+        UserLog userLog = new UserLog();
+        userLog.setUsername(user.getUsername());
+        userLog.setAction(UserLog.REGISTER);
+        userLog.setTime(new TimeUtil().toString());
+        userLogRepository.addUserLog(userLog);
         return userRepository.addUser(user);
     }
 
@@ -85,6 +95,11 @@ public class UserServiceImpl implements UserService{
         {
             user.setLatestSignIn(new TimeUtil().toString());
             userRepository.updateUser(user);
+            UserLog userLog = new UserLog();
+            userLog.setUsername(user.getUsername());
+            userLog.setAction(UserLog.SIGN_IN);
+            userLog.setTime(new TimeUtil().toString());
+            userLogRepository.addUserLog(userLog);
             return ResultMessage.SUCCESS;
         }
         else

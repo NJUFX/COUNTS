@@ -22,5 +22,7 @@ public interface UserLogRepository {
 
     public List<UserLog> findUserLogByAction(String action);
 
+    public List<UserLog> findUserLogByUsernameAndActionAndTime(String username,String action,String time);
+
 
 }

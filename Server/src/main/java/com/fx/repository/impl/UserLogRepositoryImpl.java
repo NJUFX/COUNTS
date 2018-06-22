@@ -41,6 +41,18 @@ public class UserLogRepositoryImpl implements UserLogRepository {
     }
 
     @Override
+    public List<UserLog> findUserLogByUsernameAndActionAndTime(String username, String action, String time) {
+
+        List<UserLog> logs = readAllUserLog();
+        ArrayList<UserLog> logss = new ArrayList<>();
+        for (UserLog u: logs) {
+            if(u.getAction().equals(action)&&u.getTime().equals(time)&&u.getUsername().equals(username))
+                logss.add(u);
+        }
+        return logss;
+    }
+
+    @Override
     public List<UserLog> findUserLogByTime(String time) {
        List<UserLog> userLogs = readAllUserLog();
        List<UserLog> log = new ArrayList<>();

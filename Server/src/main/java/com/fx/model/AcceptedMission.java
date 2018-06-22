@@ -76,6 +76,7 @@ public class AcceptedMission {
         this.username = username;
         this.point = mission.getPoints();
         this.recommendType = recommendType;
+        this.score = 2;
     }
 
     public AcceptedMission(int id, String missionName, String begin, String end, String type, int finished, int sum, int point) {

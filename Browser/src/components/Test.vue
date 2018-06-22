@@ -1,6 +1,11 @@
 <template>
   <div>
+<<<<<<< HEAD
     <vuejs-heatmap v-bind:selector="mySelector" v-bind:entries="myEntries" tooltip-unit="Action" tooltip-enabled='true'>
+=======
+    <a href="/static/balabala.csv" v-bind:download="downloadFileName">download data</a>
+    <vuejs-heatmap selector="mySelector" v-bind:entries="myEntries" v-bind:color-range="color_range" tooltip-enabled="true" locale="myLocale">
+>>>>>>> 8a2315d878402e4fbfc5d295f42e54f31fb58acc
 
     </vuejs-heatmap>
   </div>
@@ -23,6 +28,7 @@
           },
           {
             'counting':100,
+<<<<<<< HEAD
             'created_at':'2017-07-21'
           },
           {
@@ -36,6 +42,9 @@
           {
             'counting':4,
             'created_at':'2018-01-21'
+=======
+            'created_at':'2018-06-18'
+>>>>>>> 8a2315d878402e4fbfc5d295f42e54f31fb58acc
           },
         ],
         color_range:['#c9ecec','#09b3af'],
@@ -46,7 +55,12 @@
           on: 'on',
           Less: 'Less',
           More: 'More'
+<<<<<<< HEAD
         }
+=======
+        },
+        downloadFileName:'test csv'
+>>>>>>> 8a2315d878402e4fbfc5d295f42e54f31fb58acc
       }
     },
     methods:{

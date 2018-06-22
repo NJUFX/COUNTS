@@ -134,7 +134,7 @@ public class AnalysisController {
         method = RequestMethod.GET
     )
     @ResponseBody
-    public List<Integer> getBoxChart(){
+    public List<List<Integer>> getBoxChart(){
 
         return analysisService.getBoxChart();
     }
@@ -199,5 +199,24 @@ public class AnalysisController {
         return lineChart;
     }
 
+    @RequestMapping(
+        value = "/getWorkerMap",
+        method = RequestMethod.POST,
+        produces =  {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public LineChart getWorkerMap(String username){
+        return analysisService.getWorkerChart(username);
+    }
+    @RequestMapping(
+        value = "/getRequestorMap",
+        method = RequestMethod.POST,
+        produces =  {"application/json; charset=UTF-8"}
+    )
+    @ResponseBody
+    public LineChart getRequestorMap(String username){
+        return analysisService.getRequestorChart(username);
+    }
 
 }
+
