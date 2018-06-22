@@ -134,7 +134,7 @@ public class AnalysisController {
         method = RequestMethod.GET
     )
     @ResponseBody
-    public List<Integer> getBoxChart(){
+    public List<List<Integer>> getBoxChart(){
 
         return analysisService.getBoxChart();
     }
@@ -219,3 +219,4 @@ public class AnalysisController {
     }
 
 }
+

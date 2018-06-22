@@ -39,7 +39,7 @@ public interface AnalysisService {
     public MissionMonthChart getMissionMonthChart();
 
 
-    public List<Integer> getBoxChart();
+    public List<List<Integer>> getBoxChart();
 
     public float getPredictChart();
 
