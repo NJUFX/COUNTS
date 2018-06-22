@@ -184,7 +184,7 @@ public class MissionRepositoryImpl implements MissionRepository {
 
     private int findNextID() {
         List<Mission> missions = getAllMission();
-        int max = missions.size() == 0 ? 1 : missions.get(0).getID();
+        int max = missions.size() == 0 ? 0 : missions.get(0).getID();
         for (Mission m :
                 missions) {
             if (max < m.getID())
