@@ -469,7 +469,7 @@ public class MissionServiceImpl implements MissionService {
            mid.setId(autoMission.getId());
            mid.setType(autoMission.getType());
            mid.setTypes(autoMission.getTypes());
-            System.out.println(mid.getType());
+           // System.out.println(mid.getType());
            mid.setMissionName(autoMission.getMissionName());
            if(!autoUserMissions.get(i).isFinishTrain()){
                mid.setStatus("Train");

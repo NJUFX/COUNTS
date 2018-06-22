@@ -66,7 +66,7 @@ public class PBServer {
                     max = logits[i][j];
                     index = j+1;
                 }
-                System.out.println(labels[j]+" "+logits[i][j]);
+               // System.out.println(labels[j]+" "+logits[i][j]);
             }
         }
         AutoClassificationLabel autoClassificationLabel = new AutoClassificationLabel();
@@ -111,13 +111,13 @@ public class PBServer {
 
         float[][] floatscores = scores.copyTo(new float[(int)reshape2[0]][(int)reshape2[1]]);
         float[][][] floatboxed = boxes.copyTo(new float[(int)reshape1[0]][(int)reshape1[1]][(int)reshape1[2]]);
-        System.out.println(floatscores.length);
+       // System.out.println(floatscores.length);
 
         List<AutoPercentDot> dots = new ArrayList<>();
 
 
         for(int i=0;i<=floatscores[0].length-1;i++){
-            System.out.println(floatscores[0][i]);
+           // System.out.println(floatscores[0][i]);
             if(floatscores[0][i]>=0.5){
                 AutoPercentDot mid1 = new AutoPercentDot();
                 AutoPercentDot mid2 = new AutoPercentDot();

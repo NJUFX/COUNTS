@@ -499,7 +499,7 @@ public class LabelController {
     )
     @ResponseBody
     public ResultMessage addAutoCaptionLabel(@RequestBody AutoCaptionLabelBean autoCaptionLabelBean){
-        System.out.println("234");
+       // System.out.println("234");
         return  labelService.addAutoCaptionLabel(autoCaptionLabelBean);
 
     }
@@ -511,7 +511,7 @@ public class LabelController {
     )
     @ResponseBody
     public ResultMessage addAutoDetectionLabel(@RequestBody AutoDetectionLabelBean autoDetectionLabelBean){
-        System.out.println(autoDetectionLabelBean==null);
+       // System.out.println(autoDetectionLabelBean==null);
         return labelService.addAutoDetectionLabel(autoDetectionLabelBean);
 
     }
@@ -576,7 +576,7 @@ public class LabelController {
     )
     @ResponseBody
     public List<AutoCaptionLabel> getAutoCaptionLabel(String missionid,String username){
-        System.out.println( labelService.getAutoCaptionLabel(missionid, username));
+       // System.out.println( labelService.getAutoCaptionLabel(missionid, username));
         return labelService.getAutoCaptionLabel(missionid, username);
     }
 
