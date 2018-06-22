@@ -108,7 +108,14 @@
               <div id="radar" style="position: absolute;left: 100px; top: 50px;width: 400px; height: 200px;"></div>
             </div>
           </div>
-          <div style="float:left; margin-top:10px; width: 400px; height: 250px;">
+          <div style="position: absolute; left:0;top:270px; width: 100%">
+            <span style="position: absolute; left: 0px; top: 0px; text-align: left; font-size: 16px">活动足迹</span>
+            <img style="width: 470px; position: absolute; left: 80px;top: 30px;" src="../assets/aboveLabel1.png">
+            <img style="width: 140px; position: absolute; left: 590px;top: 30px;" src="../assets/aboveLabel2.png">
+            <vuejs-heatmap style="position: absolute; left: -50px;top: 10px;" v-bind:entries="myEntries" tooltip-unit="Action" tooltip-enabled='true'>
+            </vuejs-heatmap>
+          </div>
+          <div style="position: absolute; left:0;top:500px; width: 100%">
             <div style="position: relative;">
               <span style="position: absolute; left: 0px; top: 0px; text-align: left; font-size: 16px">排名信息</span>
               <span style="position: absolute; left: 100px; top: 30px; font-size: 15px">我的经验值排名：<span style="font-weight: bold; color: gold">{{myRanking}}</span></span>
@@ -289,6 +296,59 @@ export default {
       }
     }
     return {
+      myEntries:[
+        {
+          'counting':100,
+          'created_at':'2017-06-22'
+        },
+        {
+          'counting':100,
+          'created_at':'2017-07-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2017-08-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2017-09-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2017-10-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2017-11-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2017-12-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2018-01-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2018-02-01'
+        },{
+          'counting':100,
+          'created_at':'2018-03-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2018-04-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2018-05-01'
+        },
+        {
+          'counting':100,
+          'created_at':'2018-06-01'
+        },
+      ],
       autoProjects:[
       ],
       selectLabelTypeOption:[],
@@ -510,10 +570,36 @@ export default {
       formData.append('username', localStorage.getItem('username'))
       xmlhttp.open('POST', 'http://localhost:8080/counts/user/getuser', true)
       xmlhttp.send(formData)
+      this.getAllAcitonsRecord()
     }
+
   },
 
   methods: {
+    getAllAcitonsRecord(){
+      var xmlhttp = new XMLHttpRequest()
+      var _this = this;
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          if (xmlhttp.responseText != null) {
+            console.log('entries')
+            var map = JSON.parse(xmlhttp.responseText);
+            _this.myEntries=[]
+            for(var i=0;i<map.x.length;i++){
+              _this.myEntries.push({
+                'counting':map.y[i],
+                'created_at':map.x[i]
+              })
+            }
+          }
+        }
+      }
+      var formData = new FormData();
+      formData.append('username',localStorage.getItem('username'))
+      var path = 'http://localhost:8080/counts/analysis/getRequestorMap'
+      xmlhttp.open('POST',path, true)
+      xmlhttp.send(formData)
+    },
     getAllAutoProject(){
       var xmlhttp = new XMLHttpRequest()
       var _this = this

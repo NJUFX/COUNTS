@@ -520,7 +520,7 @@
         formData.append('username', localStorage.getItem('username'))
         xmlhttp.open('POST', 'http://localhost:8080/counts/user/getuser', true)
         xmlhttp.send(formData)
-
+        this.getAllAcitonsRecord()
         var list = [].slice.call(document.querySelectorAll('pre code'))
         list.forEach((val, index) => {
           hljs.highlightBlock(val)
@@ -529,6 +529,30 @@
     },
 
     methods: {
+      getAllAcitonsRecord(){
+        var xmlhttp = new XMLHttpRequest()
+        var _this = this;
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (xmlhttp.responseText != null) {
+              console.log('entries')
+              var map = JSON.parse(xmlhttp.responseText);
+              _this.myEntries=[]
+              for(var i=0;i<map.x.length;i++){
+                _this.myEntries.push({
+                  'counting':map.y[i],
+                  'created_at':map.x[i]
+                })
+              }
+            }
+          }
+        }
+        var formData = new FormData();
+        formData.append('username',localStorage.getItem('username'))
+        var path = 'http://localhost:8080/counts/analysis/getRequestorMap'
+        xmlhttp.open('POST',path, true)
+        xmlhttp.send(formData)
+      },
       downloadData(mid,type){
         console.log('click')
         var xmlhttp = new XMLHttpRequest()
