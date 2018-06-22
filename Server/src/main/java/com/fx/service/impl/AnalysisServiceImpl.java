@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.Line;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -523,6 +524,22 @@ public class AnalysisServiceImpl implements AnalysisService {
         lineChart.setX(x);
         lineChart.setY(y);
         return lineChart;
+    }
+
+    @Override
+    public HashMap<String, Integer> getLocationChart() {
+       List<User> users =  userRepository.findAllUsers();
+        HashMap<String,Integer> map = new HashMap<>();
+        for (int i = 0; i < users.size() ; i++) {
+            if(map.containsKey(users.get(i).getCity())){
+                map.put(users.get(i).getCity(),1);
+            }else {
+                int number = map.get(users.get(i).getCity());
+                number++;
+                map.replace(users.get(i).getCity(),number);
+            }
+        }
+        return map;
     }
 }
 

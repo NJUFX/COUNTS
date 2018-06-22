@@ -2,6 +2,7 @@ package com.fx.service;
 
 import com.fx.bean.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -91,4 +92,6 @@ public interface AnalysisService {
      * @return
      */
     public LineChart getRequestorChart(String username);
+
+    public HashMap<String,Integer> getLocationChart();
 }

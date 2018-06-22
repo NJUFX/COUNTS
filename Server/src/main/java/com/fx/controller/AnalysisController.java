@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -217,6 +218,15 @@ public class AnalysisController {
     public LineChart getRequestorMap(String username){
         return analysisService.getRequestorChart(username);
     }
+    @RequestMapping(
+        value = "/getLocation",
+        method = RequestMethod.POST,
+        produces =  {"application/json; charset=UTF-8"}
+    )
+    public HashMap<String,Integer> getLocation(){
+     return    analysisService.getLocationChart();
+    }
+
 
 }
 
