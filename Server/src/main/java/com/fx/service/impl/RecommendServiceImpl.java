@@ -68,9 +68,9 @@ public class RecommendServiceImpl implements RecommendService {
                 type = 4;
         } else {
           if(  record[2]==0)
-              record[2] = 2;
+              record[2] = 5;
           sum += record[2];
-            int random =(int)( Math.random() * (sum * 1.5));
+            int random =(int)( Math.random() * (sum * 2));
             if (random <= record[0])
                 type = 1;
             else if (random <= record[0] + record[1])
