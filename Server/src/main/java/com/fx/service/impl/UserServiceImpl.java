@@ -59,7 +59,11 @@ public class UserServiceImpl implements UserService{
     public List<String> findTagsByUsername(String username) {
         User user = userRepository.findUserByUsername(username);
         if (user!=null)
+        {
+            if(user.getTags()==null)
+                return new ArrayList<>();
             return user.getTags();
+        }
         return new ArrayList<>();
     }
 
