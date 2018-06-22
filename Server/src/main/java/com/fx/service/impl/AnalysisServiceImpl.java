@@ -175,7 +175,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         }
         //int max;
         for(int i=0;i<=list.size()-1;i++){
-            levels.get(list.get(i).getLevel()).add(list.get(i).getLevel());
+            levels.get(list.get(i).getLevel()-1).add(list.get(i).getLabelNum());
         }
 
         return levels;
@@ -231,6 +231,7 @@ public class AnalysisServiceImpl implements AnalysisService {
             if((i+1)>list.size()-1||!list.get(i).getLatestSignIn().equals(list.get(i+1).getLatestSignIn())){
 
                 samples.add(list.get(i));
+                continue;
             }
             int index =0;
             while(list.get(i+index).getLatestSignIn().equals(list.get(i+index+1).getLatestSignIn())){
@@ -259,17 +260,20 @@ public class AnalysisServiceImpl implements AnalysisService {
 
         NormalDistribution normalDistribution = new NormalDistribution();
 
-        float p=active/(samples.size());
 
+        float p=((float)active/((float)samples.size()));
+
+        //System.out.println("active "+active);
+        //System.out.println("sample "+samples.size());
+        System.out.println("p "+p);
         int n=active;
 
-        int num =n/2;
+        int num =n/4;
 
         float k = (float)((num-n*p)/Math.sqrt(n*p*(1-p)));
 
         float result = 1-normalDistribution.selfCaculate(k);
-
-
+        System.out.println(result);
 
         return result;
     }
