@@ -14,9 +14,9 @@ public class OSSHelper {
     // Endpoint以杭州为例，其它Region请按实际情况填写。
     private static final String endpoint = "http://oss-cn-beijing.aliyuncs.com";
     // 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
-    private static final String accessKeyId = "LTAIFKY2agu6Sj1H";
-    private static final String accessKeySecret = "5h7x9bYHZ8MVXtYjWINOj1fJATwKpk";
-    private static final String bucketName = "counts";
+    private static final String accessKeyId = "yourkey";
+    private static final String accessKeySecret = "yourkeysecret";
+    private static final String bucketName = "yourbucketName";
 
 
 
