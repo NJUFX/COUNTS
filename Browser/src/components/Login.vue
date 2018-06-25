@@ -251,14 +251,14 @@ export default {
       console.log(templatePram)
       console.log('send')
       const SMSClient = require('@alicloud/sms-sdk')
-      const accessKeyId = 'LTAIFKY2agu6Sj1H'
-      const secretAccessKey = '5h7x9bYHZ8MVXtYjWINOj1fJATwKpk'
+      const accessKeyId = 'yourkeyID'
+      const secretAccessKey = 'yourAcessKey'
       //初始化sms_client
       let smsClient = new SMSClient({accessKeyId, secretAccessKey})
       smsClient.sendSMS({
         PhoneNumbers: phone,
-        SignName: '众包标注平台FX',
-        TemplateCode: 'SMS_133265998',
+        SignName: 'yourname',
+        TemplateCode: 'yoursms',
         TemplateParam: templatePram
       }).then(function (res) {
         let {Code}=res
